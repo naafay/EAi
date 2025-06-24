@@ -114,7 +114,15 @@ export default function App() {
             {sorted.map(e => (
               <tr key={e.message_id} className="hover:bg-gray-50">
                 <td className="px-4 py-2 border-b text-center">
-                  {e.received ? new Date(e.received).toLocaleString() : "---"}
+                  {e.received
+                    ? (() => {
+                        const d = new Date(e.received);
+                        const date = d.toLocaleDateString("en-GB");
+                        const hh = d.getUTCHours().toString().padStart(2, "0");
+                        const mm = d.getUTCMinutes().toString().padStart(2, "0");
+                        return `${date}, ${hh}:${mm}`;
+                      })()
+                    : "---"}
                 </td>
                 <td className="px-4 py-2 border-b">{e.sender}</td>
                 <td className="px-4 py-2 border-b">{e.subject}</td>
