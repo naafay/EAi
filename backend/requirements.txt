@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+apscheduler
+pywin32
+pydantic
+openai
