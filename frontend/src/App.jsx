@@ -3,6 +3,9 @@ import { useEffect, useState, useMemo, useRef } from "react";
 import axios from "axios";
 import { Mail, Loader } from "lucide-react";
 
+// point axios at your backend once
+axios.defaults.baseURL = "http://localhost:8000";
+
 const COLUMNS = [
   { key: "received",   label: "Datetime" },
   { key: "sender",     label: "From" },
@@ -14,34 +17,25 @@ const COLUMNS = [
   { key: "dismiss",    label: "" },
 ];
 
-function ConfigPanel({ config, onSave, onFetch }) {
+function ConfigPanel({ config, onSave, onFetch, loading }) {
   const [interval, setIntervalValue] = useState(config.fetch_interval_minutes);
   const [lookback, setLookback]     = useState(config.lookback_hours);
-  const [saving, setSaving]         = useState(false);
-  const [fetching, setFetching]     = useState(false);
 
-  const handleSave = async () => {
-    setSaving(true);
-    await onSave({ fetch_interval_minutes: interval, lookback_hours: lookback });
-    // force a fetch under new config so last/next update move immediately
-    await onFetch();
-    setSaving(false);
-  };
-
-  const handleFetchNow = async () => {
-    setFetching(true);
-    await onFetch();
-    setFetching(false);
-  };
+  // keep selects in sync if server config changes
+  useEffect(() => {
+    setIntervalValue(config.fetch_interval_minutes);
+    setLookback(config.lookback_hours);
+  }, [config]);
 
   return (
     <div className="flex flex-wrap items-center space-x-4 mb-4">
-      {/* Fetch interval */}
+      {/* Fetch every */}
       <div className="flex items-center bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 space-x-2">
         <span className="text-gray-600 text-sm">Fetch every</span>
         <select
           value={interval}
           onChange={e => setIntervalValue(+e.target.value)}
+          disabled={loading}
           className="bg-white border border-gray-300 rounded-md px-2 py-1 text-sm"
         >
           {[1,5,15,30,60,180,360,720,1440].map(m => (
@@ -52,12 +46,13 @@ function ConfigPanel({ config, onSave, onFetch }) {
         </select>
       </div>
 
-      {/* Lookback */}
+      {/* Look back */}
       <div className="flex items-center bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 space-x-2">
         <span className="text-gray-600 text-sm">Look back</span>
         <select
           value={lookback}
           onChange={e => setLookback(+e.target.value)}
+          disabled={loading}
           className="bg-white border border-gray-300 rounded-md px-2 py-1 text-sm"
         >
           {[1,3,6,12,24,72,168,720].map(h => (
@@ -68,120 +63,121 @@ function ConfigPanel({ config, onSave, onFetch }) {
         </select>
       </div>
 
-      {/* Save */}
+      {/* Save Config */}
       <button
-        onClick={handleSave}
-        disabled={saving}
+        onClick={() => onSave({ fetch_interval_minutes: interval, lookback_hours: lookback })}
+        disabled={loading}
         className="flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow disabled:opacity-50"
       >
-        {saving ? <Loader className="h-4 w-4 animate-spin" /> : "Save Config"}
+        {loading
+          ? <Loader className="h-4 w-4 animate-spin" />
+          : "Save Config"}
       </button>
 
-      {/* Manual fetch */}
+      {/* Manual Fetch */}
       <button
-        onClick={handleFetchNow}
-        disabled={fetching}
+        onClick={onFetch}
+        disabled={loading}
         className="flex items-center justify-center bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow disabled:opacity-50"
       >
-        {fetching ? <Loader className="h-4 w-4 animate-spin" /> : "Fetch Now"}
+        {loading
+          ? <Loader className="h-4 w-4 animate-spin" />
+          : "Fetch Now"}
       </button>
     </div>
   );
 }
 
 export default function App() {
-  const [emails, setEmails] = useState([]);
-  const [config, setConfig] = useState({ fetch_interval_minutes: 5, lookback_hours: 3 });
-  const [sortKey, setSortKey]   = useState("importance");
-  const [sortDir, setSortDir]   = useState("desc");
-  const [search, setSearch]     = useState("");
-  const [pageSize, setPageSize] = useState(50);
-  const [page, setPage]         = useState(1);
+  const [emails, setEmails]       = useState([]);
+  const [config, setConfig]       = useState({ fetch_interval_minutes: 5, lookback_hours: 3 });
+  const [sortKey, setSortKey]     = useState("importance");
+  const [sortDir, setSortDir]     = useState("desc");
+  const [search, setSearch]       = useState("");
+  const [pageSize, setPageSize]   = useState(50);
+  const [page, setPage]           = useState(1);
   const [lastFetch, setLastFetch] = useState(null);
   const [nextFetch, setNextFetch] = useState(null);
+  const [loading, setLoading]     = useState(false);
 
-  // hold onto the interval ID so we can clear it
+  // hold interval id so we can re-schedule
   const intervalRef = useRef(null);
 
-  // load config on mount
+  // 1) load config on mount
   useEffect(() => {
-    axios.get("http://localhost:8000/config")
-      .then(res => setConfig(res.data))
-      .catch(console.error);
+    setLoading(true);
+    axios.get("/config")
+      .then(r => setConfig(r.data))
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
-  // when config changes, trigger an immediate fetch
-  useEffect(() => {
-    doFetch();
-  }, [config]);
-
-  // set up the automatic polling based on config.fetch_interval_minutes
+  // 2) whenever config changes: reset polling and immediately fetch
   useEffect(() => {
     // clear old
     if (intervalRef.current) clearInterval(intervalRef.current);
-    // set new
+
+    // schedule new
     intervalRef.current = setInterval(() => {
       doFetch();
     }, config.fetch_interval_minutes * 60 * 1000);
-    return () => clearInterval(intervalRef.current);
-  }, [config.fetch_interval_minutes]);
 
-  // common fetch+timestamps
+    // immediate first fetch
+    doFetch();
+
+    return () => clearInterval(intervalRef.current);
+  }, [config]);
+
+  // core fetch + timestamps
   async function doFetch() {
+    setLoading(true);
     const now = new Date();
-    await fetchData();
     setLastFetch(now);
     setNextFetch(new Date(now.getTime() + config.fetch_interval_minutes * 60000));
-  }
 
-  // pull emails & reset page
-  async function fetchData() {
     try {
-      const { data } = await axios.get("http://localhost:8000/emails");
+      const { data } = await axios.get("/emails");
       setEmails(data);
       setPage(1);
     } catch (err) {
-      console.error("Error fetching emails:", err);
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
 
-  // save config via API
+  // save config
   async function saveConfig(newCfg) {
+    setLoading(true);
     try {
-      const { data } = await axios.post("http://localhost:8000/config", newCfg);
+      const { data } = await axios.post("/config", newCfg);
       setConfig(data);
-      return data;
-    } catch (err) {
-      console.error("Error saving config:", err);
-    }
-  }
-
-  // manual fetch now
-  async function fetchNow() {
-    await doFetch();
-  }
-
-  // dismiss
-  async function dismiss(id) {
-    try {
-      await axios.post(`http://localhost:8000/emails/${id}/dismiss`);
-      setEmails(e => e.filter(m => m.message_id !== id));
+      // the config‐effect will clear interval & call doFetch()
     } catch (err) {
       console.error(err);
+      setLoading(false);
     }
   }
 
-  // open Outlook
+  // manual fetch
+  function fetchNow() {
+    doFetch();
+  }
+
+  // dismiss & open
+  async function dismiss(id) {
+    await axios.post(`/emails/${id}/dismiss`);
+    setEmails(e => e.filter(m => m.message_id !== id));
+  }
   async function openInOutlook(id) {
     try {
-      await axios.post(`http://localhost:8000/open/${encodeURIComponent(id)}`);
-    } catch (err) {
-      console.error(err);
-      alert("Could not open email in Outlook.");
+      await axios.post(`/open/${encodeURIComponent(id)}`);
+    } catch {
+      alert("Could not open Outlook.");
     }
   }
 
-  // filtering, sorting, pagination...
+  // filter → sort → paginate
   const filtered = useMemo(() =>
     emails.filter(e =>
       [e.sender, e.subject, e.preview].some(f =>
@@ -190,19 +186,20 @@ export default function App() {
     ), [emails, search]
   );
 
-  const sorted = useMemo(() => {
-    const arr = [...filtered];
-    arr.sort((a,b) => {
-      let va = a[sortKey], vb = b[sortKey];
-      if (sortKey === "received") {
-        va = Date.parse(va); vb = Date.parse(vb);
-      }
-      if (va < vb) return sortDir==="asc"? -1:1;
-      if (va > vb) return sortDir==="asc"? 1:-1;
-      return 0;
-    });
-    return arr;
-  }, [filtered, sortKey, sortDir]);
+    const sorted = useMemo(() => {
+    return filtered
+      .slice() // make a copy
+      .sort((a, b) => {
+        // 1) rating descending
+        if (b.importance !== a.importance) {
+          return b.importance - a.importance;
+        }
+        // 2) received datetime descending
+        const ta = Date.parse(a.received);
+        const tb = Date.parse(b.received);
+        return tb - ta;
+      });
+  }, [filtered]);
 
   const pageCount = Math.ceil(sorted.length / pageSize);
   const pageData  = sorted.slice((page-1)*pageSize, page*pageSize);
@@ -212,34 +209,38 @@ export default function App() {
     else { setSortKey(key); setSortDir("asc"); }
   }
 
-  // render pill
   const renderPill = imp => {
-    if (imp === 5) return <span className="inline-block uppercase text-xs font-semibold bg-red-200 text-red-700 px-3 py-1 rounded-full">Critical</span>;
-    if (imp === 4) return <span className="inline-block uppercase text-xs font-semibold bg-orange-100 text-orange-700 px-3 py-1 rounded-full">Major</span>;
-    if (imp === 3) return <span className="inline-block uppercase text-xs font-semibold bg-blue-100 text-blue-700 px-3 py-1 rounded-full">High</span>;
+    if (imp===5) return <span className="inline-block uppercase text-xs font-semibold bg-red-200 text-red-700 px-3 py-1 rounded-full">Critical</span>;
+    if (imp===4) return <span className="inline-block uppercase text-xs font-semibold bg-orange-100 text-orange-700 px-3 py-1 rounded-full">Major</span>;
+    if (imp===3) return <span className="inline-block uppercase text-xs font-semibold bg-blue-100 text-blue-700 px-3 py-1 rounded-full">High</span>;
     return null;
   };
 
-  const formatTime = dt =>
+  const fmtDT = dt =>
     dt
-      ? `${dt.toLocaleDateString("en-GB")} ${dt.toLocaleTimeString("en-GB",{ hour:'2-digit', minute:'2-digit'})}`
+      ? `${dt.toLocaleDateString("en-GB",{timeZone:"Asia/Dubai"})} ${dt.toLocaleTimeString("en-GB",{hour:'2-digit',minute:'2-digit',timeZone:"Asia/Dubai"})}`
       : "---";
 
   return (
     <div className="min-h-screen bg-gray-900 p-10">
       <div className="bg-white rounded-2xl shadow-lg p-8 overflow-hidden">
-        {/* Header + timings */}
+        {/* header + timings */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-semibold">EAi: Important Emails</h1>
           <div className="text-right text-sm text-gray-600 space-y-1">
-            <div>Last update: {formatTime(lastFetch)}</div>
-            <div>Next update: {formatTime(nextFetch)}</div>
+            <div>Last update: {fmtDT(lastFetch)}</div>
+            <div>Next update: {fmtDT(nextFetch)}</div>
           </div>
         </div>
 
-        <ConfigPanel config={config} onSave={saveConfig} onFetch={fetchNow} />
+        <ConfigPanel
+          config={config}
+          onSave={saveConfig}
+          onFetch={fetchNow}
+          loading={loading}
+        />
 
-        {/* Search & page size */}
+        {/* search & page size */}
         <div className="flex items-center justify-between mb-6">
           <input
             type="text"
@@ -261,7 +262,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Table */}
+        {/* table */}
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white rounded-lg overflow-hidden">
             <thead className="bg-gray-100">
@@ -281,14 +282,12 @@ export default function App() {
               </tr>
             </thead>
             <tbody>
-              {pageData.map(e=>(
+              {pageData.map(e => (
                 <tr key={e.message_id} className="border-b last:border-0 hover:bg-gray-50">
-                  <td className="px-4 py-2 text-sm text-gray-800">
-                    {(() => {
-                      const d=new Date(e.received);
-                      return `${d.toLocaleDateString("en-GB")}, ${d.getHours().toString().padStart(2,"0")}:${d.getMinutes().toString().padStart(2,"0")}`;
-                    })()}
-                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-800">{(() => {
+                    const d=new Date(e.received);
+                    return `${d.toLocaleDateString("en-GB",{timeZone:"Asia/Dubai"})}, ${d.toLocaleTimeString("en-GB",{hour:'2-digit',minute:'2-digit',timeZone:"Asia/Dubai"})}`;
+                  })()}</td>
                   <td className="px-4 py-2 text-sm text-gray-800">{e.sender}</td>
                   <td className="px-4 py-2 text-sm text-gray-800">{e.subject}</td>
                   <td className="px-4 py-2 text-sm text-gray-800">{e.preview}</td>
@@ -302,16 +301,14 @@ export default function App() {
                   </td>
                 </tr>
               ))}
-              {pageData.length===0 && (
-                <tr>
-                  <td colSpan={COLUMNS.length} className="px-4 py-4 text-center text-gray-500">No records found.</td>
-                </tr>
+              {!pageData.length && (
+                <tr><td colSpan={COLUMNS.length} className="px-4 py-4 text-center text-gray-500">No records found.</td></tr>
               )}
             </tbody>
           </table>
         </div>
 
-        {/* Pagination */}
+        {/* pagination */}
         <div className="mt-6 flex items-center justify-between">
           <div className="text-sm text-gray-600">
             Page <span className="font-medium">{page}</span> of <span className="font-medium">{pageCount}</span>

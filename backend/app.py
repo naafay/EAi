@@ -4,11 +4,15 @@ import sqlite3
 import pythoncom
 import re
 import win32com.client
+import queue
+import json
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.base import SchedulerAlreadyRunningError
+from starlette.responses import StreamingResponse
+from starlette.concurrency import run_in_threadpool
 
 # === Configuration ===
 EMAIL_ADDRESS    = "abdul.nafay@aviatnet.com"
@@ -76,6 +80,9 @@ class ConfigItem(BaseModel):
     fetch_interval_minutes: int
     lookback_hours:         int
 
+# === SSE queue ===
+fetch_queue: queue.Queue[str] = queue.Queue()
+
 # === Helpers ===
 def extract_last_email(body: str) -> str:
     parts = re.split(
@@ -102,77 +109,6 @@ def normalize_sender(name: str, smtp: str) -> str:
         return smtp or name
     return name or smtp
 
-def fetch_outlook_dicts() -> list[dict]:
-    logging.info("Fetching Outlook emails…")
-    pythoncom.CoInitialize()
-    out = []
-    try:
-        ns    = win32com.client.gencache.EnsureDispatch("Outlook.Application").GetNamespace("MAPI")
-        inbox = ns.GetDefaultFolder(6)
-        cutoff = datetime.datetime.now() - datetime.timedelta(hours=BACKEND_CONFIG["lookback_hours"])
-        flt    = f"[UnRead]=True AND [ReceivedTime]>='{cutoff.strftime('%m/%d/%Y %I:%M %p')}'"
-        try:
-            items = inbox.Items.Restrict(flt)
-        except:
-            items = []
-
-        for msg in items:
-            # only process true MailItems (class 43), skip meetings/tasks/etc.
-            try:
-                if msg.Class != 43:
-                    continue
-            except AttributeError:
-                continue
-
-            try:
-                rec_smtp, rec_names, to_smtp = [], [], []
-                for r in msg.Recipients:
-                    try:
-                        ex   = r.AddressEntry.GetExchangeUser()
-                        addr = (ex.PrimarySmtpAddress or r.Address).lower()
-                    except:
-                        addr = r.Address.lower()
-                    rec_smtp.append(addr)
-                    rec_names.append(r.Name.lower())
-                    if r.Type == 1:
-                        to_smtp.append(addr)
-
-                if (EMAIL_ADDRESS.lower() not in rec_smtp
-                   and EMAIL_ALIAS_NAME.lower() not in " ".join(rec_names)):
-                    continue
-
-                body      = msg.Body or ""
-                last_body = extract_last_email(body)
-                snippet   = last_body[:200].replace("\r"," ").replace("\n"," ")
-
-                raw_name  = (msg.Sender.Name or "").strip()
-                raw_smtp  = (msg.SenderEmailAddress or "").lower()
-                sender    = normalize_sender(raw_name, raw_smtp)
-
-                received  = msg.ReceivedTime.isoformat()
-                entry_id  = msg.EntryID
-
-                out.append({
-                    "message_id": entry_id,
-                    "sender":      sender,
-                    "sender_smtp": raw_smtp,
-                    "subject":     msg.Subject or "",
-                    "preview":     snippet,
-                    "received":    received,
-                    "rec_smtp":    rec_smtp,
-                    "to_smtp":     to_smtp,
-                    "last_body":   last_body.lower(),
-                })
-            except Exception as e:
-                logging.error(f"Process error: {e}")
-    except Exception as e:
-        logging.error(f"COM init failed: {e}")
-    finally:
-        pythoncom.CoUninitialize()
-
-    logging.info(f"Fetched {len(out)} emails.")
-    return out
-
 def rate_and_reason(m: dict) -> tuple[int,str]:
     is_elt   = (m["sender_smtp"] in ELT_EMAILS or m["sender"] in ELT_NAMES)
     sole_to  = (len(m["to_smtp"]) == 1 and m["to_smtp"][0] == EMAIL_ADDRESS.lower())
@@ -188,6 +124,73 @@ def rate_and_reason(m: dict) -> tuple[int,str]:
     if sole_to:
         return 3, "Sole-To Only"
     return 0, ""
+
+def fetch_outlook_dicts() -> list[dict]:
+    logging.info("Fetching Outlook emails…")
+    pythoncom.CoInitialize()
+    out = []
+    try:
+        ns    = win32com.client.gencache.EnsureDispatch("Outlook.Application").GetNamespace("MAPI")
+        inbox = ns.GetDefaultFolder(6)
+        cutoff = datetime.datetime.now() - datetime.timedelta(hours=BACKEND_CONFIG["lookback_hours"])
+        flt    = f"[UnRead]=True AND [ReceivedTime]>='{cutoff.strftime('%m/%d/%Y %I:%M %p')}'"
+        try:
+            items = inbox.Items.Restrict(flt)
+        except:
+            items = []
+
+        for msg in items:
+            # only mail items
+            try:
+                if msg.Class != 43:
+                    continue
+            except AttributeError:
+                continue
+
+            rec_smtp, rec_names, to_smtp = [], [], []
+            for r in msg.Recipients:
+                try:
+                    ex   = r.AddressEntry.GetExchangeUser()
+                    addr = (ex.PrimarySmtpAddress or r.Address).lower()
+                except:
+                    addr = r.Address.lower()
+                rec_smtp.append(addr)
+                rec_names.append(r.Name.lower())
+                if r.Type == 1:
+                    to_smtp.append(addr)
+
+            if (EMAIL_ADDRESS.lower() not in rec_smtp
+               and EMAIL_ALIAS_NAME.lower() not in " ".join(rec_names)):
+                continue
+
+            body      = msg.Body or ""
+            last_body = extract_last_email(body)
+            snippet   = last_body[:200].replace("\r"," ").replace("\n"," ")
+
+            raw_name  = (msg.Sender.Name or "").strip()
+            raw_smtp  = (msg.SenderEmailAddress or "").lower()
+            sender    = normalize_sender(raw_name, raw_smtp)
+            received  = msg.ReceivedTime.isoformat()
+            entry_id  = msg.EntryID
+
+            out.append({
+                "message_id": entry_id,
+                "sender":      sender,
+                "sender_smtp": raw_smtp,
+                "subject":     msg.Subject or "",
+                "preview":     snippet,
+                "received":    received,
+                "rec_smtp":    rec_smtp,
+                "to_smtp":     to_smtp,
+                "last_body":   last_body.lower(),
+            })
+    except Exception as e:
+        logging.error(f"COM init failed: {e}")
+    finally:
+        pythoncom.CoUninitialize()
+
+    logging.info(f"Fetched {len(out)} emails.")
+    return out
 
 def fetch_and_track():
     pythoncom.CoInitialize()
@@ -206,6 +209,8 @@ def fetch_and_track():
                 (msg.EntryID,)
             )
         conn.commit()
+        # push SSE event
+        fetch_queue.put(datetime.datetime.utcnow().isoformat())
     except Exception as e:
         logging.error(f"Fetch error: {e}")
     finally:
@@ -244,6 +249,14 @@ def fetch_now():
     fetch_and_track()
     return {"ok": True}
 
+@app.get("/events")
+async def events():
+    async def event_generator():
+        while True:
+            ts = await run_in_threadpool(fetch_queue.get)
+            yield f"event: fetched\ndata: {json.dumps({'timestamp': ts})}\n\n"
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
+
 @app.get("/emails", response_model=list[EmailItem])
 def get_emails():
     msgs = fetch_outlook_dicts()
@@ -259,13 +272,13 @@ def get_emails():
         if row and row[0] is not None:
             continue
         out.append(EmailItem(
-            message_id = m["message_id"],
-            sender      = m["sender"],
-            subject     = m["subject"],
-            preview     = m["preview"],
-            received    = m["received"],
-            importance  = imp,
-            reason      = reason
+            message_id=m["message_id"],
+            sender     =m["sender"],
+            subject    =m["subject"],
+            preview    =m["preview"],
+            received   =m["received"],
+            importance =imp,
+            reason     =reason
         ))
     return out
 
