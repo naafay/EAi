@@ -115,7 +115,15 @@ def fetch_outlook_dicts() -> list[dict]:
             items = inbox.Items.Restrict(flt)
         except:
             items = []
+
         for msg in items:
+            # only process true MailItems (class 43), skip meetings/tasks/etc.
+            try:
+                if msg.Class != 43:
+                    continue
+            except AttributeError:
+                continue
+
             try:
                 rec_smtp, rec_names, to_smtp = [], [], []
                 for r in msg.Recipients:
@@ -128,17 +136,22 @@ def fetch_outlook_dicts() -> list[dict]:
                     rec_names.append(r.Name.lower())
                     if r.Type == 1:
                         to_smtp.append(addr)
+
                 if (EMAIL_ADDRESS.lower() not in rec_smtp
                    and EMAIL_ALIAS_NAME.lower() not in " ".join(rec_names)):
                     continue
+
                 body      = msg.Body or ""
                 last_body = extract_last_email(body)
                 snippet   = last_body[:200].replace("\r"," ").replace("\n"," ")
+
                 raw_name  = (msg.Sender.Name or "").strip()
                 raw_smtp  = (msg.SenderEmailAddress or "").lower()
                 sender    = normalize_sender(raw_name, raw_smtp)
+
                 received  = msg.ReceivedTime.isoformat()
                 entry_id  = msg.EntryID
+
                 out.append({
                     "message_id": entry_id,
                     "sender":      sender,
@@ -156,6 +169,7 @@ def fetch_outlook_dicts() -> list[dict]:
         logging.error(f"COM init failed: {e}")
     finally:
         pythoncom.CoUninitialize()
+
     logging.info(f"Fetched {len(out)} emails.")
     return out
 
@@ -176,7 +190,6 @@ def rate_and_reason(m: dict) -> tuple[int,str]:
     return 0, ""
 
 def fetch_and_track():
-    # Poll and store message_ids
     pythoncom.CoInitialize()
     try:
         ns    = win32com.client.gencache.EnsureDispatch("Outlook.Application").GetNamespace("MAPI")
