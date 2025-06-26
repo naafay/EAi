@@ -1,8 +1,7 @@
 // src/App.jsx
-
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef, Fragment } from "react";
 import axios from "axios";
-import { Mail, Loader } from "lucide-react";
+import { Mail, Loader, MailSearch, MailCheck } from "lucide-react";
 
 // point axios at your backend once
 axios.defaults.baseURL = "http://localhost:8000";
@@ -10,8 +9,8 @@ axios.defaults.baseURL = "http://localhost:8000";
 // helper to treat naive ISO (YYYY-MM-DDTHH:mm:ss) as local time
 function parseLocal(iso) {
   const [date, time] = iso.split("T");
-  const [Y, M, D]    = date.split("-").map(Number);
-  const [h, m, s]    = time.split(/[:.]/).map(Number);
+  const [Y, M, D] = date.split("-").map(Number);
+  const [h, m, s] = time.split(/[:.]/).map(Number);
   return new Date(Y, M - 1, D, h, m, s);
 }
 
@@ -38,14 +37,23 @@ const COLUMNS = [
   { key: "dismiss",    label: "" },
 ];
 
-function ConfigPanel({ config, onSave, onFetch, loading }) {
-  const [interval, setIntervalValue]   = useState(config.fetch_interval_minutes);
-  const [lookback, setLookback]        = useState(config.lookback_hours);
-  const [mode, setMode]                = useState(config.start ? "custom" : "preset");
-  const [customStart, setCustomStart]  = useState("");
-  const [customEnd,   setCustomEnd]    = useState("");
-  const [error, setError]              = useState("");
+// Map numeric importance to label
+const IMPORTANCE_LABELS = {
+  5: "Critical",
+  4: "Major",
+  3: "High",
+  2: "Medium",
+};
 
+function ConfigPanel({ config, onSave, onFetch, loading }) {
+  const [interval, setIntervalValue] = useState(config.fetch_interval_minutes);
+  const [lookback, setLookback]     = useState(config.lookback_hours);
+  const [mode, setMode]             = useState(config.start ? "custom" : "preset");
+  const [customStart, setCustomStart] = useState("");
+  const [customEnd, setCustomEnd]     = useState("");
+  const [error, setError]           = useState("");
+
+  // sync local form to server config
   useEffect(() => {
     setIntervalValue(config.fetch_interval_minutes);
     setLookback(config.lookback_hours);
@@ -75,11 +83,10 @@ function ConfigPanel({ config, onSave, onFetch, loading }) {
         setError("End must be after start.");
         return;
       }
-      if ((e - s) / (1000*60*60*24) > 31) {
+      if ((e - s) / (1000 * 60 * 60 * 24) > 31) {
         setError("Range cannot exceed 31 days.");
         return;
       }
-      // **Send the raw local input** so it stays exactly what you picked
       onSave({
         fetch_interval_minutes: interval,
         lookback_hours: lookback,
@@ -121,7 +128,7 @@ function ConfigPanel({ config, onSave, onFetch, loading }) {
         <div className="flex items-center bg-gray-50 border rounded-lg px-3 py-2 space-x-2">
           <span className="text-gray-600 text-sm">Look back</span>
           <select
-            value={mode==="preset" ? lookback : "custom"}
+            value={mode === "preset" ? lookback : "custom"}
             onChange={e => {
               const v = e.target.value;
               if (v === "custom") setMode("custom");
@@ -156,7 +163,7 @@ function ConfigPanel({ config, onSave, onFetch, loading }) {
               type="datetime-local"
               value={customEnd}
               onChange={e => setCustomEnd(e.target.value)}
-              min={customStart||undefined}
+              min={customStart || undefined}
               max={nowLocal}
               className="border rounded-md px-2 py-1 text-sm"
             />
@@ -171,7 +178,7 @@ function ConfigPanel({ config, onSave, onFetch, loading }) {
           {loading ? <Loader className="h-4 w-4 animate-spin" /> : "Save Config"}
         </button>
         <button
-          onClick={() => mode==="custom" ? onFetch(customStart, customEnd) : onFetch()}
+          onClick={() => mode === "custom" ? onFetch(customStart, customEnd) : onFetch()}
           disabled={loading}
           className="flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow disabled:opacity-50"
         >
@@ -183,25 +190,27 @@ function ConfigPanel({ config, onSave, onFetch, loading }) {
 }
 
 export default function App() {
-  const [emails,       setEmails]       = useState([]);
-  const [config,       setConfig]       = useState({
+  const [emails, setEmails] = useState([]);
+  const [config, setConfig] = useState({
     fetch_interval_minutes: 5,
     lookback_hours: 3,
     start: null,
     end:   null,
   });
   const [configLoaded, setConfigLoaded] = useState(false);
-  const [sortKey,      setSortKey]      = useState("importance");
-  const [sortDir,      setSortDir]      = useState("desc");
-  const [search,       setSearch]       = useState("");
-  const [pageSize,     setPageSize]     = useState(50);
-  const [page,         setPage]         = useState(1);
-  const [lastFetch,    setLastFetch]    = useState(null);
-  const [nextFetch,    setNextFetch]    = useState(null);
-  const [loading,      setLoading]      = useState(false);
-  const [showModal,    setShowModal]    = useState(false);
-  const intervalRef    = useRef(null);
-  const modalTimerRef  = useRef(null);
+  const [sortKey, setSortKey] = useState("importance");
+  const [sortDir, setSortDir] = useState("desc");
+  const [search, setSearch] = useState("");
+  const [pageSize, setPageSize] = useState(50);
+  const [page, setPage] = useState(1);
+  const [lastFetch, setLastFetch] = useState(null);
+  const [nextFetch, setNextFetch] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [collapsed, setCollapsed] = useState({});
+
+  const intervalRef = useRef(null);
+  const modalTimerRef = useRef(null);
 
   // 1) on mount, load config
   useEffect(() => {
@@ -256,12 +265,14 @@ export default function App() {
 
   const fmtDT = dt =>
     dt
-      ? `${dt.toLocaleDateString("en-GB",{timeZone:"Asia/Dubai"})} ${dt.toLocaleTimeString("en-GB",{hour:'2-digit',minute:'2-digit',timeZone:"Asia/Dubai"})}`
+      ? `${dt.toLocaleDateString("en-GB",{timeZone:"Asia/Dubai"})} ${dt
+          .toLocaleTimeString("en-GB",{hour:'2-digit',minute:'2-digit',timeZone:"Asia/Dubai"})}`
       : "---";
 
   const fmtEmailDT = iso => {
     const d = parseLocal(iso);
-    return `${d.toLocaleDateString("en-GB",{timeZone:"Asia/Dubai"})} ${d.toLocaleTimeString("en-GB",{hour:'2-digit',minute:'2-digit',timeZone:"Asia/Dubai"})}`;
+    return `${d.toLocaleDateString("en-GB",{timeZone:"Asia/Dubai"})} ${d
+      .toLocaleTimeString("en-GB",{hour:'2-digit',minute:'2-digit',timeZone:"Asia/Dubai"})}`;
   };
 
   async function saveConfig(newCfg) {
@@ -317,33 +328,96 @@ export default function App() {
     }
   }
 
-  const filtered = useMemo(() =>
-    emails.filter(e =>
+  const filtered = useMemo(
+    () => emails.filter(e =>
       [e.sender,e.subject,e.preview].some(f =>
         f.toLowerCase().includes(search.toLowerCase())
       )
-    ), [emails,search]);
+    ),
+    [emails,search]
+  );
 
-  const sorted = useMemo(() =>
-    filtered.slice().sort((a,b) => {
-      if (b.importance!==a.importance) return b.importance-a.importance;
-      return Date.parse(b.received)-Date.parse(a.received);
-    }), [filtered]);
+  const sorted = useMemo(() => {
+    const arr = filtered.slice().sort((a,b) => {
+      if (b.importance !== a.importance) {
+        return sortDir === "asc"
+          ? a.importance - b.importance
+          : b.importance - a.importance;
+      }
+      const da = Date.parse(a.received),
+            db = Date.parse(b.received);
+      return sortDir === "asc" ? da - db : db - da;
+    });
+    return arr;
+  }, [filtered, sortKey, sortDir]);
 
-  const pageCount = Math.ceil(sorted.length/pageSize);
-  const pageData  = sorted.slice((page-1)*pageSize,page*pageSize);
+  // GROUPING logic
+  const groupedData = useMemo(() => {
+    if (sortKey === "importance") {
+      // bucket by numeric importance
+      const buckets = { 5: [], 4: [], 3: [], 2: [] };
+      sorted.forEach(e => {
+        if (buckets[e.importance]) buckets[e.importance].push(e);
+      });
+      return buckets;
+    }
+    if (sortKey === "received") {
+      // bucket by date ranges
+      const now = new Date();
+      const buckets = { Today: [], "This week": [], Older: [] };
+      sorted.forEach(e => {
+        const d = parseLocal(e.received),
+              diff = now - d;
+        if (d.toDateString() === now.toDateString()) buckets.Today.push(e);
+        else if (diff < 1000*60*60*24*7) buckets["This week"].push(e);
+        else buckets.Older.push(e);
+      });
+      return buckets;
+    }
+    // default single bucket
+    return { All: sorted };
+  }, [sorted, sortKey]);
+
+  const groupKeys = useMemo(() => {
+    if (sortKey === "importance") {
+      return [5,4,3,2].filter(k => groupedData[k].length);
+    }
+    if (sortKey === "received") {
+      return ["Today","This week","Older"].filter(k => groupedData[k].length);
+    }
+    return ["All"];
+  }, [groupedData, sortKey]);
+
+  const toggleGroup = key =>
+    setCollapsed(c => ({ ...c, [key]: !c[key] }));
+
+  const pageCount = Math.ceil(sorted.length / pageSize);
 
   function onHeaderClick(key) {
-    if (key===sortKey) setSortDir(d=>d==="asc"?"desc":"asc");
-    else { setSortKey(key); setSortDir("asc"); }
+    if (sortKey === key) setSortDir(d => (d==="asc"?"desc":"asc"));
+    else {
+      setSortKey(key);
+      setSortDir("desc");
+    }
   }
 
   const renderPill = imp => {
-    if (imp===5) return <span className="inline-block uppercase text-xs font-semibold bg-red-200 text-red-700 px-3 py-1 rounded-full">Critical</span>;
-    if (imp===4) return <span className="inline-block uppercase text-xs font-semibold bg-orange-100 text-orange-700 px-3 py-1 rounded-full">Major</span>;
-    if (imp===3) return <span className="inline-block uppercase text-xs font-semibold bg-blue-100 text-blue-700 px-3 py-1 rounded-full">High</span>;
-    if (imp===2) return <span className="inline-block uppercase text-xs font-semibold bg-green-100 text-green-700 px-3 py-1 rounded-full">Medium</span>;
-    return null;
+    const label = IMPORTANCE_LABELS[imp] || "";
+    return (
+      <span className="inline-block uppercase text-xs font-semibold px-3 py-1 rounded-full"
+            style={{
+              backgroundColor: imp===5 ? "#fed7d7" :
+                               imp===4 ? "#fef3c7" :
+                               imp===3 ? "#dbecff" :
+                               imp===2 ? "#dcfce7" : "",
+              color: imp===5 ? "#c53030" :
+                     imp===4 ? "#b45309" :
+                     imp===3 ? "#2c5282" :
+                     imp===2 ? "#047857" : ""
+            }}>
+        {label}
+      </span>
+    );
   };
 
   return (
@@ -391,7 +465,7 @@ export default function App() {
         {/* Email Table */}
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white rounded-lg overflow-hidden">
-            <thead className="bg-gray-100">
+            <thead className="bg-gray-200">
               <tr>
                 {COLUMNS.map(({ key, label }) => (
                   <th
@@ -412,33 +486,49 @@ export default function App() {
               </tr>
             </thead>
             <tbody>
-              {pageData.map(e => (
-                <tr key={e.message_id} className="border-b last:border-0 hover:bg-gray-50">
-                  <td className="px-4 py-2 text-sm text-gray-800">{fmtEmailDT(e.received)}</td>
-                  <td className="px-4 py-2 text-sm text-gray-800">{e.sender}</td>
-                  <td className="px-4 py-2 text-sm text-gray-800">{e.subject}</td>
-                  <td className="px-4 py-2 text-sm text-gray-800">{e.preview}</td>
-                  <td className="px-4 py-2 text-center">{renderPill(e.importance)}</td>
-                  <td className="px-4 py-2 text-center text-sm text-gray-800">{e.reason}</td>
-                  <td className="px-4 py-2 text-center">
-                    <Mail className="h-5 w-5 text-blue-600 hover:text-blue-800 cursor-pointer"
-                          onClick={() => openInOutlook(e.message_id)} />
-                  </td>
-                  <td className="px-4 py-2 text-center">
-                    <button onClick={() => dismiss(e.message_id)}
-                            className="text-red-600 hover:text-red-800 text-sm font-medium">
-                      Dismiss
-                    </button>
-                  </td>
-                </tr>
+              {groupKeys.map(groupKey => (
+                <Fragment key={groupKey}>
+                  {/* Group header */}
+                  <tr
+                    className="bg-gray-100 cursor-pointer"
+                    onClick={() => toggleGroup(groupKey)}
+                  >
+                    <td colSpan={COLUMNS.length} className="px-4 py-2">
+                      <span className="font-medium mr-2">
+                        {collapsed[groupKey] ? "+" : "–"}
+                      </span>
+					  <span className="text-xs font-semibold text-gray-700 uppercase">
+                      {sortKey === "importance"
+                        ? IMPORTANCE_LABELS[groupKey]
+                        : groupKey}
+					 </span>
+                      <span className="ml-1 text-gray-600">({groupedData[groupKey].length})</span>
+                    </td>
+                  </tr>
+
+                  {/* Group rows */}
+                  {!collapsed[groupKey] &&
+                    groupedData[groupKey].map(e => (
+                      <tr key={e.message_id} className="border-b last:border-0 hover:bg-gray-50">
+                        <td className="px-4 py-2 text-sm text-gray-800">{fmtEmailDT(e.received)}</td>
+                        <td className="px-4 py-2 text-sm text-gray-800">{e.sender}</td>
+                        <td className="px-4 py-2 text-sm text-gray-800">{e.subject}</td>
+                        <td className="px-4 py-2 text-sm text-gray-800">{e.preview}</td>
+                        <td className="px-4 py-2 text-center">{renderPill(e.importance)}</td>
+                        <td className="px-4 py-2 text-center text-sm text-gray-800">{e.reason}</td>
+                        <td className="px-4 py-2 text-center">
+                          <MailSearch strokeWidth = {1.5} className="h-5 w-5 text-blue-600 hover:text-blue-800 cursor-pointer"
+                                onClick={() => openInOutlook(e.message_id)} />
+                        </td>
+						
+                        <td className="px-4 py-2 text-center">
+						<MailCheck strokeWidth = {1.5} className="h-5 w-5 text-red-600 hover:text-red-800 cursor-pointer"
+                                onClick={() => dismiss(e.message_id)} />
+								 </td>
+                      </tr>
+                    ))}
+                </Fragment>
               ))}
-              {!pageData.length && (
-                <tr>
-                  <td colSpan={COLUMNS.length} className="px-4 py-4 text-center text-gray-500">
-                    No records found.
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
         </div>
@@ -449,18 +539,13 @@ export default function App() {
             Page <span className="font-medium">{page}</span> of <span className="font-medium">{pageCount}</span>
           </div>
           <div className="space-x-2">
-            <button onClick={() => setPage(1)} disabled={page === 1}
-                    className="px-3 py-1 bg-white border rounded-full disabled:opacity-50">«</button>
-            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                    className="px-3 py-1 bg-white border rounded-full disabled:opacity-50">‹</button>
-            <button onClick={() => setPage(p => Math.min(pageCount, p + 1))} disabled={page === pageCount}
-                    className="px-3 py-1 bg-white;border rounded-full disabled:opacity-50">›</button>
-            <button onClick={() => setPage(pageCount)} disabled={page === pageCount}
-                    className="px-3 py-1 bg-white;border rounded-full disabled:opacity-50">»</button>
+            <button onClick={() => setPage(1)} disabled={page===1} className="px-3 py-1 bg-white border rounded-full disabled:opacity-50">«</button>
+            <button onClick={() => setPage(p=>Math.max(1,p-1))} disabled={page===1} className="px-3 py-1 bg-white border rounded-full disabled:opacity-50">‹</button>
+            <button onClick={() => setPage(p=>Math.min(pageCount,p+1))} disabled={page===pageCount} className="px-3 py-1 bg-white border rounded-full disabled:opacity-50">›</button>
+            <button onClick={() => setPage(pageCount)} disabled={page===pageCount} className="px-3 py-1 bg-white border rounded-full disabled:opacity-50">»</button>
           </div>
-          <select value={pageSize} onChange={e => { setPageSize(+e.target.value); setPage(1); }}
-                  className="border rounded-lg px-3 py-1 text-sm">
-            {[50,100,200].map(n => <option key={n} value={n}>{n}</option>)}
+          <select value={pageSize} onChange={e=>{ setPageSize(+e.target.value); setPage(1); }} className="border rounded-lg px-3 py-1 text-sm">
+            {[50,100,200].map(n=><option key={n} value={n}>{n}</option>)}
           </select>
         </div>
       </div>
@@ -470,9 +555,7 @@ export default function App() {
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
             <h2 className="text-xl font-semibold mb-4 text-red-600">
-              {config.start
-                ? "Custom range detected"
-                : "Pre-configured range"}
+              {config.start ? "Custom range detected" : "Pre-configured range"}
             </h2>
             <p className="mb-6">
               {config.start
