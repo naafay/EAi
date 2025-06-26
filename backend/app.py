@@ -1,3 +1,5 @@
+# app.py
+
 import logging
 import datetime
 import sqlite3
@@ -6,7 +8,8 @@ import re
 import win32com.client
 import queue
 import json
-from fastapi import FastAPI, HTTPException
+from typing import Optional
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -40,6 +43,8 @@ ELT_NAMES = {
 BACKEND_CONFIG = {
     "fetch_interval_minutes": 5,
     "lookback_hours":         3,
+    "start":                  None,  # Optional[datetime]
+    "end":                    None,
 }
 
 # === Logging ===
@@ -79,6 +84,8 @@ class EmailItem(BaseModel):
 class ConfigItem(BaseModel):
     fetch_interval_minutes: int
     lookback_hours:         int
+    start:                  Optional[datetime.datetime] = None
+    end:                    Optional[datetime.datetime] = None
 
 # === SSE queue ===
 fetch_queue: queue.Queue[str] = queue.Queue()
@@ -114,7 +121,6 @@ def rate_and_reason(m: dict) -> tuple[int,str]:
     sole_to  = (len(m["to_smtp"]) == 1 and m["to_smtp"][0] == EMAIL_ADDRESS.lower())
     mention  = ("abdul" in m["last_body"] or "nafay" in m["last_body"])
 
-    # Critical / Major / High (existing)
     if is_elt and sole_to:
         return 5, "ELT + Sole-To"
     if mention and is_elt:
@@ -125,37 +131,41 @@ def rate_and_reason(m: dict) -> tuple[int,str]:
         return 4, "Mention Only"
     if sole_to:
         return 3, "Sole-To Only"
-
-    # === New Medium (2) categories ===
-
-    # 1) Small To-Group: not from ELT, I'm in To with 1–4 others
     if (
         not is_elt
         and EMAIL_ADDRESS.lower() in m["to_smtp"]
         and 2 <= len(m["to_smtp"]) <= 3
     ):
         return 2, "Small To Group"
-
-    # 2) ELT-Recipient: sender isn’t ELT, I'm anywhere in rec_smtp,
-    #    and at least one ELT member is in To
     if (
         not is_elt
         and EMAIL_ADDRESS.lower() in m["rec_smtp"]
         and any(addr in ELT_EMAILS for addr in m["to_smtp"])
     ):
         return 2, "ELT Recipients"
-
     return 0, ""
 
-def fetch_outlook_dicts() -> list[dict]:
-    logging.info("Fetching Outlook emails…")
+def fetch_dicts(preset: bool,
+                start: Optional[datetime.datetime]=None,
+                end:   Optional[datetime.datetime]=None) -> list[dict]:
+    """Unified fetch: either preset lookback or explicit range."""
     pythoncom.CoInitialize()
     out = []
     try:
         ns    = win32com.client.gencache.EnsureDispatch("Outlook.Application").GetNamespace("MAPI")
         inbox = ns.GetDefaultFolder(6)
-        cutoff = datetime.datetime.now() - datetime.timedelta(hours=BACKEND_CONFIG["lookback_hours"])
-        flt    = f"[UnRead]=True AND [ReceivedTime]>='{cutoff.strftime('%m/%d/%Y %I:%M %p')}'"
+
+        if not preset:
+            fmt = "%m/%d/%Y %I:%M %p"
+            flt = (
+                f"[UnRead]=True "
+                f"AND [ReceivedTime]>='{start.strftime(fmt)}' "
+                f"AND [ReceivedTime]<='{end.strftime(fmt)}'"
+            )
+        else:
+            cutoff = datetime.datetime.now() - datetime.timedelta(hours=BACKEND_CONFIG["lookback_hours"])
+            flt    = f"[UnRead]=True AND [ReceivedTime]>='{cutoff.strftime('%m/%d/%Y %I:%M %p')}'"
+
         try:
             items = inbox.Items.Restrict(flt)
         except:
@@ -189,15 +199,12 @@ def fetch_outlook_dicts() -> list[dict]:
             body      = msg.Body or ""
             last_body = extract_last_email(body)
             snippet   = last_body[:200].replace("\r"," ").replace("\n"," ")
-
             raw_name  = (msg.Sender.Name or "").strip()
             raw_smtp  = (msg.SenderEmailAddress or "").lower()
             sender    = normalize_sender(raw_name, raw_smtp)
             received  = msg.ReceivedTime.isoformat()
-            entry_id  = msg.EntryID
-
             out.append({
-                "message_id": entry_id,
+                "message_id": msg.EntryID,
                 "sender":      sender,
                 "sender_smtp": raw_smtp,
                 "subject":     msg.Subject or "",
@@ -207,36 +214,30 @@ def fetch_outlook_dicts() -> list[dict]:
                 "to_smtp":     to_smtp,
                 "last_body":   last_body.lower(),
             })
-    except Exception as e:
-        logging.error(f"COM init failed: {e}")
     finally:
         pythoncom.CoUninitialize()
 
-    logging.info(f"Fetched {len(out)} emails.")
+    logging.info(f"Fetched {len(out)} emails{' in custom range' if not preset else ''}.")
     return out
 
 def fetch_and_track():
-    pythoncom.CoInitialize()
-    try:
-        ns    = win32com.client.gencache.EnsureDispatch("Outlook.Application").GetNamespace("MAPI")
-        inbox = ns.GetDefaultFolder(6)
-        cutoff = datetime.datetime.now() - datetime.timedelta(hours=BACKEND_CONFIG["lookback_hours"])
-        flt    = f"[UnRead]=True AND [ReceivedTime]>='{cutoff.strftime('%m/%d/%Y %I:%M %p')}'"
-        try:
-            items = inbox.Items.Restrict(flt)
-        except:
-            items = []
-        for msg in items:
-            c.execute(
-                "INSERT OR IGNORE INTO tracked_emails(message_id, dismissed_at) VALUES (?, NULL)",
-                (msg.EntryID,)
-            )
-        conn.commit()
-        fetch_queue.put(datetime.datetime.utcnow().isoformat())
-    except Exception as e:
-        logging.error(f"Fetch error: {e}")
-    finally:
-        pythoncom.CoUninitialize()
+    # called by scheduler: uses config persistence
+    start = BACKEND_CONFIG.get("start")
+    end   = BACKEND_CONFIG.get("end")
+    preset = not (start and end)
+    if not preset:
+        start_dt = datetime.datetime.fromisoformat(start)
+        end_dt   = datetime.datetime.fromisoformat(end)
+        items = fetch_dicts(False, start_dt, end_dt)
+    else:
+        items = fetch_dicts(True)
+    for m in items:
+        c.execute(
+            "INSERT OR IGNORE INTO tracked_emails(message_id, dismissed_at) VALUES (?, NULL)",
+            (m["message_id"],)
+        )
+    conn.commit()
+    fetch_queue.put(datetime.datetime.utcnow().isoformat())
 
 # === Scheduler ===
 scheduler = BackgroundScheduler()
@@ -256,14 +257,31 @@ except SchedulerAlreadyRunningError:
 
 @app.get("/config", response_model=ConfigItem)
 def get_config():
-    return ConfigItem(**BACKEND_CONFIG)
+    return ConfigItem(**BACKEND_CONFIG)  # includes optional start/end
 
 @app.post("/config", response_model=ConfigItem)
 def set_config(cfg: ConfigItem):
+    # validate presets
     if not (1 <= cfg.fetch_interval_minutes <= 1440 and 1 <= cfg.lookback_hours <= 720):
         raise HTTPException(400, "Values out of range")
-    BACKEND_CONFIG.update(cfg.dict())
-    scheduler.reschedule_job("fetch_job", trigger="interval", minutes=cfg.fetch_interval_minutes)
+    # if custom range provided, validate
+    if (cfg.start is None) ^ (cfg.end is None):
+        raise HTTPException(400, "Must provide both start and end for custom range")
+    if cfg.start and cfg.end:
+        if cfg.end <= cfg.start:
+            raise HTTPException(400, "End must be after start")
+        if cfg.end - cfg.start > datetime.timedelta(days=31):
+            raise HTTPException(400, "Range cannot exceed 31 days")
+    # update
+    BACKEND_CONFIG.update({
+        "fetch_interval_minutes": cfg.fetch_interval_minutes,
+        "lookback_hours":         cfg.lookback_hours,
+        "start":                  cfg.start.isoformat() if cfg.start else None,
+        "end":                    cfg.end.isoformat()   if cfg.end   else None,
+    })
+    scheduler.reschedule_job("fetch_job",
+                             trigger="interval",
+                             minutes=cfg.fetch_interval_minutes)
     return ConfigItem(**BACKEND_CONFIG)
 
 @app.post("/fetch-now")
@@ -280,15 +298,29 @@ async def events():
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 @app.get("/emails", response_model=list[EmailItem])
-def get_emails():
-    msgs = fetch_outlook_dicts()
-    out  = []
+def get_emails(
+    start: Optional[datetime.datetime] = Query(None),
+    end:   Optional[datetime.datetime] = Query(None),
+):
+    # either both or neither
+    if (start is None) ^ (end is None):
+        raise HTTPException(400, "Must provide both start and end or neither")
+    if start and end:
+        if end <= start:
+            raise HTTPException(400, "End must be after start")
+        if end - start > datetime.timedelta(days=31):
+            raise HTTPException(400, "Range cannot exceed 31 days")
+        msgs = fetch_dicts(False, start, end)
+    else:
+        msgs = fetch_dicts(True)
+
+    out = []
     for m in msgs:
         imp, reason = rate_and_reason(m)
         if imp < 2:
             continue
         row = c.execute(
-            "SELECT dismissed_at FROM tracked_emails WHERE message_id=?", 
+            "SELECT dismissed_at FROM tracked_emails WHERE message_id=?",
             (m["message_id"],)
         ).fetchone()
         if row and row[0] is not None:
