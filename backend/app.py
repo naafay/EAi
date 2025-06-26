@@ -113,6 +113,8 @@ def rate_and_reason(m: dict) -> tuple[int,str]:
     is_elt   = (m["sender_smtp"] in ELT_EMAILS or m["sender"] in ELT_NAMES)
     sole_to  = (len(m["to_smtp"]) == 1 and m["to_smtp"][0] == EMAIL_ADDRESS.lower())
     mention  = ("abdul" in m["last_body"] or "nafay" in m["last_body"])
+
+    # Critical / Major / High (existing)
     if is_elt and sole_to:
         return 5, "ELT + Sole-To"
     if mention and is_elt:
@@ -123,6 +125,26 @@ def rate_and_reason(m: dict) -> tuple[int,str]:
         return 4, "Mention Only"
     if sole_to:
         return 3, "Sole-To Only"
+
+    # === New Medium (2) categories ===
+
+    # 1) Small To-Group: not from ELT, I'm in To with 1–4 others
+    if (
+        not is_elt
+        and EMAIL_ADDRESS.lower() in m["to_smtp"]
+        and 2 <= len(m["to_smtp"]) <= 3
+    ):
+        return 2, "Small To Group"
+
+    # 2) ELT-Recipient: sender isn’t ELT, I'm anywhere in rec_smtp,
+    #    and at least one ELT member is in To
+    if (
+        not is_elt
+        and EMAIL_ADDRESS.lower() in m["rec_smtp"]
+        and any(addr in ELT_EMAILS for addr in m["to_smtp"])
+    ):
+        return 2, "ELT Recipients"
+
     return 0, ""
 
 def fetch_outlook_dicts() -> list[dict]:
@@ -140,7 +162,6 @@ def fetch_outlook_dicts() -> list[dict]:
             items = []
 
         for msg in items:
-            # only mail items
             try:
                 if msg.Class != 43:
                     continue
@@ -159,8 +180,10 @@ def fetch_outlook_dicts() -> list[dict]:
                 if r.Type == 1:
                     to_smtp.append(addr)
 
-            if (EMAIL_ADDRESS.lower() not in rec_smtp
-               and EMAIL_ALIAS_NAME.lower() not in " ".join(rec_names)):
+            if (
+                EMAIL_ADDRESS.lower() not in rec_smtp
+                and EMAIL_ALIAS_NAME.lower() not in " ".join(rec_names)
+            ):
                 continue
 
             body      = msg.Body or ""
@@ -209,7 +232,6 @@ def fetch_and_track():
                 (msg.EntryID,)
             )
         conn.commit()
-        # push SSE event
         fetch_queue.put(datetime.datetime.utcnow().isoformat())
     except Exception as e:
         logging.error(f"Fetch error: {e}")
@@ -263,7 +285,7 @@ def get_emails():
     out  = []
     for m in msgs:
         imp, reason = rate_and_reason(m)
-        if imp < 3:
+        if imp < 2:
             continue
         row = c.execute(
             "SELECT dismissed_at FROM tracked_emails WHERE message_id=?", 
@@ -290,6 +312,16 @@ def dismiss(mid: str):
         (mid, now)
     )
     conn.commit()
+    pythoncom.CoInitialize()
+    try:
+        ns   = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
+        mail = ns.GetItemFromID(mid)
+        mail.UnRead = False
+        mail.Save()
+    except Exception as e:
+        logging.error(f"COM mark-as-read failed: {e}")
+    finally:
+        pythoncom.CoUninitialize()
     return {"ok": True}
 
 @app.post("/open/{mid}")
