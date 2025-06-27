@@ -130,21 +130,21 @@ def rate_and_reason(m: dict) -> tuple[int,str]:
     mention  = ("abdul" in m["last_body"] or "nafay" in m["last_body"])
 
     if is_elt and sole_to:
-        return 5, "ELT + Sole-To"
+        return 5, "From ELT + Direct To You"
     if mention and is_elt:
-        return 5, "ELT + Mention"
+        return 5, "From ELT + Mentioned You"
     if is_elt:
-        return 4, "ELT Sender"
+        return 4, "From ELT"
     if mention:
-        return 4, "Mention Only"
+        return 4, "Mentioned You"
     if sole_to:
-        return 3, "Sole-To Only"
+        return 3, "Direct To You"
     if (
         not is_elt
         and EMAIL_ADDRESS.lower() in m["to_smtp"]
         and 2 <= len(m["to_smtp"]) <= 3
     ):
-        return 2, "Small To Group"
+        return 2, "Small Group"
     if (
         not is_elt
         and EMAIL_ADDRESS.lower() in m["rec_smtp"]

@@ -1,7 +1,17 @@
 // src/App.jsx
 import { useEffect, useState, useMemo, useRef, Fragment } from "react";
 import axios from "axios";
-import { Mail, Loader, MailSearch, MailCheck, Mails, ExternalLink, CopyCheck, MailOpen } from "lucide-react";
+import {
+  Mail,
+  Loader,
+  MailSearch,
+  MailCheck,
+  Mails,
+  ExternalLink,
+  CopyCheck,
+  MailOpen,
+  Tag
+} from "lucide-react";
 
 // point axios at your backend once
 axios.defaults.baseURL = "http://localhost:8000";
@@ -12,6 +22,17 @@ function parseLocal(iso) {
   const [Y, M, D] = date.split("-").map(Number);
   const [h, m, s] = time.split(/[:.]/).map(Number);
   return new Date(Y, M - 1, D, h, m, s);
+}
+
+function insertZWS(str, maxLen = 30) {
+  return str.split(" ").map(word => {
+    if (word.length <= maxLen) return word;
+    // insert \u200B every maxLen chars
+    return word.replace(
+      new RegExp(`(.{${maxLen}})(?=.)`, "g"),
+      "$1\u200B"
+    );
+  }).join(" ");
 }
 
 const LOOKBACK_OPTIONS = [
@@ -482,7 +503,10 @@ export default function App() {
                   <th
                     key={key}
                     onClick={() => onHeaderClick(key)}
-                    className="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer"
+                    className={
+      `px-4 py-2 text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer
+      ${key === "importance" || key === "reason" ? "text-center" : "text-left"}`
+    }
                   >
                     <div className="inline-flex items-center">
                       {label}
@@ -524,9 +548,18 @@ export default function App() {
                         <td className="px-4 py-2 text-sm text-gray-800">{fmtEmailDT(e.received)}</td>
                         <td className="px-4 py-2 text-sm text-gray-800">{e.sender}</td>
                         <td className="px-4 py-2 text-sm text-gray-800">{e.subject}</td>
-                        <td className="px-4 py-2 text-sm text-gray-800">{e.preview}</td>
+                        <td className="px-4 py-2 text-sm text-gray-800 break-words whitespace-normal">{insertZWS(e.preview)}</td>
                         <td className="px-4 py-2 text-center">{renderPill(e.importance)}</td>
-                        <td className="px-4 py-2 text-center text-sm text-gray-800">{e.reason}</td>
+                        <td className="px-4 py-2 text-center align-center">
+                          {e.reason.split("+").map(r => r.trim()).map((r, i) => (
+                            <div key={i} className="flex items-center mb-1 whitespace-nowrap justify-center">
+                              <Tag className="h-3 w-3 text-gray-500 mr-1" />
+                              <span className="bg-gray-100 text-center text-gray-800 text-xs font-medium px-2 py-1 rounded">
+                                {r}
+                              </span>
+                            </div>
+                          ))}
+                        </td>
                         <td className="px-4 py-2 text-center">
                           <span title="Open mail">
                             <MailOpen
