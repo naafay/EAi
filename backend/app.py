@@ -36,7 +36,7 @@ ELT_NAMES = {
     "Michael Connaway",
     "Gary Croke",
     "Erin Boase",
-    "Spencer Stoakley",
+    "Spencer Stoakey",
 }
 
 # === Runtime Config ===
@@ -63,10 +63,17 @@ app.add_middleware(
 # === Database ===
 conn = sqlite3.connect(DB_PATH, check_same_thread=False)
 c    = conn.cursor()
+# track individual message dismissals
 c.execute("""
 CREATE TABLE IF NOT EXISTS tracked_emails(
   message_id TEXT PRIMARY KEY,
   dismissed_at DATETIME NULL
+)
+""")
+# track entire conversation dismissals
+c.execute("""
+CREATE TABLE IF NOT EXISTS dismissed_conversations(
+  conversation_id TEXT PRIMARY KEY
 )
 """)
 conn.commit()
@@ -74,6 +81,7 @@ conn.commit()
 # === Pydantic Models ===
 class EmailItem(BaseModel):
     message_id: str
+    conversation_id: str
     sender:      str
     subject:     str
     preview:     str
@@ -178,6 +186,7 @@ def fetch_dicts(preset: bool,
             except AttributeError:
                 continue
 
+            # gather recipients
             rec_smtp, rec_names, to_smtp = [], [], []
             for r in msg.Recipients:
                 try:
@@ -190,12 +199,14 @@ def fetch_dicts(preset: bool,
                 if r.Type == 1:
                     to_smtp.append(addr)
 
+            # ensure this mailbox is in recipients
             if (
                 EMAIL_ADDRESS.lower() not in rec_smtp
                 and EMAIL_ALIAS_NAME.lower() not in " ".join(rec_names)
             ):
                 continue
 
+            # extract snippet
             body      = msg.Body or ""
             last_body = extract_last_email(body)
             snippet   = last_body[:200].replace("\r"," ").replace("\n"," ")
@@ -203,16 +214,19 @@ def fetch_dicts(preset: bool,
             raw_smtp  = (msg.SenderEmailAddress or "").lower()
             sender    = normalize_sender(raw_name, raw_smtp)
             received  = msg.ReceivedTime.isoformat()
+            conv_id   = msg.ConversationID
+
             out.append({
-                "message_id": msg.EntryID,
-                "sender":      sender,
-                "sender_smtp": raw_smtp,
-                "subject":     msg.Subject or "",
-                "preview":     snippet,
-                "received":    received,
-                "rec_smtp":    rec_smtp,
-                "to_smtp":     to_smtp,
-                "last_body":   last_body.lower(),
+                "message_id":     msg.EntryID,
+                "conversation_id": conv_id,
+                "sender":          sender,
+                "sender_smtp":     raw_smtp,
+                "subject":         msg.Subject or "",
+                "preview":         snippet,
+                "received":        received,
+                "rec_smtp":        rec_smtp,
+                "to_smtp":         to_smtp,
+                "last_body":       last_body.lower(),
             })
     finally:
         pythoncom.CoUninitialize()
@@ -231,6 +245,11 @@ def fetch_and_track():
         items = fetch_dicts(False, start_dt, end_dt)
     else:
         items = fetch_dicts(True)
+
+    # filter out any already-dismissed conversations
+    dismissed_convs = {row[0] for row in c.execute("SELECT conversation_id FROM dismissed_conversations")}
+    items = [m for m in items if m["conversation_id"] not in dismissed_convs]
+
     for m in items:
         c.execute(
             "INSERT OR IGNORE INTO tracked_emails(message_id, dismissed_at) VALUES (?, NULL)",
@@ -257,14 +276,12 @@ except SchedulerAlreadyRunningError:
 
 @app.get("/config", response_model=ConfigItem)
 def get_config():
-    return ConfigItem(**BACKEND_CONFIG)  # includes optional start/end
+    return ConfigItem(**BACKEND_CONFIG)
 
 @app.post("/config", response_model=ConfigItem)
 def set_config(cfg: ConfigItem):
-    # validate presets
     if not (1 <= cfg.fetch_interval_minutes <= 1440 and 1 <= cfg.lookback_hours <= 720):
         raise HTTPException(400, "Values out of range")
-    # if custom range provided, validate
     if (cfg.start is None) ^ (cfg.end is None):
         raise HTTPException(400, "Must provide both start and end for custom range")
     if cfg.start and cfg.end:
@@ -272,7 +289,6 @@ def set_config(cfg: ConfigItem):
             raise HTTPException(400, "End must be after start")
         if cfg.end - cfg.start > datetime.timedelta(days=31):
             raise HTTPException(400, "Range cannot exceed 31 days")
-    # update
     BACKEND_CONFIG.update({
         "fetch_interval_minutes": cfg.fetch_interval_minutes,
         "lookback_hours":         cfg.lookback_hours,
@@ -302,7 +318,6 @@ def get_emails(
     start: Optional[datetime.datetime] = Query(None),
     end:   Optional[datetime.datetime] = Query(None),
 ):
-    # either both or neither
     if (start is None) ^ (end is None):
         raise HTTPException(400, "Must provide both start and end or neither")
     if start and end:
@@ -314,8 +329,13 @@ def get_emails(
     else:
         msgs = fetch_dicts(True)
 
+    dismissed_convs = {row[0] for row in c.execute("SELECT conversation_id FROM dismissed_conversations")}
+
     out = []
     for m in msgs:
+        # skip if conversation dismissed
+        if m["conversation_id"] in dismissed_convs:
+            continue
         imp, reason = rate_and_reason(m)
         if imp < 2:
             continue
@@ -326,24 +346,20 @@ def get_emails(
         if row and row[0] is not None:
             continue
         out.append(EmailItem(
-            message_id=m["message_id"],
-            sender     =m["sender"],
-            subject    =m["subject"],
-            preview    =m["preview"],
-            received   =m["received"],
-            importance =imp,
-            reason     =reason
+            message_id     = m["message_id"],
+            conversation_id = m["conversation_id"],
+            sender          = m["sender"],
+            subject         = m["subject"],
+            preview         = m["preview"],
+            received        = m["received"],
+            importance      = imp,
+            reason          = reason
         ))
     return out
 
 @app.post("/emails/{mid}/dismiss")
 def dismiss(mid: str):
-    now = datetime.datetime.now().isoformat()
-    c.execute(
-        "INSERT OR REPLACE INTO tracked_emails(message_id, dismissed_at) VALUES (?, ?)",
-        (mid, now)
-    )
-    conn.commit()
+    # mark as read in Outlook only, no DB write here
     pythoncom.CoInitialize()
     try:
         ns   = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
@@ -354,6 +370,32 @@ def dismiss(mid: str):
         logging.error(f"COM mark-as-read failed: {e}")
     finally:
         pythoncom.CoUninitialize()
+    return {"ok": True}
+
+@app.post("/emails/{mid}/dismiss-conversation")
+def dismiss_conversation(mid: str):
+    pythoncom.CoInitialize()
+    try:
+        ns   = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
+        mail = ns.GetItemFromID(mid)
+        conv = mail.GetConversation()
+
+        table = conv.GetTable()
+        while not table.EndOfTable:
+            row      = table.GetNextRow()
+            try:
+                entry_id = row.Item("EntryID")
+                item     = ns.GetItemFromID(entry_id)
+                item.UnRead = False
+                item.Save()
+            except Exception:
+                # skip any failures per-item
+                continue
+    except Exception as e:
+        logging.error(f"Error dismissing conversation: {e}")
+    finally:
+        pythoncom.CoUninitialize()
+
     return {"ok": True}
 
 @app.post("/open/{mid}")

@@ -1,7 +1,7 @@
 // src/App.jsx
 import { useEffect, useState, useMemo, useRef, Fragment } from "react";
 import axios from "axios";
-import { Mail, Loader, MailSearch, MailCheck } from "lucide-react";
+import { Mail, Loader, MailSearch, MailCheck, Mails, ExternalLink, CopyCheck, MailOpen } from "lucide-react";
 
 // point axios at your backend once
 axios.defaults.baseURL = "http://localhost:8000";
@@ -26,15 +26,17 @@ const LOOKBACK_OPTIONS = [
   { label: "Custom", value: "custom" },
 ];
 
+// added an extra column for "Dismiss Conversation"
 const COLUMNS = [
-  { key: "received",   label: "Datetime" },
-  { key: "sender",     label: "From" },
-  { key: "subject",    label: "Subject" },
-  { key: "preview",    label: "Body preview" },
-  { key: "importance", label: "Rating" },
-  { key: "reason",     label: "Reason" },
-  { key: "open",       label: "" },
-  { key: "dismiss",    label: "" },
+  { key: "received",             label: "Datetime" },
+  { key: "sender",               label: "From" },
+  { key: "subject",              label: "Subject" },
+  { key: "preview",              label: "Body preview" },
+  { key: "importance",           label: "Rating" },
+  { key: "reason",               label: "Reason" },
+  { key: "open",                 label: "" },
+  { key: "dismiss",              label: "" },
+  { key: "dismiss_conversation", label: "" },
 ];
 
 // Map numeric importance to label
@@ -320,6 +322,15 @@ export default function App() {
     setEmails(e => e.filter(m => m.message_id !== id));
   }
 
+  // NEW: dismiss entire conversation
+  function dismissConversation(id, convId) {
+    axios.post(`/emails/${id}/dismiss-conversation`)
+         .then(() => {
+           setEmails(e => e.filter(m => m.conversation_id !== convId));
+         })
+         .catch(console.error);
+  }
+
   async function openInOutlook(id) {
     try {
       await axios.post(`/open/${encodeURIComponent(id)}`);
@@ -497,11 +508,11 @@ export default function App() {
                       <span className="font-medium mr-2">
                         {collapsed[groupKey] ? "+" : "–"}
                       </span>
-					  <span className="text-xs font-semibold text-gray-700 uppercase">
-                      {sortKey === "importance"
-                        ? IMPORTANCE_LABELS[groupKey]
-                        : groupKey}
-					 </span>
+                      <span className="text-xs font-semibold text-gray-700 uppercase">
+                        {sortKey === "importance"
+                          ? IMPORTANCE_LABELS[groupKey]
+                          : groupKey}
+                      </span>
                       <span className="ml-1 text-gray-600">({groupedData[groupKey].length})</span>
                     </td>
                   </tr>
@@ -517,14 +528,32 @@ export default function App() {
                         <td className="px-4 py-2 text-center">{renderPill(e.importance)}</td>
                         <td className="px-4 py-2 text-center text-sm text-gray-800">{e.reason}</td>
                         <td className="px-4 py-2 text-center">
-                          <MailSearch strokeWidth = {1.5} className="h-5 w-5 text-blue-600 hover:text-blue-800 cursor-pointer"
-                                onClick={() => openInOutlook(e.message_id)} />
+                          <span title="Open mail">
+                            <MailOpen
+                              strokeWidth={1.5}
+                              className="h-5 w-5 text-blue-600 hover:text-blue-800 cursor-pointer"
+                              onClick={() => openInOutlook(e.message_id)}
+                            />
+                          </span>
                         </td>
-						
                         <td className="px-4 py-2 text-center">
-						<MailCheck strokeWidth = {1.5} className="h-5 w-5 text-red-600 hover:text-red-800 cursor-pointer"
-                                onClick={() => dismiss(e.message_id)} />
-								 </td>
+                          <span title="Mark as read & dismiss">
+                            <MailCheck
+                              strokeWidth={1.5}
+                              className="h-5 w-5 text-red-600 hover:text-red-800 cursor-pointer"
+                              onClick={() => dismiss(e.message_id)}
+                            />
+                          </span>
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          <span title="Mark conversation as read">
+                            <CopyCheck
+                              strokeWidth={1.5}
+                              className="h-5 w-5 text-red-600 hover:text-red-800 cursor-pointer"
+                              onClick={() => dismissConversation(e.message_id, e.conversation_id)}
+                            />
+                          </span>
+                        </td>
                       </tr>
                     ))}
                 </Fragment>
