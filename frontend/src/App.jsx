@@ -554,7 +554,7 @@ export default function App() {
                           {e.reason.split("+").map(r => r.trim()).map((r, i) => (
                             <div key={i} className="flex items-center mb-1 whitespace-nowrap justify-center">
                               <Tag className="h-3 w-3 text-gray-500 mr-1" />
-                              <span className="bg-gray-100 text-center text-gray-800 text-xs font-medium px-2 py-1 rounded">
+                              <span className="bg-red-100 text-center text-gray-800 text-xs font-medium px-2 py-1 rounded">
                                 {r}
                               </span>
                             </div>
