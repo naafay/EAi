@@ -3,8 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import stripe
 import os
-import supabase
-from supabase import create_client, Client
 from dotenv import load_dotenv
 
 load_dotenv()
