@@ -3,23 +3,25 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import stripe
 import os
-from dotenv import load_dotenv
 import httpx
+import logging
+from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
 app = FastAPI()
 
-# Allow CORS for Netlify frontend
+# Enable CORS for Netlify frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace * with Netlify domain for stricter security
+    allow_origins=["*"],  # Replace with Netlify domain for production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Stripe & Supabase configuration
+# Stripe and Supabase config
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -31,6 +33,7 @@ class CheckoutSessionRequest(BaseModel):
     customer_email: str
 
 # ========== ROUTES ==========
+
 @app.post("/create-checkout-session")
 async def create_checkout_session(req: CheckoutSessionRequest):
     try:
@@ -66,20 +69,36 @@ async def stripe_webhook(request: Request):
         subscription_id = session.get("subscription")
 
         if customer_email and subscription_id:
-            # Update Supabase via REST API
-            async with httpx.AsyncClient() as client:
-                update_url = f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}"
-                headers = {
-                    "apikey": SUPABASE_SERVICE_ROLE_KEY,
-                    "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
-                    "Content-Type": "application/json",
-                    "Prefer": "return=representation"
-                }
-                update_body = {
-                    "is_paid": True,
-                    "subscription_id": subscription_id
-                }
-                await client.patch(update_url, headers=headers, json=update_body)
+            try:
+                subscription = stripe.Subscription.retrieve(subscription_id)
+                start_timestamp = subscription.current_period_start
+                end_timestamp = subscription.current_period_end
+                interval = subscription.plan.interval  # 'month' or 'year'
+
+                subscription_start = datetime.utcfromtimestamp(start_timestamp).isoformat()
+                subscription_end = datetime.utcfromtimestamp(end_timestamp).isoformat()
+                subscription_type = "monthly" if interval == "month" else "annual"
+
+                async with httpx.AsyncClient() as client:
+                    update_url = f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}"
+                    headers = {
+                        "apikey": SUPABASE_SERVICE_ROLE_KEY,
+                        "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
+                        "Content-Type": "application/json",
+                        "Prefer": "return=representation"
+                    }
+                    body = {
+                        "is_paid": True,
+                        "subscription_start": subscription_start,
+                        "subscription_end": subscription_end,
+                        "subscription_type": subscription_type
+                    }
+                    resp = await client.patch(update_url, headers=headers, json=body)
+                    logging.warning(f"📦 Supabase PATCH status: {resp.status_code}")
+                    logging.warning(f"📦 Supabase response: {resp.text}")
+
+            except Exception as e:
+                logging.error(f"❌ Error updating Supabase: {e}")
 
     return {"status": "success"}
 
