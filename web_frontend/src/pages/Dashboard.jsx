@@ -10,6 +10,7 @@ export default function Dashboard() {
   const [editing, setEditing] = useState(false);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [subscriptionInfo, setSubscriptionInfo] = useState(null);
 
   const BACKEND_URL = 'https://eai-uuwt.onrender.com'; // Replace with your actual URL
 
@@ -26,6 +27,7 @@ export default function Dashboard() {
       }
 
       setUser(user);
+
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('*')
@@ -37,6 +39,22 @@ export default function Dashboard() {
         setFirstName(profileData.first_name || '');
         setLastName(profileData.last_name || '');
         setEmail(profileData.email || '');
+
+        if (profileData.subscription_id) {
+          fetchSubscriptionInfo(profileData.subscription_id);
+        }
+      }
+    };
+
+    const fetchSubscriptionInfo = async (subscriptionId) => {
+      try {
+        const res = await fetch(`${BACKEND_URL}/subscription-info/${subscriptionId}`);
+        const data = await res.json();
+        if (!data.error) {
+          setSubscriptionInfo(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch subscription info:', err);
       }
     };
 
@@ -194,6 +212,16 @@ export default function Dashboard() {
             <p>Days Remaining: <strong>{daysRemaining}</strong></p>
           )}
         </div>
+
+        {isPaid && subscriptionInfo && (
+          <div className="mb-6 border p-4 rounded bg-gray-50">
+            <h4 className="font-semibold mb-2">Subscription Details</h4>
+            <p><strong>Plan:</strong> {subscriptionInfo.plan}</p>
+            <p><strong>Start Date:</strong> {subscriptionInfo.start_date}</p>
+            <p><strong>End Date:</strong> {subscriptionInfo.end_date}</p>
+            <p><strong>Auto-Renewal:</strong> {subscriptionInfo.auto_renew}</p>
+          </div>
+        )}
 
         {!trialStart && !isPaid && (
           <div className="mb-4">
