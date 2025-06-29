@@ -12,7 +12,7 @@ app = FastAPI()
 # Enable CORS for Netlify frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace * with your Netlify domain for better security
+    allow_origins=["*"],  # Replace "*" with your Netlify domain in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -41,3 +41,8 @@ async def create_checkout_session(req: CheckoutSessionRequest):
         return {"url": checkout_session.url}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# ✅ Health check route for Render and browser testing
+@app.get("/")
+def root():
+    return {"message": "Stripe backend is live!"}
