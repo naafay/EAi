@@ -4,6 +4,7 @@ from pydantic import BaseModel
 import stripe
 import os
 from dotenv import load_dotenv
+import httpx
 
 load_dotenv()
 
@@ -18,18 +19,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize Stripe and Supabase
+# Stripe & Supabase configuration
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
-supabase_url = os.getenv("SUPABASE_URL")
-supabase_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-supabase: Client = create_client(supabase_url, supabase_key)
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
 # ========== MODELS ==========
 class CheckoutSessionRequest(BaseModel):
     price_id: str
     customer_email: str
-
 
 # ========== ROUTES ==========
 @app.post("/create-checkout-session")
@@ -67,10 +66,20 @@ async def stripe_webhook(request: Request):
         subscription_id = session.get("subscription")
 
         if customer_email and subscription_id:
-            supabase.from_("profiles").update({
-                "is_paid": True,
-                "subscription_id": subscription_id
-            }).eq("email", customer_email).execute()
+            # Update Supabase via REST API
+            async with httpx.AsyncClient() as client:
+                update_url = f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}"
+                headers = {
+                    "apikey": SUPABASE_SERVICE_ROLE_KEY,
+                    "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
+                    "Content-Type": "application/json",
+                    "Prefer": "return=representation"
+                }
+                update_body = {
+                    "is_paid": True,
+                    "subscription_id": subscription_id
+                }
+                await client.patch(update_url, headers=headers, json=update_body)
 
     return {"status": "success"}
 
