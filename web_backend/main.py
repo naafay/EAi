@@ -1,29 +1,31 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import stripe
-import os
-import httpx
-import logging
 from dotenv import load_dotenv
 from datetime import datetime
+import stripe
+import os
+import logging
+import requests
 
 load_dotenv()
 
 app = FastAPI()
 
-# Enable CORS for Netlify frontend
+# Enable CORS for your Netlify frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace with Netlify domain for production
+    allow_origins=["*"],  # Replace "*" with "https://yourdomain.netlify.app" for production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Stripe and Supabase config
+# Stripe setup
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
+
+# Supabase config
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
@@ -68,44 +70,54 @@ async def stripe_webhook(request: Request):
         customer_email = session.get("customer_email")
         subscription_id = session.get("subscription")
 
-        if customer_email and subscription_id:
-            try:
-                subscription = stripe.Subscription.retrieve(subscription_id)
+        if not (customer_email and subscription_id):
+            logging.error("❌ Missing customer_email or subscription_id in session")
+            return {"status": "error", "message": "Missing data"}
 
-                # Defensive checks
-                start_ts = subscription.get("current_period_start")
-                end_ts = subscription.get("current_period_end")
-                interval = subscription.get("plan", {}).get("interval", "unknown")
+        # Retrieve full subscription details
+        try:
+            subscription = stripe.Subscription.retrieve(subscription_id)
+        except Exception as e:
+            logging.error(f"❌ Stripe subscription fetch error: {e}")
+            return {"status": "error", "message": "Failed to fetch subscription"}
 
-                if not start_ts or not end_ts:
-                    logging.error("❌ Missing timestamps in subscription object")
-                    logging.error(subscription)
-                    return {"status": "error", "message": "Missing subscription timestamps"}
+        # Extract timestamps from nested structure
+        items = subscription.get("items", {}).get("data", [])
+        if not items or not items[0].get("current_period_start") or not items[0].get("current_period_end"):
+            logging.error("❌ Missing timestamps in subscription.items")
+            logging.error(subscription)
+            return {"status": "error", "message": "Missing timestamps in subscription.items"}
 
-                subscription_start = datetime.utcfromtimestamp(start_ts).isoformat()
-                subscription_end = datetime.utcfromtimestamp(end_ts).isoformat()
-                subscription_type = "monthly" if interval == "month" else "annual"
+        subscription_start = datetime.utcfromtimestamp(items[0]["current_period_start"]).isoformat()
+        subscription_end = datetime.utcfromtimestamp(items[0]["current_period_end"]).isoformat()
+        subscription_type = items[0]["plan"]["interval"]
 
-                async with httpx.AsyncClient() as client:
-                    update_url = f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}"
-                    headers = {
-                        "apikey": SUPABASE_SERVICE_ROLE_KEY,
-                        "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
-                        "Content-Type": "application/json",
-                        "Prefer": "return=representation"
-                    }
-                    body = {
-                        "is_paid": True,
-                        "subscription_start": subscription_start,
-                        "subscription_end": subscription_end,
-                        "subscription_type": subscription_type
-                    }
-                    resp = await client.patch(update_url, headers=headers, json=body)
-                    logging.warning(f"📦 Supabase PATCH status: {resp.status_code}")
-                    logging.warning(f"📦 Supabase response: {resp.text}")
+        # Update Supabase
+        supabase_url = f"{SUPABASE_URL}/rest/v1/profiles"
+        headers = {
+            "apikey": SUPABASE_SERVICE_ROLE_KEY,
+            "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
+            "Content-Type": "application/json",
+            "Prefer": "return=representation"
+        }
+        payload = {
+            "is_paid": True,
+            "subscription_id": subscription_id,
+            "subscription_type": subscription_type,
+            "subscription_start": subscription_start,
+            "subscription_end": subscription_end
+        }
 
-            except Exception as e:
-                logging.error(f"❌ Error updating Supabase: {e}")
+        response = requests.patch(
+            f"{supabase_url}?email=eq.{customer_email}",
+            json=payload,
+            headers=headers
+        )
+
+        if response.status_code >= 300:
+            logging.error(f"❌ Supabase update failed: {response.text}")
+        else:
+            logging.info("✅ Supabase updated successfully")
 
     return {"status": "success"}
 
@@ -114,17 +126,18 @@ async def stripe_webhook(request: Request):
 def get_subscription_info(subscription_id: str):
     try:
         sub = stripe.Subscription.retrieve(subscription_id)
+        item = sub["items"]["data"][0]
         return {
             "id": sub.id,
             "status": sub.status,
-            "start_date": sub.start_date,
-            "current_period_start": sub.current_period_start,
-            "current_period_end": sub.current_period_end,
+            "start_date": item["current_period_start"],
+            "current_period_start": item["current_period_start"],
+            "current_period_end": item["current_period_end"],
             "cancel_at_period_end": sub.cancel_at_period_end,
             "plan": {
-                "interval": sub.plan.interval,
-                "amount": sub.plan.amount / 100,
-                "currency": sub.plan.currency
+                "interval": item["plan"]["interval"],
+                "amount": item["plan"]["amount"] / 100,
+                "currency": item["plan"]["currency"]
             }
         }
     except Exception as e:
