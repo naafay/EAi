@@ -28,8 +28,8 @@ class CheckoutSessionRequest(BaseModel):
 async def create_checkout_session(req: CheckoutSessionRequest):
     try:
         checkout_session = stripe.checkout.Session.create(
-            success_url="https://yourfrontenddomain.com/success",
-            cancel_url="https://yourfrontenddomain.com/cancel",
+            success_url="https://outprio.netlify.app/dashboard",
+            cancel_url="https://outprio.netlify.app/dashboard",
             payment_method_types=["card"],
             mode="subscription",
             line_items=[{
