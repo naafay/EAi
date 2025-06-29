@@ -12,7 +12,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [subscriptionInfo, setSubscriptionInfo] = useState(null);
 
-  const BACKEND_URL = 'https://eai-uuwt.onrender.com'; // Replace with your actual URL
+  const BACKEND_URL = 'https://eai-uuwt.onrender.com';
 
   useEffect(() => {
     const fetchUserAndProfile = async () => {
@@ -123,12 +123,10 @@ export default function Dashboard() {
     }
   };
 
-  if (!user || !profile) return null;
-
   const today = new Date();
-  const trialStart = profile.trial_start ? new Date(profile.trial_start) : null;
-  const trialExpires = profile.trial_expires ? new Date(profile.trial_expires) : null;
-  const isPaid = profile.is_paid;
+  const trialStart = profile?.trial_start ? new Date(profile.trial_start) : null;
+  const trialExpires = profile?.trial_expires ? new Date(profile.trial_expires) : null;
+  const isPaid = profile?.is_paid;
 
   let licenseStatus = '⏳ Not Started';
   let daysRemaining = 0;
@@ -141,6 +139,37 @@ export default function Dashboard() {
     licenseStatus = daysRemaining > 0 ? '🧪 Trial Active' : '⚠️ Trial Expired';
   }
 
+  const formatDate = (timestamp) => {
+    if (!timestamp) return 'N/A';
+    return new Date(timestamp * 1000).toLocaleDateString();
+  };
+
+  const renderSubscriptionDetails = () => {
+    if (!subscriptionInfo) return null;
+
+    return (
+      <div className="mb-6 border p-4 rounded bg-gray-50">
+        <h4 className="font-semibold mb-2">Subscription Details</h4>
+        <p><strong>Plan:</strong> {subscriptionInfo.plan?.interval} (${subscriptionInfo.plan?.amount})</p>
+        <p><strong>Start Date:</strong> {formatDate(subscriptionInfo.start_date)}</p>
+        <p><strong>End Date:</strong> {formatDate(subscriptionInfo.current_period_end)}</p>
+        <p><strong>Auto-Renewal:</strong> {subscriptionInfo.cancel_at_period_end ? '❌ Off' : '✅ On'}</p>
+
+        {/* Future features */}
+        <div className="mt-4 space-x-2">
+          <button disabled className="bg-yellow-500 text-white px-3 py-1 rounded opacity-60">
+            Upgrade (Coming Soon)
+          </button>
+          <button disabled className="bg-red-600 text-white px-3 py-1 rounded opacity-60">
+            Cancel Subscription
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  if (!user || !profile) return null;
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-xl mx-auto bg-white rounded shadow-md p-6">
@@ -148,34 +177,17 @@ export default function Dashboard() {
 
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">Email</label>
-          <input
-            type="text"
-            value={email}
-            disabled
-            className="w-full border px-3 py-2 rounded bg-gray-100"
-          />
+          <input type="text" value={email} disabled className="w-full border px-3 py-2 rounded bg-gray-100" />
         </div>
 
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">First Name</label>
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-            disabled={!editing}
-          />
+          <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full border px-3 py-2 rounded" disabled={!editing} />
         </div>
 
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">Last Name</label>
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-            disabled={!editing}
-          />
+          <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-full border px-3 py-2 rounded" disabled={!editing} />
         </div>
 
         {message && <div className="text-sm text-green-600 mb-3">{message}</div>}
@@ -183,23 +195,11 @@ export default function Dashboard() {
         <div className="flex gap-2 mb-6">
           {editing ? (
             <>
-              <button onClick={handleSave} className="bg-blue-600 text-white px-4 py-2 rounded">
-                Save
-              </button>
-              <button
-                onClick={() => setEditing(false)}
-                className="bg-gray-300 px-4 py-2 rounded"
-              >
-                Cancel
-              </button>
+              <button onClick={handleSave} className="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
+              <button onClick={() => setEditing(false)} className="bg-gray-300 px-4 py-2 rounded">Cancel</button>
             </>
           ) : (
-            <button
-              onClick={() => setEditing(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded"
-            >
-              Edit Profile
-            </button>
+            <button onClick={() => setEditing(true)} className="bg-blue-600 text-white px-4 py-2 rounded">Edit Profile</button>
           )}
         </div>
 
@@ -213,22 +213,11 @@ export default function Dashboard() {
           )}
         </div>
 
-        {isPaid && subscriptionInfo && (
-          <div className="mb-6 border p-4 rounded bg-gray-50">
-            <h4 className="font-semibold mb-2">Subscription Details</h4>
-            <p><strong>Plan:</strong> {subscriptionInfo.plan}</p>
-            <p><strong>Start Date:</strong> {subscriptionInfo.start_date}</p>
-            <p><strong>End Date:</strong> {subscriptionInfo.end_date}</p>
-            <p><strong>Auto-Renewal:</strong> {subscriptionInfo.auto_renew}</p>
-          </div>
-        )}
+        {isPaid && renderSubscriptionDetails()}
 
         {!trialStart && !isPaid && (
           <div className="mb-4">
-            <button
-              onClick={handleStartTrial}
-              className="bg-green-600 text-white px-4 py-2 rounded"
-            >
+            <button onClick={handleStartTrial} className="bg-green-600 text-white px-4 py-2 rounded">
               Start Free 3-Day Trial
             </button>
           </div>
@@ -236,27 +225,16 @@ export default function Dashboard() {
 
         {!isPaid && (
           <div className="mb-4 space-y-2">
-            <button
-              onClick={() => handleSubscription('price_1RfIVDFVd7b5c6lTQrG7zUtJ')}
-              disabled={loading}
-              className="w-full bg-blue-600 text-white px-4 py-2 rounded"
-            >
+            <button onClick={() => handleSubscription('price_1RfIVDFVd7b5c6lTQrG7zUtJ')} disabled={loading} className="w-full bg-blue-600 text-white px-4 py-2 rounded">
               {loading ? 'Redirecting...' : 'Buy Monthly Subscription'}
             </button>
-            <button
-              onClick={() => handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')}
-              disabled={loading}
-              className="w-full bg-blue-800 text-white px-4 py-2 rounded"
-            >
+            <button onClick={() => handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')} disabled={loading} className="w-full bg-blue-800 text-white px-4 py-2 rounded">
               {loading ? 'Redirecting...' : 'Buy Annual Subscription'}
             </button>
           </div>
         )}
 
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2 rounded mt-6"
-        >
+        <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded mt-6">
           Logout
         </button>
       </div>
