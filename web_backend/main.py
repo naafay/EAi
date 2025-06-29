@@ -71,12 +71,19 @@ async def stripe_webhook(request: Request):
         if customer_email and subscription_id:
             try:
                 subscription = stripe.Subscription.retrieve(subscription_id)
-                start_timestamp = subscription.current_period_start
-                end_timestamp = subscription.current_period_end
-                interval = subscription.plan.interval  # 'month' or 'year'
 
-                subscription_start = datetime.utcfromtimestamp(start_timestamp).isoformat()
-                subscription_end = datetime.utcfromtimestamp(end_timestamp).isoformat()
+                # Defensive checks
+                start_ts = subscription.get("current_period_start")
+                end_ts = subscription.get("current_period_end")
+                interval = subscription.get("plan", {}).get("interval", "unknown")
+
+                if not start_ts or not end_ts:
+                    logging.error("❌ Missing timestamps in subscription object")
+                    logging.error(subscription)
+                    return {"status": "error", "message": "Missing subscription timestamps"}
+
+                subscription_start = datetime.utcfromtimestamp(start_ts).isoformat()
+                subscription_end = datetime.utcfromtimestamp(end_ts).isoformat()
                 subscription_type = "monthly" if interval == "month" else "annual"
 
                 async with httpx.AsyncClient() as client:
