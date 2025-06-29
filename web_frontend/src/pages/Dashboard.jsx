@@ -9,6 +9,9 @@ export default function Dashboard() {
   const [email, setEmail] = useState('');
   const [editing, setEditing] = useState(false);
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const BACKEND_URL = 'https://eai-uuwt.onrender.com'; // Replace with your actual URL
 
   useEffect(() => {
     const fetchUserAndProfile = async () => {
@@ -79,6 +82,29 @@ export default function Dashboard() {
     }
   };
 
+  const handleSubscription = async (priceId) => {
+    if (!email) return alert('User email not loaded');
+    setLoading(true);
+    try {
+      const res = await fetch(`${BACKEND_URL}/create-checkout-session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ price_id: priceId, customer_email: email }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert('Failed to initiate checkout session.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error creating checkout session.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (!user || !profile) return null;
 
   const today = new Date();
@@ -139,10 +165,7 @@ export default function Dashboard() {
         <div className="flex gap-2 mb-6">
           {editing ? (
             <>
-              <button
-                onClick={handleSave}
-                className="bg-blue-600 text-white px-4 py-2 rounded"
-              >
+              <button onClick={handleSave} className="bg-blue-600 text-white px-4 py-2 rounded">
                 Save
               </button>
               <button
@@ -184,17 +207,21 @@ export default function Dashboard() {
         )}
 
         {!isPaid && (
-          <div className="mb-4">
-            <a
-              href="#"
-              className="text-blue-600 underline"
-              onClick={(e) => {
-                e.preventDefault();
-                alert('💳 Payment and subscription coming soon via Stripe.');
-              }}
+          <div className="mb-4 space-y-2">
+            <button
+              onClick={() => handleSubscription('price_1RfIVDFVd7b5c6lTQrG7zUtJ')}
+              disabled={loading}
+              className="w-full bg-blue-600 text-white px-4 py-2 rounded"
             >
-              Purchase Subscription
-            </a>
+              {loading ? 'Redirecting...' : 'Buy Monthly Subscription'}
+            </button>
+            <button
+              onClick={() => handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')}
+              disabled={loading}
+              className="w-full bg-blue-800 text-white px-4 py-2 rounded"
+            >
+              {loading ? 'Redirecting...' : 'Buy Annual Subscription'}
+            </button>
           </div>
         )}
 
