@@ -145,6 +145,25 @@ export default function Dashboard() {
     }
   };
 
+  const handleResumeSubscription = async () => {
+    if (!profile?.subscription_id) return;
+    try {
+      const res = await fetch(`${BACKEND_URL}/resume-subscription/${profile.subscription_id}`, {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (data.status === 'success') {
+        alert('Subscription resumed.');
+        window.location.reload();
+      } else {
+        alert('Failed to resume subscription.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error resuming subscription.');
+    }
+  };
+
   const handleUpgrade = async () => {
     if (!email) return alert('User email not loaded');
     const confirm = window.confirm('Upgrade to annual plan? This will prorate your current subscription.');
@@ -209,7 +228,11 @@ export default function Dashboard() {
               Upgrade to Annual
             </button>
           )}
-          {!subscriptionInfo.cancel_at_period_end && (
+          {subscriptionInfo.cancel_at_period_end ? (
+            <button onClick={handleResumeSubscription} className="bg-green-600 text-white px-3 py-1 rounded">
+              Resume Subscription
+            </button>
+          ) : (
             <button onClick={handleCancelSubscription} className="bg-red-600 text-white px-3 py-1 rounded">
               Cancel Subscription
             </button>
