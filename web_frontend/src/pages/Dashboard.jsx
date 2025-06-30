@@ -123,26 +123,51 @@ export default function Dashboard() {
     }
   };
 
-  const handleUpgrade = async (priceId) => {
+  const handleCancelSubscription = async () => {
+    if (!profile?.subscription_id) return;
+    const confirm = window.confirm('Are you sure you want to cancel your subscription?');
+    if (!confirm) return;
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/cancel-subscription/${profile.subscription_id}`, {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (data.status === 'success') {
+        alert('Your subscription will be canceled at the end of the billing period.');
+        window.location.reload();
+      } else {
+        alert('Failed to cancel subscription.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error cancelling subscription.');
+    }
+  };
+
+  const handleUpgrade = async () => {
     if (!email) return alert('User email not loaded');
-    setLoading(true);
+    const confirm = window.confirm('Upgrade to annual plan? This will prorate your current subscription.');
+    if (!confirm) return;
+
     try {
       const res = await fetch(`${BACKEND_URL}/upgrade-subscription`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ price_id: priceId, customer_email: email }),
+        body: JSON.stringify({
+          customer_email: email,
+          price_id: 'price_1RfJ54FVd7b5c6lTbljBBCOB', // Annual Plan
+        }),
       });
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
       } else {
-        alert('Failed to initiate upgrade.');
+        alert('Failed to start upgrade session.');
       }
     } catch (err) {
       console.error(err);
-      alert('Error processing upgrade.');
-    } finally {
-      setLoading(false);
+      alert('Error upgrading subscription.');
     }
   };
 
@@ -179,15 +204,16 @@ export default function Dashboard() {
         <p><strong>Auto-Renewal:</strong> {subscriptionInfo.cancel_at_period_end ? '❌ Off' : '✅ On'}</p>
 
         <div className="mt-4 space-x-2">
-          <button
-            onClick={() => handleUpgrade('price_1RfJ54FVd7b5c6lTbljBBCOB')}
-            className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-          >
-            Upgrade to Annual
-          </button>
-          <button disabled className="bg-red-600 text-white px-3 py-1 rounded opacity-60">
-            Cancel Subscription
-          </button>
+          {subscriptionInfo.plan?.interval === 'month' && (
+            <button onClick={handleUpgrade} className="bg-yellow-500 text-white px-3 py-1 rounded">
+              Upgrade to Annual
+            </button>
+          )}
+          {!subscriptionInfo.cancel_at_period_end && (
+            <button onClick={handleCancelSubscription} className="bg-red-600 text-white px-3 py-1 rounded">
+              Cancel Subscription
+            </button>
+          )}
         </div>
       </div>
     );
