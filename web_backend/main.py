@@ -12,10 +12,10 @@ load_dotenv()
 
 app = FastAPI()
 
-# Enable CORS for your Netlify frontend
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace "*" with "https://yourdomain.netlify.app" for production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -29,12 +29,11 @@ endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
-# ========== MODELS ==========
+
 class CheckoutSessionRequest(BaseModel):
     price_id: str
     customer_email: str
 
-# ========== ROUTES ==========
 
 @app.post("/create-checkout-session")
 async def create_checkout_session(req: CheckoutSessionRequest):
@@ -44,10 +43,7 @@ async def create_checkout_session(req: CheckoutSessionRequest):
             cancel_url="https://outprio.netlify.app/dashboard",
             payment_method_types=["card"],
             mode="subscription",
-            line_items=[{
-                "price": req.price_id,
-                "quantity": 1,
-            }],
+            line_items=[{"price": req.price_id, "quantity": 1}],
             customer_email=req.customer_email,
         )
         return {"url": checkout_session.url}
@@ -74,25 +70,21 @@ async def stripe_webhook(request: Request):
             logging.error("❌ Missing customer_email or subscription_id in session")
             return {"status": "error", "message": "Missing data"}
 
-        # Retrieve full subscription details
         try:
             subscription = stripe.Subscription.retrieve(subscription_id)
         except Exception as e:
             logging.error(f"❌ Stripe subscription fetch error: {e}")
             return {"status": "error", "message": "Failed to fetch subscription"}
 
-        # Extract timestamps from nested structure
         items = subscription.get("items", {}).get("data", [])
         if not items or not items[0].get("current_period_start") or not items[0].get("current_period_end"):
             logging.error("❌ Missing timestamps in subscription.items")
-            logging.error(subscription)
-            return {"status": "error", "message": "Missing timestamps in subscription.items"}
+            return {"status": "error", "message": "Missing timestamps"}
 
         subscription_start = datetime.utcfromtimestamp(items[0]["current_period_start"]).isoformat()
         subscription_end = datetime.utcfromtimestamp(items[0]["current_period_end"]).isoformat()
         subscription_type = items[0]["plan"]["interval"]
 
-        # Update Supabase
         supabase_url = f"{SUPABASE_URL}/rest/v1/profiles"
         headers = {
             "apikey": SUPABASE_SERVICE_ROLE_KEY,
@@ -140,5 +132,23 @@ def get_subscription_info(subscription_id: str):
                 "currency": item["plan"]["currency"]
             }
         }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/cancel-subscription/{subscription_id}")
+def cancel_subscription(subscription_id: str):
+    try:
+        stripe.Subscription.modify(subscription_id, cancel_at_period_end=True)
+        return {"status": "success", "message": "Subscription set to cancel at period end."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/resume-subscription/{subscription_id}")
+def resume_subscription(subscription_id: str):
+    try:
+        stripe.Subscription.modify(subscription_id, cancel_at_period_end=False)
+        return {"status": "success", "message": "Subscription resumed."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
