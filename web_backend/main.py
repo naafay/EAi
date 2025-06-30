@@ -152,3 +152,38 @@ def resume_subscription(subscription_id: str):
         return {"status": "success", "message": "Subscription resumed."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/upgrade-subscription")
+async def upgrade_subscription(req: CheckoutSessionRequest):
+    try:
+        # Fetch user from Supabase to get current subscription_id
+        user_email = req.customer_email
+        supabase_url = f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{user_email}"
+        headers = {
+            "apikey": SUPABASE_SERVICE_ROLE_KEY,
+            "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}"
+        }
+        user_response = requests.get(supabase_url, headers=headers)
+        user_data = user_response.json()[0]
+        current_sub_id = user_data.get("subscription_id")
+
+        if not current_sub_id:
+            raise Exception("No existing subscription to upgrade.")
+
+        # Create new Checkout Session for upgrade
+        session = stripe.checkout.Session.create(
+            success_url="https://outprio.netlify.app/dashboard",
+            cancel_url="https://outprio.netlify.app/dashboard",
+            mode="subscription",
+            payment_method_types=["card"],
+            customer_email=user_email,
+            subscription_data={
+                "items": [{
+                    "id": stripe.Subscription.retrieve(current_sub_id)["items"]["data"][0]["id"],
+                    "price": req.price_id
+                }]
+            }
+        )
+        return {"url": session.url}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
