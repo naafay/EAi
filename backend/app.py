@@ -5,10 +5,10 @@ import datetime
 import sqlite3
 import pythoncom
 import re
-import win32com.client
 import queue
 import json
 from typing import Optional
+
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -16,6 +16,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.base import SchedulerAlreadyRunningError
 from starlette.responses import StreamingResponse
 from starlette.concurrency import run_in_threadpool
+
+import win32com.client
+from win32com.client import gencache
 
 # === Configuration ===
 EMAIL_ADDRESS    = "abdul.nafay@aviatnet.com"
@@ -59,6 +62,20 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# === On startup: rebuild broken gencache ===
+@app.on_event("startup")
+def rebuild_com_cache():
+    try:
+        pythoncom.CoInitialize()
+        # ensure we can write to the cache and then rebuild
+        gencache.is_readonly = False
+        gencache.Rebuild()
+        logging.info("Outlook COM cache rebuilt successfully.")
+    except Exception as e:
+        logging.warning(f"Could not rebuild Outlook COM cache: {e}")
+    finally:
+        pythoncom.CoUninitialize()
 
 # === Database ===
 conn = sqlite3.connect(DB_PATH, check_same_thread=False)
@@ -160,7 +177,7 @@ def fetch_dicts(preset: bool,
     pythoncom.CoInitialize()
     out = []
     try:
-        ns    = win32com.client.gencache.EnsureDispatch("Outlook.Application").GetNamespace("MAPI")
+        ns    = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
         inbox = ns.GetDefaultFolder(6)
 
         if not preset:
@@ -176,7 +193,7 @@ def fetch_dicts(preset: bool,
 
         try:
             items = inbox.Items.Restrict(flt)
-        except:
+        except Exception:
             items = []
 
         for msg in items:
@@ -346,7 +363,7 @@ def get_emails(
         if row and row[0] is not None:
             continue
         out.append(EmailItem(
-            message_id     = m["message_id"],
+            message_id      = m["message_id"],
             conversation_id = m["conversation_id"],
             sender          = m["sender"],
             subject         = m["subject"],
@@ -382,14 +399,13 @@ def dismiss_conversation(mid: str):
 
         table = conv.GetTable()
         while not table.EndOfTable:
-            row      = table.GetNextRow()
+            row = table.GetNextRow()
             try:
                 entry_id = row.Item("EntryID")
                 item     = ns.GetItemFromID(entry_id)
                 item.UnRead = False
                 item.Save()
             except Exception:
-                # skip any failures per-item
                 continue
     except Exception as e:
         logging.error(f"Error dismissing conversation: {e}")
