@@ -18,7 +18,190 @@ import {
 
 axios.defaults.baseURL = "http://localhost:8000";
 
-// ConfigPanel component
+// --- SettingsModal Overlay ---
+function SettingsModal({ initial, onCancel, onSave }) {
+  const [form, setForm] = useState({
+    app_title: initial.app_title,
+    full_name: initial.full_name,
+    outlook_email: initial.outlook_email,
+    vip_group_name: initial.vip_group_name,
+    vip_emails: (initial.vip_emails || []).join("\n"),
+    label_5: initial.label_5,
+    label_4: initial.label_4,
+    label_3: initial.label_3,
+    label_2: initial.label_2 || "Medium",
+    fetch_interval_minutes: initial.fetch_interval_minutes,
+    lookback_hours: initial.lookback_hours,
+    entries_per_page: initial.entries_per_page,
+    default_sort: initial.default_sort
+  });
+
+  const updateField = (key, value) => {
+    setForm(f => ({ ...f, [key]: value }));
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white w-[90%] max-w-3xl h-[90%] rounded-lg shadow-lg overflow-auto p-6">
+        <h2 className="text-2xl font-semibold mb-4">Settings</h2>
+
+        <section className="space-y-4">
+          <h3 className="font-medium">App Branding</h3>
+          <label className="block text-sm">App Title</label>
+          <input
+            type="text"
+            value={form.app_title}
+            onChange={e => updateField("app_title", e.target.value)}
+            className="w-full border rounded px-3 py-2 text-sm"
+          />
+        </section>
+
+        <section className="space-y-4 mt-6">
+          <h3 className="font-medium">Your Identity</h3>
+          <label className="block text-sm">Outlook Alias</label>
+          <input
+            type="text"
+            value={form.full_name}
+            onChange={e => updateField("full_name", e.target.value)}
+            className="w-full border rounded px-3 py-2 text-sm"
+          />
+          <label className="block text-sm">Outlook Email Address</label>
+          <input
+            type="email"
+            value={form.outlook_email}
+            onChange={e => updateField("outlook_email", e.target.value)}
+            className="w-full border rounded px-3 py-2 text-sm"
+          />
+        </section>
+
+        <section className="space-y-4 mt-6">
+          <h3 className="font-medium">VIP Group</h3>
+          <label className="block text-sm">Group Name</label>
+          <input
+            type="text"
+            value={form.vip_group_name}
+            onChange={e => updateField("vip_group_name", e.target.value)}
+            className="w-full border rounded px-3 py-2 text-sm"
+          />
+          <label className="block text-sm">
+            VIP Email Addresses (one per line)
+          </label>
+          <textarea
+            rows={4}
+            value={form.vip_emails}
+            onChange={e => updateField("vip_emails", e.target.value)}
+            className="w-full border rounded px-3 py-2 text-sm"
+          />
+        </section>
+
+        <section className="space-y-4 mt-6">
+          <h3 className="font-medium">Importance Labels</h3>
+          {[5, 4, 3, 2].map(tier => (
+            <div key={tier}>
+              <label className="block text-sm">
+                Tier {tier} {tier === 5 && "(highest)"}
+              </label>
+              <input
+                type="text"
+                value={form[`label_${tier}`]}
+                onChange={e =>
+                  updateField(`label_${tier}`, e.target.value)
+                }
+                className="w-full border rounded px-3 py-2 text-sm"
+              />
+            </div>
+          ))}
+        </section>
+
+        <section className="space-y-4 mt-6">
+          <h3 className="font-medium">Fetch & Display Preferences</h3>
+          <div>
+            <label className="block text-sm">Fetch interval (minutes)</label>
+            <input
+              type="number"
+              value={form.fetch_interval_minutes}
+              onChange={e =>
+                updateField("fetch_interval_minutes", +e.target.value)
+              }
+              className="w-full border rounded px-3 py-2 text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-sm">Look-back window (hours)</label>
+            <input
+              type="number"
+              value={form.lookback_hours}
+              onChange={e =>
+                updateField("lookback_hours", +e.target.value)
+              }
+              className="w-full border rounded px-3 py-2 text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-sm">Entries per page</label>
+            <input
+              type="number"
+              value={form.entries_per_page}
+              onChange={e =>
+                updateField("entries_per_page", +e.target.value)
+              }
+              className="w-full border rounded px-3 py-2 text-sm"
+            />
+          </div>
+          <div>
+            <label className="block text-sm">Default sort by</label>
+            <select
+              value={form.default_sort}
+              onChange={e => updateField("default_sort", e.target.value)}
+              className="w-full border rounded px-3 py-2 text-sm"
+            >
+              <option>Importance</option>
+              <option>Date</option>
+            </select>
+          </div>
+        </section>
+
+        <div className="mt-6 flex justify-end space-x-3">
+          <button
+            onClick={onCancel}
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => {
+              // build payload exactly as Supabase expects
+              const payload = {
+                app_title: form.app_title,
+                full_name: form.full_name,
+                outlook_email: form.outlook_email,
+                vip_group_name: form.vip_group_name,
+                vip_emails: form.vip_emails
+                  .split("\n")
+                  .map(l => l.trim())
+                  .filter(Boolean),
+                label_5: form.label_5,
+                label_4: form.label_4,
+                label_3: form.label_3,
+                label_2: form.label_2,
+                fetch_interval_minutes: form.fetch_interval_minutes,
+                lookback_hours: form.lookback_hours,
+                entries_per_page: form.entries_per_page,
+                default_sort: form.default_sort
+              };
+              onSave(payload);
+            }}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- ConfigPanel component (unchanged) ---
 const LOOKBACK_OPTIONS = [
   { label: "1 hr", value: 1 },
   { label: "3 hr", value: 3 },
@@ -165,13 +348,15 @@ function ConfigPanel({ config, onSave, onFetch, loading }) {
   );
 }
 
+// --- MainApp Component ---
 export default function MainApp({ userSettings }) {
   const {
+    user_id,
     app_title,
     label_5,
     label_4,
     label_3,
-    label_2,            // now reading tier-2 label
+    label_2,
     vip_group_name,
     vip_emails,
     fetch_interval_minutes,
@@ -183,7 +368,7 @@ export default function MainApp({ userSettings }) {
   axios.defaults.baseURL = "http://localhost:8000";
   const DEFAULT_SORT_KEY = default_sort.toLowerCase();
 
-  // state
+  // core state
   const [emails, setEmails] = useState([]);
   const [config, setConfig] = useState({
     fetch_interval_minutes,
@@ -203,12 +388,16 @@ export default function MainApp({ userSettings }) {
   const [showModal, setShowModal] = useState(false);
   const [collapsed, setCollapsed] = useState({});
 
+  // new state for SettingsModal
+  const [showSettings, setShowSettings] = useState(false);
+
   const intervalRef = useRef(null);
   const modalTimerRef = useRef(null);
 
   // Electron shell
   let shell;
   try { shell = window.require("electron").shell; } catch {}
+
   function openExternal(url) {
     if (shell) shell.openExternal(url);
     else window.open(url, "_blank");
@@ -218,10 +407,10 @@ export default function MainApp({ userSettings }) {
   async function handleLogout() {
     const { error } = await supabase.auth.signOut();
     if (error) console.error("Logout error:", error.message);
-    // AuthContext listener will redirect to login
+    // AuthContext listener will redirect to login screen
   }
 
-  // date parsing
+  // date helpers
   function parseLocal(iso) {
     const [date, time] = iso.split("T");
     const [Y, M, D] = date.split("-").map(Number);
@@ -233,10 +422,7 @@ export default function MainApp({ userSettings }) {
       .split(" ")
       .map(word => {
         if (word.length <= maxLen) return word;
-        return word.replace(
-          new RegExp(`(.{${maxLen}})(?=.)`, "g"),
-          "$1\u200B"
-        );
+        return word.replace(new RegExp(`(.{${maxLen}})(?=.)`, "g"), "$1\u200B");
       })
       .join(" ");
   }
@@ -245,7 +431,7 @@ export default function MainApp({ userSettings }) {
     5: label_5,
     4: label_4,
     3: label_3,
-    2: label_2    // use user’s tier-2 label
+    2: label_2
   };
 
   const COLUMNS = [
@@ -270,24 +456,29 @@ export default function MainApp({ userSettings }) {
     return `${d.toLocaleDateString("en-GB",{timeZone:"Asia/Dubai"})} ${d.toLocaleTimeString("en-GB",{hour:'2-digit',minute:'2-digit',timeZone:"Asia/Dubai"})}`;
   };
 
-  // load config
+  // load config on mount
   useEffect(() => {
     setLoading(true);
     axios
       .get("/config")
       .then(r => {
         setConfig(r.data);
-        if (!modalTimerRef.current &&
-            (r.data.start !== null || r.data.lookback_hours > 3)) {
+        if (
+          !modalTimerRef.current &&
+          (r.data.start !== null || r.data.lookback_hours > 3)
+        ) {
           setShowModal(true);
           modalTimerRef.current = setTimeout(handleResetDefault, 60000);
         }
       })
       .catch(console.error)
-      .finally(() => { setLoading(false); setConfigLoaded(true); });
+      .finally(() => {
+        setLoading(false);
+        setConfigLoaded(true);
+      });
   }, []);
 
-  // fetch loop
+  // polling & immediate fetch
   useEffect(() => {
     if (!configLoaded || showModal) return;
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -316,7 +507,6 @@ export default function MainApp({ userSettings }) {
     return () => clearInterval(intervalRef.current);
   }, [configLoaded, showModal, config]);
 
-  // save config
   async function saveConfig(newCfg) {
     setLoading(true);
     try {
@@ -329,7 +519,6 @@ export default function MainApp({ userSettings }) {
     }
   }
 
-  // manual fetch
   function fetchNow(startIso, endIso) {
     setLoading(true);
     axios
@@ -337,7 +526,7 @@ export default function MainApp({ userSettings }) {
         params:
           startIso && endIso
             ? { start: startIso, end: endIso }
-            : undefined,
+            : undefined
       })
       .then(r => { setEmails(r.data); setPage(1); })
       .catch(console.error)
@@ -351,7 +540,7 @@ export default function MainApp({ userSettings }) {
       fetch_interval_minutes: config.fetch_interval_minutes,
       lookback_hours: 3,
       start: null,
-      end: null,
+      end: null
     });
   }
 
@@ -360,7 +549,6 @@ export default function MainApp({ userSettings }) {
     clearTimeout(modalTimerRef.current);
   }
 
-  // dismiss/open handlers
   function dismiss(id) {
     axios.post(`/emails/${id}/dismiss`);
     setEmails(e => e.filter(m => m.message_id !== id));
@@ -375,62 +563,105 @@ export default function MainApp({ userSettings }) {
     catch { alert("Could not open Outlook."); }
   }
 
-  // filter, sort, group
+  // filtering, sorting, grouping
   const filtered = useMemo(
-    () => emails.filter(e => [e.sender,e.subject,e.preview]
-      .some(f => f.toLowerCase().includes(search.toLowerCase()))),
-    [emails,search]
+    () =>
+      emails.filter(e =>
+        [e.sender, e.subject, e.preview].some(f =>
+          f.toLowerCase().includes(search.toLowerCase())
+        )
+      ),
+    [emails, search]
   );
+
   const sorted = useMemo(() => {
-    return filtered.slice().sort((a,b) => {
+    return filtered.slice().sort((a, b) => {
       if (b.importance !== a.importance) {
         return sortDir === "asc"
           ? a.importance - b.importance
           : b.importance - a.importance;
       }
-      const da = Date.parse(a.received), db = Date.parse(b.received);
+      const da = Date.parse(a.received),
+        db = Date.parse(b.received);
       return sortDir === "asc" ? da - db : db - da;
     });
-  }, [filtered,sortKey,sortDir]);
+  }, [filtered, sortKey, sortDir]);
+
   const groupedData = useMemo(() => {
     if (sortKey === "importance") {
-      const buckets = {5:[],4:[],3:[],2:[]};
-      sorted.forEach(e=>{ if(buckets[e.importance]) buckets[e.importance].push(e); });
+      const buckets = { 5: [], 4: [], 3: [], 2: [] };
+      sorted.forEach(e => {
+        if (buckets[e.importance]) buckets[e.importance].push(e);
+      });
       return buckets;
     }
     if (sortKey === "received") {
-      const now=new Date(), buckets={Today:[],"This week":[],Older:[]};
-      sorted.forEach(e=>{
-        const d=parseLocal(e.received), diff=now-d;
-        if(d.toDateString()===now.toDateString()) buckets.Today.push(e);
-        else if(diff<1000*60*60*24*7) buckets["This week"].push(e);
+      const now = new Date();
+      const buckets = { Today: [], "This week": [], Older: [] };
+      sorted.forEach(e => {
+        const d = parseLocal(e.received),
+          diff = now - d;
+        if (d.toDateString() === now.toDateString()) buckets.Today.push(e);
+        else if (diff < 1000 * 60 * 60 * 24 * 7) buckets["This week"].push(e);
         else buckets.Older.push(e);
       });
       return buckets;
     }
     return { All: sorted };
-  }, [sorted,sortKey]);
+  }, [sorted, sortKey]);
+
   const groupKeys = useMemo(() => {
-    if (sortKey==="importance") return [5,4,3,2].filter(k=>groupedData[k].length);
-    if (sortKey==="received") return ["Today","This week","Older"].filter(k=>groupedData[k].length);
+    if (sortKey === "importance") {
+      return [5, 4, 3, 2].filter(k => groupedData[k].length);
+    }
+    if (sortKey === "received") {
+      return ["Today", "This week", "Older"].filter(
+        k => groupedData[k].length
+      );
+    }
     return ["All"];
-  }, [groupedData,sortKey]);
-  const toggleGroup = key=>setCollapsed(c=>({ ...c, [key]: !c[key] }));
+  }, [groupedData, sortKey]);
+
+  const toggleGroup = key =>
+    setCollapsed(c => ({ ...c, [key]: !c[key] }));
   const pageCount = Math.ceil(sorted.length / pageSize);
-  function onHeaderClick(key){
-    if(sortKey===key) setSortDir(d=>d==="asc"?"desc":"asc");
-    else { setSortKey(key); setSortDir("desc"); }
+
+  function onHeaderClick(key) {
+    if (sortKey === key) setSortDir(d => (d === "asc" ? "desc" : "asc"));
+    else {
+      setSortKey(key);
+      setSortDir("desc");
+    }
   }
-  const renderPill=imp=>{
-    const label=IMPORTANCE_LABELS[imp]||"";
-    return(
-      <span className="inline-block uppercase text-xs font-semibold px-3 py-1 rounded-full"
-            style={{
-              backgroundColor:
-                imp===5?"#fed7d7":imp===4?"#fef3c7":imp===3?"#dbecff":imp===2?"#dcfce7":"",
-              color:
-                imp===5?"#c53030":imp===4?"#b45309":imp===3?"#2c5282":imp===2?"#047857":""
-            }}>
+
+  const renderPill = imp => {
+    const label = IMPORTANCE_LABELS[imp] || "";
+    return (
+      <span
+        className="inline-block uppercase text-xs font-semibold px-3 py-1 rounded-full"
+        style={{
+          backgroundColor:
+            imp === 5
+              ? "#fed7d7"
+              : imp === 4
+              ? "#fef3c7"
+              : imp === 3
+              ? "#dbecff"
+              : imp === 2
+              ? "#dcfce7"
+              : "",
+          color:
+            imp === 5
+              ? "#c53030"
+              : imp === 4
+              ? "#b45309"
+              : imp === 3
+              ? "#2c5282"
+              : imp === 2
+              ? "#047857"
+              : ""
+        }}
+      >
         {label}
       </span>
     );
@@ -445,10 +676,18 @@ export default function MainApp({ userSettings }) {
           <span className="text-lg font-semibold">{app_title}</span>
         </div>
         <div className="flex items-center space-x-4 text-gray-600">
-          <button onClick={() => openExternal("/settings")} title="Settings"><Settings /></button>
-          <button onClick={() => openExternal("/profile")} title="Account"><User /></button>
-          <button onClick={() => openExternal("/help")} title="Help"><HelpCircle /></button>
-          <button onClick={handleLogout} title="Logout"><LogOut /></button>
+          <button onClick={() => setShowSettings(true)} title="Settings">
+            <Settings />
+          </button>
+          <button onClick={() => openExternal("/profile")} title="Account">
+            <User />
+          </button>
+          <button onClick={() => openExternal("/help")} title="Help">
+            <HelpCircle />
+          </button>
+          <button onClick={handleLogout} title="Logout">
+            <LogOut />
+          </button>
         </div>
       </div>
 
@@ -464,7 +703,12 @@ export default function MainApp({ userSettings }) {
           </div>
 
           {/* Config Panel */}
-          <ConfigPanel config={config} onSave={saveConfig} onFetch={fetchNow} loading={loading} />
+          <ConfigPanel
+            config={config}
+            onSave={saveConfig}
+            onFetch={fetchNow}
+            loading={loading}
+          />
 
           {/* Search & Page Size */}
           <div className="flex items-center justify-between mb-6">
@@ -472,17 +716,27 @@ export default function MainApp({ userSettings }) {
               type="text"
               placeholder="Search emails…"
               value={search}
-              onChange={e => { setSearch(e.target.value); setPage(1); }}
+              onChange={e => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
               className="w-full max-w-xs border rounded-lg px-4 py-2 text-sm shadow-inner focus:ring-2 focus:ring-blue-200"
             />
             <div className="flex items-center space-x-2">
               <span className="text-gray-600 text-sm">Show</span>
               <select
                 value={pageSize}
-                onChange={e => { setPageSize(+e.target.value); setPage(1); }}
+                onChange={e => {
+                  setPageSize(+e.target.value);
+                  setPage(1);
+                }}
                 className="border rounded-lg px-3 py-2 text-sm"
               >
-                {[50,100,200].map(n => <option key={n} value={n}>{n}</option>)}
+                {[50, 100, 200].map(n => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
               </select>
               <span className="text-gray-600 text-sm">entries</span>
             </div>
@@ -493,56 +747,121 @@ export default function MainApp({ userSettings }) {
             <table className="min-w-full bg-white rounded-lg overflow-hidden">
               <thead className="bg-gray-200">
                 <tr>
-                  {COLUMNS.map(({key,label})=>(
+                  {COLUMNS.map(({ key, label }) => (
                     <th
                       key={key}
-                      onClick={()=>onHeaderClick(key)}
-                      className={`px-4 py-2 text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer ${key==="importance"||key==="reason"?"text-center":"text-left"}`}
+                      onClick={() => onHeaderClick(key)}
+                      className={`px-4 py-2 text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer ${
+                        key === "importance" || key === "reason"
+                          ? "text-center"
+                          : "text-left"
+                      }`}
                     >
                       <div className="inline-flex items-center">
                         {label}
-                        {sortKey===key && <span className="ml-1 text-gray-500 text-xs">{sortDir==="asc"?"▲":"▼"}</span>}
+                        {sortKey === key && (
+                          <span className="ml-1 text-gray-500 text-xs">
+                            {sortDir === "asc" ? "▲" : "▼"}
+                          </span>
+                        )}
                       </div>
                     </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {groupKeys.map(groupKey=>(
+                {groupKeys.map(groupKey => (
                   <Fragment key={groupKey}>
-                    <tr className="bg-gray-100 cursor-pointer" onClick={()=>toggleGroup(groupKey)}>
+                    {/* Group header */}
+                    <tr
+                      className="bg-gray-100 cursor-pointer"
+                      onClick={() => toggleGroup(groupKey)}
+                    >
                       <td colSpan={COLUMNS.length} className="px-4 py-2">
-                        <span className="font-medium mr-2">{collapsed[groupKey]?"+":"–"}</span>
-                        <span className="text-xs font-semibold text-gray-700 uppercase">{sortKey==="importance"?IMPORTANCE_LABELS[groupKey]:groupKey}</span>
-                        <span className="ml-1 text-gray-600">({groupedData[groupKey].length})</span>
+                        <span className="font-medium mr-2">
+                          {collapsed[groupKey] ? "+" : "–"}
+                        </span>
+                        <span className="text-xs font-semibold text-gray-700 uppercase">
+                          {sortKey === "importance"
+                            ? IMPORTANCE_LABELS[groupKey]
+                            : groupKey}
+                        </span>
+                        <span className="ml-1 text-gray-600">
+                          ({groupedData[groupKey].length})
+                        </span>
                       </td>
                     </tr>
-                    {!collapsed[groupKey] && groupedData[groupKey].map(e=>(
-                      <tr key={e.message_id} className="border-b last:border-0 hover:bg-gray-50">
-                        <td className="px-4 py-2 text-sm text-gray-800">{fmtEmailDT(e.received)}</td>
-                        <td className="px-4 py-2 text-sm text-gray-800">{e.sender}</td>
-                        <td className="px-4 py-2 text-sm text-gray-800">{e.subject}</td>
-                        <td className="px-4 py-2 text-sm text-gray-800 break-words whitespace-normal">{insertZWS(e.preview)}</td>
-                        <td className="px-4 py-2 text-center">{renderPill(e.importance)}</td>
-                        <td className="px-4 py-2 text-center">
-                          {e.reason.split("+").map(r=>r.trim()).map((r,i)=>(
-                            <div key={i} className="flex items-center mb-1 whitespace-nowrap justify-center">
-                              <Tag className="h-3 w-3 text-gray-500 mr-1"/>
-                              <span className="bg-red-100 text-gray-800 text-xs font-medium px-2 py-1 rounded">{r}</span>
-                            </div>
-                          ))}
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          <MailOpen strokeWidth={1.5} className="h-5 w-5 text-blue-600 hover:text-blue-800 cursor-pointer" onClick={()=>openInOutlook(e.message_id)}/>
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          <MailCheck strokeWidth={1.5} className="h-5 w-5 text-red-600 hover:text-red-800 cursor-pointer" onClick={()=>dismiss(e.message_id)}/>
-                        </td>
-                        <td className="px-4 py-2 text-center">
-                          <CopyCheck strokeWidth={1.5} className="h-5 w-5 text-red-600 hover:text-red-800 cursor-pointer" onClick={()=>dismissConversation(e.message_id,e.conversation_id)}/>
-                        </td>
-                      </tr>
-                    ))}
+
+                    {/* Group rows */}
+                    {!collapsed[groupKey] &&
+                      groupedData[groupKey].map(e => (
+                        <tr
+                          key={e.message_id}
+                          className="border-b last:border-0 hover:bg-gray-50"
+                        >
+                          <td className="px-4 py-2 text-sm text-gray-800">
+                            {fmtEmailDT(e.received)}
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-800">
+                            {e.sender}
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-800">
+                            {e.subject}
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-800 break-words whitespace-normal">
+                            {insertZWS(e.preview)}
+                          </td>
+                          <td className="px-4 py-2 text-center">
+                            {renderPill(e.importance)}
+                          </td>
+<td className="px-4 py-2 text-center">
+  {e.reason
+    .split("+")
+    .map((r) => r.trim())
+    .map((segment, i) => {
+      // replace every ELT substring (case-insensitive) with your VIP group name
+      const displayLabel = segment.replace(/ELT/gi, vip_group_name);
+      return (
+        <div
+          key={i}
+          className="flex items-center mb-1 whitespace-nowrap justify-center"
+        >
+          <Tag className="h-3 w-3 text-gray-500 mr-1" />
+          <span className="bg-red-100 text-gray-800 text-xs font-medium px-2 py-1 rounded">
+            {displayLabel}
+          </span>
+        </div>
+      );
+    })}
+</td>
+                          <td className="px-4 py-2 text-center">
+                            <MailOpen
+                              strokeWidth={1.5}
+                              className="h-5 w-5 text-blue-600 hover:text-blue-800 cursor-pointer"
+                              onClick={() => openInOutlook(e.message_id)}
+                            />
+                          </td>
+                          <td className="px-4 py-2 text-center">
+                            <MailCheck
+                              strokeWidth={1.5}
+                              className="h-5 w-5 text-red-600 hover:text-red-800 cursor-pointer"
+                              onClick={() => dismiss(e.message_id)}
+                            />
+                          </td>
+                          <td className="px-4 py-2 text-center">
+                            <CopyCheck
+                              strokeWidth={1.5}
+                              className="h-5 w-5 text-red-600 hover:text-red-800 cursor-pointer"
+                              onClick={() =>
+                                dismissConversation(
+                                  e.message_id,
+                                  e.conversation_id
+                                )
+                              }
+                            />
+                          </td>
+                        </tr>
+                      ))}
                   </Fragment>
                 ))}
               </tbody>
@@ -552,27 +871,65 @@ export default function MainApp({ userSettings }) {
           {/* Pagination */}
           <div className="mt-6 flex items-center justify-between">
             <div className="text-sm text-gray-600">
-              Page <span className="font-medium">{page}</span> of <span className="font-medium">{pageCount}</span>
+              Page <span className="font-medium">{page}</span> of{" "}
+              <span className="font-medium">{pageCount}</span>
             </div>
             <div className="space-x-2">
-              <button onClick={()=>setPage(1)} disabled={page===1} className="px-3 py-1 bg-white border rounded-full disabled:opacity-50">«</button>
-              <button onClick={()=>setPage(p=>Math.max(1,p-1))} disabled={page===1} className="px-3 py-1 bg-white border rounded-full disabled:opacity-50">‹</button>
-              <button onClick={()=>setPage(p=>Math.min(pageCount,p+1))} disabled={page===pageCount} className="px-3 py-1 bg-white border rounded-full disabled:opacity-50">›</button>
-              <button onClick={()=>setPage(pageCount)} disabled={page===pageCount} className="px-3 py-1 bg-white border rounded-full disabled:opacity-50">»</button>
+              <button
+                onClick={() => setPage(1)}
+                disabled={page === 1}
+                className="px-3 py-1 bg-white border rounded-full disabled:opacity-50"
+              >
+                «
+              </button>
+              <button
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="px-3 py-1 bg-white border rounded-full disabled:opacity-50"
+              >
+                ‹
+              </button>
+              <button
+                onClick={() => setPage(p => Math.min(pageCount, p + 1))}
+                disabled={page === pageCount}
+                className="px-3 py-1 bg-white border rounded-full disabled:opacity-50"
+              >
+                ›
+              </button>
+              <button
+                onClick={() => setPage(pageCount)}
+                disabled={page === pageCount}
+                className="px-3 py-1 bg-white border rounded-full disabled:opacity-50"
+              >
+                »
+              </button>
             </div>
-            <select value={pageSize} onChange={e=>{setPageSize(+e.target.value);setPage(1);}} className="border rounded-lg px-3 py-1 text-sm">
-              {[50,100,200].map(n=><option key={n} value={n}>{n}</option>)}
+            <select
+              value={pageSize}
+              onChange={e => {
+                setPageSize(+e.target.value);
+                setPage(1);
+              }}
+              className="border rounded-lg px-3 py-1 text-sm"
+            >
+              {[50, 100, 200].map(n => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
             </select>
           </div>
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Pre-config / Custom Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
             <h2 className="text-xl font-semibold mb-4 text-red-600">
-              {config.start ? "Custom range detected" : "Pre-configured range"}
+              {config.start
+                ? "Custom range detected"
+                : "Pre-configured range"}
             </h2>
             <p className="mb-6">
               {config.start
@@ -580,11 +937,37 @@ export default function MainApp({ userSettings }) {
                 : "A pre-configured look-back window over 3 hours was detected. Would you like to reset to the default 3 hours?"}
             </p>
             <div className="flex justify-end space-x-3">
-              <button onClick={handleContinue} className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded">Continue</button>
-              <button onClick={handleResetDefault} className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded">Reset to default</button>
+              <button
+                onClick={handleContinue}
+                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+              >
+                Continue
+              </button>
+              <button
+                onClick={handleResetDefault}
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
+              >
+                Reset to default
+              </button>
             </div>
           </div>
         </div>
+      )}
+
+      {/* Settings Modal */}
+      {showSettings && (
+        <SettingsModal
+          initial={userSettings}
+          onCancel={() => setShowSettings(false)}
+          onSave={async newSettings => {
+            const payload = { user_id, ...newSettings };
+            const { error } = await supabase
+              .from("user_settings")
+              .upsert(payload);
+            if (error) console.error("Settings save error:", error);
+            else window.location.reload();
+          }}
+        />
       )}
     </div>
   );

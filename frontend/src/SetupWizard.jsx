@@ -4,7 +4,7 @@ import { supabase } from './utils/supabaseClient';
 
 const STEPS = [
   'Welcome',
-  'Your Identity',
+  'Outlook ID',
   'VIP Group',
   'Labels',
   'Preferences',
@@ -15,10 +15,10 @@ export default function SetupWizard({ onComplete }) {
   const [step, setStep] = useState(1);
 
   // Wizard state
-  const [appTitle,        setAppTitle]        = useState('FocusedMail');
+  const [appTitle,        setAppTitle]        = useState('Priority Mail');
   const [fullName,        setFullName]        = useState('');
   const [outlookEmail,    setOutlookEmail]    = useState('');
-  const [vipGroupName,    setVipGroupName]    = useState('VIPs');
+  const [vipGroupName,    setVipGroupName]    = useState('VIP');
   const [vipEmails,       setVipEmails]       = useState(
 `Jon Doe <jon.doe@outlook.com>
 Jane Roe <jane.roe@outlook.com>`
@@ -137,9 +137,9 @@ Jane Roe <jane.roe@outlook.com>`
 
           {step === 2 && (
             <div className="space-y-4">
-              <h2 className="text-lg font-medium">Your Identity</h2>
+              <h2 className="text-lg font-medium">Outlook ID</h2>
               <div>
-                <label className="block mb-1 text-sm">What’s your name?</label>
+                <label className="block mb-1 text-sm">What’s your Outlook Alias?</label>
                 <input
                   type="text"
                   value={fullName}
@@ -148,7 +148,7 @@ Jane Roe <jane.roe@outlook.com>`
                 />
               </div>
               <div>
-                <label className="block mb-1 text-sm">Which Outlook account should we monitor?</label>
+                <label className="block mb-1 text-sm">What's your Outlook Email Address?</label>
                 <input
                   type="email"
                   value={outlookEmail}
@@ -247,7 +247,7 @@ Jane Roe <jane.roe@outlook.com>`
               <h2 className="text-lg font-medium mb-4">Review & Save</h2>
               <ul className="list-disc list-inside mb-4 text-gray-700 text-sm">
                 <li><strong>App Title:</strong> {appTitle}</li>
-                <li><strong>Your Name:</strong> {fullName}</li>
+                <li><strong>Outlook Alias:</strong> {fullName}</li>
                 <li><strong>Outlook Address:</strong> {outlookEmail}</li>
                 <li><strong>VIP Group:</strong> {vipGroupName}</li>
                 <li><strong>VIP Addresses:</strong>
