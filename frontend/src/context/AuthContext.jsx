@@ -10,38 +10,39 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const currentSession = supabase.auth.getSession().then(({ data }) => {
+    // initial session
+    supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       if (data.session) fetchLicenseStatus(data.session.user.id);
+      setLoading(false);
     });
 
+    // listen for changes
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session) fetchLicenseStatus(session.user.id);
       else setLicenseStatus(null);
     });
 
-    setLoading(false);
-    return () => listener?.subscription.unsubscribe();
+    return () => listener.subscription.unsubscribe();
   }, []);
 
   const fetchLicenseStatus = async (userId) => {
     const { data, error } = await supabase
       .from('profiles')
-      .select('*')
+      .select('is_paid, trial_expires')
       .eq('id', userId)
       .single();
 
     if (error || !data) {
       setLicenseStatus('error');
-      return;
-    }
-
-    const today = dayjs();
-    if (data.is_paid || today.isBefore(dayjs(data.trial_expires))) {
-      setLicenseStatus('active');
     } else {
-      setLicenseStatus('expired');
+      const today = dayjs();
+      setLicenseStatus(
+        data.is_paid || today.isBefore(dayjs(data.trial_expires))
+          ? 'active'
+          : 'expired'
+      );
     }
   };
 
