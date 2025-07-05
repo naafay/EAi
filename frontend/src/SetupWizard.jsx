@@ -18,6 +18,8 @@ export default function SetupWizard({ onComplete }) {
   const [appTitle,        setAppTitle]        = useState('Priority Mail');
   const [fullName,        setFullName]        = useState('');
   const [outlookEmail,    setOutlookEmail]    = useState('');
+  // NEW: Additional Aliases
+  const [aliases,         setAliases]         = useState('');
   const [vipGroupName,    setVipGroupName]    = useState('VIP');
   const [vipEmails,       setVipEmails]       = useState(
 `Jon Doe <jon.doe@outlook.com>
@@ -69,6 +71,10 @@ Jane Roe <jane.roe@outlook.com>`
       app_title:              appTitle,
       full_name:              fullName,
       outlook_email:          outlookEmail,
+      aliases:                aliases
+                                .split('\n')
+                                .map(l => l.trim())
+                                .filter(Boolean),
       vip_group_name:         vipGroupName,
       vip_emails:             vipEmails
                                 .split('\n')
@@ -153,6 +159,16 @@ Jane Roe <jane.roe@outlook.com>`
                   type="email"
                   value={outlookEmail}
                   onChange={e => setOutlookEmail(e.target.value)}
+                  className="w-full border rounded px-3 py-2 text-sm"
+                />
+              </div>
+              {/* NEW: Aliases input */}
+              <div>
+                <label className="block mb-1 text-sm">Additional Aliases (one per line)</label>
+                <textarea
+                  rows={3}
+                  value={aliases}
+                  onChange={e => setAliases(e.target.value)}
                   className="w-full border rounded px-3 py-2 text-sm"
                 />
               </div>
@@ -249,6 +265,11 @@ Jane Roe <jane.roe@outlook.com>`
                 <li><strong>App Title:</strong> {appTitle}</li>
                 <li><strong>Outlook Alias:</strong> {fullName}</li>
                 <li><strong>Outlook Address:</strong> {outlookEmail}</li>
+                <li><strong>Additional Aliases:</strong>
+                  <ul className="list-decimal list-inside ml-4">
+                    {aliases.split('\n').filter(Boolean).map((l,i) => <li key={i}>{l}</li>)}
+                  </ul>
+                </li>
                 <li><strong>VIP Group:</strong> {vipGroupName}</li>
                 <li><strong>VIP Addresses:</strong>
                   <ul className="list-decimal list-inside ml-4">

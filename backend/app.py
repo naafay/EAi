@@ -427,3 +427,21 @@ def open_mid(mid: str):
     finally:
         pythoncom.CoUninitialize()
     return {"ok": True}
+
+# === New health‐check endpoints ===
+
+@app.get("/health/local")
+def health_local():
+    return {"ok": True}
+
+@app.get("/health/outlook")
+def health_outlook():
+    try:
+        pythoncom.CoInitialize()
+        # only succeeds if a running Outlook instance exists
+        win32com.client.GetActiveObject("Outlook.Application")
+        return {"ok": True}
+    except Exception:
+        raise HTTPException(503, "Outlook unavailable")
+    finally:
+        pythoncom.CoUninitialize()

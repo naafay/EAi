@@ -24,6 +24,8 @@ function SettingsModal({ initial, onCancel, onSave }) {
     app_title: initial.app_title,
     full_name: initial.full_name,
     outlook_email: initial.outlook_email,
+    // NEW: user aliases
+    aliases: (initial.aliases || []).join("\n"),
     vip_group_name: initial.vip_group_name,
     vip_emails: (initial.vip_emails || []).join("\n"),
     label_5: initial.label_5,
@@ -45,6 +47,7 @@ function SettingsModal({ initial, onCancel, onSave }) {
       <div className="bg-white w-[90%] max-w-3xl h-[90%] rounded-lg shadow-lg overflow-auto p-6">
         <h2 className="text-2xl font-semibold mb-4">Settings</h2>
 
+        {/* App Branding */}
         <section className="space-y-4">
           <h3 className="font-medium">App Branding</h3>
           <label className="block text-sm">App Title</label>
@@ -56,6 +59,7 @@ function SettingsModal({ initial, onCancel, onSave }) {
           />
         </section>
 
+        {/* Your Identity */}
         <section className="space-y-4 mt-6">
           <h3 className="font-medium">Your Identity</h3>
           <label className="block text-sm">Outlook Alias</label>
@@ -72,8 +76,17 @@ function SettingsModal({ initial, onCancel, onSave }) {
             onChange={e => updateField("outlook_email", e.target.value)}
             className="w-full border rounded px-3 py-2 text-sm"
           />
+          {/* NEW: Additional Aliases */}
+          <label className="block text-sm">Additional Aliases (one per line)</label>
+          <textarea
+            rows={3}
+            value={form.aliases}
+            onChange={e => updateField("aliases", e.target.value)}
+            className="w-full border rounded px-3 py-2 text-sm"
+          />
         </section>
 
+        {/* VIP Group */}
         <section className="space-y-4 mt-6">
           <h3 className="font-medium">VIP Group</h3>
           <label className="block text-sm">Group Name</label>
@@ -94,6 +107,7 @@ function SettingsModal({ initial, onCancel, onSave }) {
           />
         </section>
 
+        {/* Importance Labels */}
         <section className="space-y-4 mt-6">
           <h3 className="font-medium">Importance Labels</h3>
           {[5, 4, 3, 2].map(tier => (
@@ -113,6 +127,7 @@ function SettingsModal({ initial, onCancel, onSave }) {
           ))}
         </section>
 
+        {/* Fetch & Display Preferences */}
         <section className="space-y-4 mt-6">
           <h3 className="font-medium">Fetch & Display Preferences</h3>
           <div>
@@ -161,6 +176,7 @@ function SettingsModal({ initial, onCancel, onSave }) {
           </div>
         </section>
 
+        {/* Action Buttons */}
         <div className="mt-6 flex justify-end space-x-3">
           <button
             onClick={onCancel}
@@ -170,11 +186,14 @@ function SettingsModal({ initial, onCancel, onSave }) {
           </button>
           <button
             onClick={() => {
-              // build payload exactly as Supabase expects
               const payload = {
                 app_title: form.app_title,
                 full_name: form.full_name,
                 outlook_email: form.outlook_email,
+                aliases: form.aliases
+                  .split("\n")
+                  .map(l => l.trim())
+                  .filter(Boolean),
                 vip_group_name: form.vip_group_name,
                 vip_emails: form.vip_emails
                   .split("\n")
@@ -362,7 +381,9 @@ export default function MainApp({ userSettings }) {
     fetch_interval_minutes,
     lookback_hours,
     entries_per_page,
-    default_sort
+    default_sort,
+    // NEW: aliases from userSettings
+    aliases
   } = userSettings;
 
   axios.defaults.baseURL = "http://localhost:8000";
@@ -391,6 +412,12 @@ export default function MainApp({ userSettings }) {
   // new state for SettingsModal
   const [showSettings, setShowSettings] = useState(false);
 
+  // --- NEW: service health state ---
+  const [cloudOk, setCloudOk] = useState(navigator.onLine);
+  const [outlookOk, setOutlookOk] = useState(true);
+  const [localOk, setLocalOk] = useState(true);
+  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+
   const intervalRef = useRef(null);
   const modalTimerRef = useRef(null);
 
@@ -407,8 +434,30 @@ export default function MainApp({ userSettings }) {
   async function handleLogout() {
     const { error } = await supabase.auth.signOut();
     if (error) console.error("Logout error:", error.message);
-    // AuthContext listener will redirect to login screen
   }
+
+  // --- NEW: health check polling ---
+  const checkHealth = () => {
+    setCloudOk(navigator.onLine);
+    axios.get("/health/outlook")
+      .then(() => setOutlookOk(true))
+      .catch(() => setOutlookOk(false));
+    axios.get("/health/local")
+      .then(() => setLocalOk(true))
+      .catch(() => setLocalOk(false));
+  };
+
+  useEffect(() => {
+    checkHealth();
+    window.addEventListener("online", () => setCloudOk(true));
+    window.addEventListener("offline", () => setCloudOk(false));
+    const healthInterval = setInterval(checkHealth, 60_000);
+    return () => {
+      window.removeEventListener("online", () => setCloudOk(true));
+      window.removeEventListener("offline", () => setCloudOk(false));
+      clearInterval(healthInterval);
+    };
+  }, []);
 
   // date helpers
   function parseLocal(iso) {
@@ -670,23 +719,64 @@ export default function MainApp({ userSettings }) {
   return (
     <div className="min-h-screen bg-gray-900">
       {/* Top Ribbon Header */}
-      <div className="flex items-center justify-between bg-white border-b p-3 shadow-sm">
+      <div className="flex items-center justify-between bg-transparent border-b p-3 shadow-sm">
         <div className="flex items-center">
           <img src="./logo192.png" alt="Logo" className="h-8 w-8 mr-2" />
           <span className="text-lg font-semibold">{app_title}</span>
         </div>
-        <div className="flex items-center space-x-4 text-gray-600">
+        <div className="flex items-center space-x-7 text-gray-200">
+          {/* STATUS CIRCLE */}
+          <div className="relative">
+            <div
+              className={`h-3 w-3 rounded-full cursor-pointer ${
+                cloudOk && outlookOk && localOk
+                  ? "bg-green-500"
+                  : "bg-amber-400"
+              }`}
+              onMouseEnter={() => setShowStatusDropdown(true)}
+              onMouseLeave={() => setShowStatusDropdown(false)}
+            />
+            {showStatusDropdown && (
+              <div className="absolute top-6 left-0 p-2 w-44 bg-white text-black rounded shadow-lg ">
+                <div className="flex items-center mb-2 text-sm text-gray-600">
+                  <span
+                    className={`h-2 w-2 rounded-full mr-2 ${
+                      cloudOk ? "bg-green-500" : "bg-amber-400"
+                    }`}
+                  />
+                  Outprio Cloud
+                </div>
+                <div className="flex items-center mb-2 text-sm text-gray-600">
+                  <span
+                    className={`h-2 w-2 rounded-full mr-2 ${
+                      outlookOk ? "bg-green-500" : "bg-amber-400"
+                    }`}
+                  />
+                  Outlook
+                </div>
+                <div className="flex items-center mb-2 text-sm text-gray-600">
+                  <span
+                    className={`h-2 w-2 rounded-full mr-2 ${
+                      localOk ? "bg-green-500" : "bg-amber-400"
+                    }`}
+                  />
+                  Local services
+                </div>
+              </div>
+            )}
+          </div>
+
           <button onClick={() => setShowSettings(true)} title="Settings">
-            <Settings />
+            <Settings className="h-5 w-5" />
           </button>
           <button onClick={() => openExternal("/profile")} title="Account">
-            <User />
+            <User className="h-5 w-5" />
           </button>
           <button onClick={() => openExternal("/help")} title="Help">
-            <HelpCircle />
+            <HelpCircle className="h-5 w-5" />
           </button>
           <button onClick={handleLogout} title="Logout">
-            <LogOut />
+            <LogOut className="h-5 w-5" />
           </button>
         </div>
       </div>
@@ -814,26 +904,25 @@ export default function MainApp({ userSettings }) {
                           <td className="px-4 py-2 text-center">
                             {renderPill(e.importance)}
                           </td>
-<td className="px-4 py-2 text-center">
-  {e.reason
-    .split("+")
-    .map((r) => r.trim())
-    .map((segment, i) => {
-      // replace every ELT substring (case-insensitive) with your VIP group name
-      const displayLabel = segment.replace(/ELT/gi, vip_group_name);
-      return (
-        <div
-          key={i}
-          className="flex items-center mb-1 whitespace-nowrap justify-center"
-        >
-          <Tag className="h-3 w-3 text-gray-500 mr-1" />
-          <span className="bg-red-100 text-gray-800 text-xs font-medium px-2 py-1 rounded">
-            {displayLabel}
-          </span>
-        </div>
-      );
-    })}
-</td>
+                          <td className="px-4 py-2 text-center">
+                            {e.reason
+                              .split("+")
+                              .map(r => r.trim())
+                              .map((segment, i) => {
+                                const displayLabel = segment.replace(/ELT/gi, vip_group_name);
+                                return (
+                                  <div
+                                    key={i}
+                                    className="flex items-center mb-1 whitespace-nowrap justify-center"
+                                  >
+                                    <Tag className="h-3 w-3 text-gray-500 mr-1" />
+                                    <span className="bg-red-100 text-gray-800 text-xs font-medium px-2 py-1 rounded">
+                                      {displayLabel}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                          </td>
                           <td className="px-4 py-2 text-center">
                             <MailOpen
                               strokeWidth={1.5}
@@ -957,7 +1046,7 @@ export default function MainApp({ userSettings }) {
       {/* Settings Modal */}
       {showSettings && (
         <SettingsModal
-          initial={userSettings}
+          initial={{ ...userSettings, aliases }}
           onCancel={() => setShowSettings(false)}
           onSave={async newSettings => {
             const payload = { user_id, ...newSettings };
