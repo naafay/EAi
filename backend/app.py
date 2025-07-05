@@ -2,12 +2,11 @@
 
 import logging
 import datetime
-import sqlite3
 import pythoncom
 import re
 import queue
 import json
-from typing import Optional
+from typing import Optional, List
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,38 +19,26 @@ from starlette.concurrency import run_in_threadpool
 import win32com.client
 from win32com.client import gencache
 
-# === Configuration ===
-EMAIL_ADDRESS    = "abdul.nafay@aviatnet.com"
-EMAIL_ALIAS_NAME = "Abdul Nafay"
-DB_PATH          = "emails.db"
+# === Logging ===
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
-ELT_EMAILS = {
-    "enrico.leonardi@aviatnet.com",
-    "pete.smith@aviatnet.com",
-    "michael.connaway@aviatnet.com",
-    "gary.croke@aviatnet.com",
-    "erin.boase@aviatnet.com",
-    "spencer.stoakley@aviatnet.com",
-}
-ELT_NAMES = {
-    "Enrico Leonardi",
-    "Pete Smith",
-    "Michael Connaway",
-    "Gary Croke",
-    "Erin Boase",
-    "Spencer Stoakey",
-}
-
-# === Runtime Config ===
+# === Runtime Config (timing only) ===
 BACKEND_CONFIG = {
     "fetch_interval_minutes": 5,
     "lookback_hours":         3,
-    "start":                  None,  # Optional[datetime]
+    "start":                  None,  # ISO strings or None
     "end":                    None,
 }
 
-# === Logging ===
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+# === Dynamic User Config (identity & VIP list) ===
+USER_CONFIG = {
+    "outlook_email":  None,
+    "full_name":      None,
+    "aliases":        [],       # extra mailbox aliases
+    "vip_group_name": None,     # e.g. "VIP"
+    "vip_emails":     [],       # list of SMTP addresses
+    "vip_names":      []        # list of lowercase display names
+}
 
 # === FastAPI + CORS ===
 app = FastAPI(title="EAi Email Assistant Backend")
@@ -63,12 +50,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# === On startup: rebuild broken gencache ===
 @app.on_event("startup")
 def rebuild_com_cache():
     try:
         pythoncom.CoInitialize()
-        # ensure we can write to the cache and then rebuild
         gencache.is_readonly = False
         gencache.Rebuild()
         logging.info("Outlook COM cache rebuilt successfully.")
@@ -77,40 +62,29 @@ def rebuild_com_cache():
     finally:
         pythoncom.CoUninitialize()
 
-# === Database ===
-conn = sqlite3.connect(DB_PATH, check_same_thread=False)
-c    = conn.cursor()
-# track individual message dismissals
-c.execute("""
-CREATE TABLE IF NOT EXISTS tracked_emails(
-  message_id TEXT PRIMARY KEY,
-  dismissed_at DATETIME NULL
-)
-""")
-# track entire conversation dismissals
-c.execute("""
-CREATE TABLE IF NOT EXISTS dismissed_conversations(
-  conversation_id TEXT PRIMARY KEY
-)
-""")
-conn.commit()
-
 # === Pydantic Models ===
 class EmailItem(BaseModel):
-    message_id: str
+    message_id:      str
     conversation_id: str
-    sender:      str
-    subject:     str
-    preview:     str
-    received:    str
-    importance:  int
-    reason:      str
+    sender:          str
+    subject:         str
+    preview:         str
+    received:        str
+    importance:      int
+    reason:          str
 
 class ConfigItem(BaseModel):
     fetch_interval_minutes: int
     lookback_hours:         int
-    start:                  Optional[datetime.datetime] = None
-    end:                    Optional[datetime.datetime] = None
+    start:                  Optional[datetime.datetime]
+    end:                    Optional[datetime.datetime]
+
+class UserConfigItem(BaseModel):
+    outlook_email:  str
+    full_name:      str
+    aliases:        Optional[List[str]] = []
+    vip_group_name: str
+    vip_emails:     List[str]   # raw entries, e.g. "Pete Smith <Pete.Smith@Aviatnet.com>"
 
 # === SSE queue ===
 fetch_queue: queue.Queue[str] = queue.Queue()
@@ -137,43 +111,59 @@ def normalize_sender(name: str, smtp: str) -> str:
             fn_ln = seg.split("-",1)[1]
             if "." in fn_ln:
                 f,l = fn_ln.split(".",1)
-                return f.capitalize()+" "+l.capitalize()
+                return f.capitalize() + " " + l.capitalize()
         return smtp or name
     return name or smtp
 
 def rate_and_reason(m: dict) -> tuple[int,str]:
-    is_elt   = (m["sender_smtp"] in ELT_EMAILS or m["sender"] in ELT_NAMES)
-    sole_to  = (len(m["to_smtp"]) == 1 and m["to_smtp"][0] == EMAIL_ADDRESS.lower())
-    mention  = ("abdul" in m["last_body"] or "nafay" in m["last_body"])
+    outlook    = USER_CONFIG["outlook_email"].lower()
+    full_name  = (USER_CONFIG["full_name"] or "").lower()
+    aliases    = [a.lower() for a in USER_CONFIG["aliases"]]
+    vip_emails = USER_CONFIG["vip_emails"]
+    vip_names  = USER_CONFIG["vip_names"]
+    vip_name   = USER_CONFIG["vip_group_name"]
 
-    if is_elt and sole_to:
-        return 5, "From ELT + Direct To You"
-    if mention and is_elt:
-        return 5, "From ELT + Mentioned You"
-    if is_elt:
-        return 4, "From ELT"
+    sender_smtp = m["sender_smtp"].lower()
+    sender_name = m["sender"].lower()
+    last_body   = m["last_body"]
+
+    is_vip  = sender_smtp in vip_emails or sender_name in vip_names
+    sole_to = (len(m["to_smtp"]) == 1 and m["to_smtp"][0] == outlook)
+    mention = False
+    if full_name and full_name in last_body:
+        mention = True
+    for alias in aliases:
+        if alias and alias in last_body:
+            mention = True
+            break
+
+    if is_vip and sole_to:
+        return 5, f"From {vip_name} + Direct To You"
+    if mention and is_vip:
+        return 5, f"From {vip_name} + Mentioned You"
+    if is_vip:
+        return 4, f"From {vip_name}"
     if mention:
         return 4, "Mentioned You"
     if sole_to:
         return 3, "Direct To You"
     if (
-        not is_elt
-        and EMAIL_ADDRESS.lower() in m["to_smtp"]
+        not is_vip
+        and outlook in m["to_smtp"]
         and 2 <= len(m["to_smtp"]) <= 3
     ):
         return 2, "Small Group"
     if (
-        not is_elt
-        and EMAIL_ADDRESS.lower() in m["rec_smtp"]
-        and any(addr in ELT_EMAILS for addr in m["to_smtp"])
+        not is_vip
+        and outlook in m["rec_smtp"]
+        and any(addr in vip_emails for addr in m["to_smtp"])
     ):
-        return 2, "ELT Recipients"
+        return 2, f"{vip_name} Recipients"
     return 0, ""
 
 def fetch_dicts(preset: bool,
                 start: Optional[datetime.datetime]=None,
                 end:   Optional[datetime.datetime]=None) -> list[dict]:
-    """Unified fetch: either preset lookback or explicit range."""
     pythoncom.CoInitialize()
     out = []
     try:
@@ -196,6 +186,10 @@ def fetch_dicts(preset: bool,
         except Exception:
             items = []
 
+        outlook   = USER_CONFIG["outlook_email"].lower()
+        full_name = (USER_CONFIG["full_name"] or "").lower()
+        aliases   = [a.lower() for a in USER_CONFIG["aliases"]]
+
         for msg in items:
             try:
                 if msg.Class != 43:
@@ -203,7 +197,6 @@ def fetch_dicts(preset: bool,
             except AttributeError:
                 continue
 
-            # gather recipients
             rec_smtp, rec_names, to_smtp = [], [], []
             for r in msg.Recipients:
                 try:
@@ -216,27 +209,30 @@ def fetch_dicts(preset: bool,
                 if r.Type == 1:
                     to_smtp.append(addr)
 
-            # ensure this mailbox is in recipients
             if (
-                EMAIL_ADDRESS.lower() not in rec_smtp
-                and EMAIL_ALIAS_NAME.lower() not in " ".join(rec_names)
+                outlook not in rec_smtp
+                and full_name not in rec_names
+                and not any(alias in rec_names for alias in aliases)
             ):
                 continue
 
-            # extract snippet
+            try:
+                exch = msg.Sender.AddressEntry.GetExchangeUser()
+                raw_smtp = (exch.PrimarySmtpAddress or msg.SenderEmailAddress).lower()
+            except:
+                raw_smtp = (msg.SenderEmailAddress or "").lower()
+            raw_name  = (msg.Sender.Name or "").strip()
+
             body      = msg.Body or ""
             last_body = extract_last_email(body)
-            snippet   = last_body[:200].replace("\r"," ").replace("\n"," ")
-            raw_name  = (msg.Sender.Name or "").strip()
-            raw_smtp  = (msg.SenderEmailAddress or "").lower()
-            sender    = normalize_sender(raw_name, raw_smtp)
+            snippet   = last_body[:200].replace("\r", " ").replace("\n", " ")
             received  = msg.ReceivedTime.isoformat()
             conv_id   = msg.ConversationID
 
             out.append({
-                "message_id":     msg.EntryID,
+                "message_id":      msg.EntryID,
                 "conversation_id": conv_id,
-                "sender":          sender,
+                "sender":          normalize_sender(raw_name, raw_smtp),
                 "sender_smtp":     raw_smtp,
                 "subject":         msg.Subject or "",
                 "preview":         snippet,
@@ -252,30 +248,17 @@ def fetch_dicts(preset: bool,
     return out
 
 def fetch_and_track():
-    # called by scheduler: uses config persistence
-    start = BACKEND_CONFIG.get("start")
-    end   = BACKEND_CONFIG.get("end")
+    start  = BACKEND_CONFIG.get("start")
+    end    = BACKEND_CONFIG.get("end")
     preset = not (start and end)
     if not preset:
         start_dt = datetime.datetime.fromisoformat(start)
         end_dt   = datetime.datetime.fromisoformat(end)
-        items = fetch_dicts(False, start_dt, end_dt)
+        items    = fetch_dicts(False, start_dt, end_dt)
     else:
-        items = fetch_dicts(True)
-
-    # filter out any already-dismissed conversations
-    dismissed_convs = {row[0] for row in c.execute("SELECT conversation_id FROM dismissed_conversations")}
-    items = [m for m in items if m["conversation_id"] not in dismissed_convs]
-
-    for m in items:
-        c.execute(
-            "INSERT OR IGNORE INTO tracked_emails(message_id, dismissed_at) VALUES (?, NULL)",
-            (m["message_id"],)
-        )
-    conn.commit()
+        items    = fetch_dicts(True)
     fetch_queue.put(datetime.datetime.utcnow().isoformat())
 
-# === Scheduler ===
 scheduler = BackgroundScheduler()
 scheduler.add_job(
     fetch_and_track,
@@ -317,6 +300,36 @@ def set_config(cfg: ConfigItem):
                              minutes=cfg.fetch_interval_minutes)
     return ConfigItem(**BACKEND_CONFIG)
 
+@app.post("/user-config", response_model=UserConfigItem)
+def set_user_config(cfg: UserConfigItem):
+    missing = [f for f in ("outlook_email", "full_name", "vip_group_name", "vip_emails") if not getattr(cfg, f)]
+    if missing:
+        raise HTTPException(400, f"Missing user configuration: {', '.join(missing)}")
+
+    parsed_emails: List[str] = []
+    parsed_names: List[str]  = []
+    for entry in cfg.vip_emails:
+        m = re.match(r'^(.*?)<([^>]+)>$', entry)
+        if m:
+            name_part  = m.group(1).strip()
+            email_part = m.group(2).strip()
+        else:
+            name_part  = None
+            email_part = entry.strip()
+        parsed_emails.append(email_part.lower())
+        if name_part:
+            parsed_names.append(name_part.lower())
+
+    USER_CONFIG.update({
+        "outlook_email":  cfg.outlook_email.lower(),
+        "full_name":      cfg.full_name.lower(),
+        "aliases":        [a.lower() for a in (cfg.aliases or [])],
+        "vip_group_name": cfg.vip_group_name,
+        "vip_emails":     parsed_emails,
+        "vip_names":      parsed_names
+    })
+    return cfg
+
 @app.post("/fetch-now")
 def fetch_now():
     fetch_and_track()
@@ -330,11 +343,15 @@ async def events():
             yield f"event: fetched\ndata: {json.dumps({'timestamp': ts})}\n\n"
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
-@app.get("/emails", response_model=list[EmailItem])
+@app.get("/emails", response_model=List[EmailItem])
 def get_emails(
     start: Optional[datetime.datetime] = Query(None),
     end:   Optional[datetime.datetime] = Query(None),
 ):
+    required = ("outlook_email", "full_name", "vip_group_name", "vip_emails")
+    missing = [k for k in required if USER_CONFIG.get(k) is None or USER_CONFIG.get(k) == []]
+    if missing:
+        raise HTTPException(400, f"Missing user configuration: {', '.join(missing)}")
     if (start is None) ^ (end is None):
         raise HTTPException(400, "Must provide both start and end or neither")
     if start and end:
@@ -346,21 +363,10 @@ def get_emails(
     else:
         msgs = fetch_dicts(True)
 
-    dismissed_convs = {row[0] for row in c.execute("SELECT conversation_id FROM dismissed_conversations")}
-
     out = []
     for m in msgs:
-        # skip if conversation dismissed
-        if m["conversation_id"] in dismissed_convs:
-            continue
         imp, reason = rate_and_reason(m)
         if imp < 2:
-            continue
-        row = c.execute(
-            "SELECT dismissed_at FROM tracked_emails WHERE message_id=?",
-            (m["message_id"],)
-        ).fetchone()
-        if row and row[0] is not None:
             continue
         out.append(EmailItem(
             message_id      = m["message_id"],
@@ -376,7 +382,6 @@ def get_emails(
 
 @app.post("/emails/{mid}/dismiss")
 def dismiss(mid: str):
-    # mark as read in Outlook only, no DB write here
     pythoncom.CoInitialize()
     try:
         ns   = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
@@ -396,7 +401,6 @@ def dismiss_conversation(mid: str):
         ns   = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
         mail = ns.GetItemFromID(mid)
         conv = mail.GetConversation()
-
         table = conv.GetTable()
         while not table.EndOfTable:
             row = table.GetNextRow()
@@ -405,13 +409,12 @@ def dismiss_conversation(mid: str):
                 item     = ns.GetItemFromID(entry_id)
                 item.UnRead = False
                 item.Save()
-            except Exception:
+            except:
                 continue
     except Exception as e:
         logging.error(f"Error dismissing conversation: {e}")
     finally:
         pythoncom.CoUninitialize()
-
     return {"ok": True}
 
 @app.post("/open/{mid}")
@@ -428,8 +431,6 @@ def open_mid(mid: str):
         pythoncom.CoUninitialize()
     return {"ok": True}
 
-# === New health‐check endpoints ===
-
 @app.get("/health/local")
 def health_local():
     return {"ok": True}
@@ -438,10 +439,9 @@ def health_local():
 def health_outlook():
     try:
         pythoncom.CoInitialize()
-        # only succeeds if a running Outlook instance exists
         win32com.client.GetActiveObject("Outlook.Application")
         return {"ok": True}
-    except Exception:
+    except:
         raise HTTPException(503, "Outlook unavailable")
     finally:
         pythoncom.CoUninitialize()

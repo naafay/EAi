@@ -1,11 +1,11 @@
 // src/MainApp.jsx
+
 import React, { useEffect, useState, useMemo, useRef, Fragment } from "react";
 import axios from "axios";
 import { supabase } from "./utils/supabaseClient";
 import {
   Mail,
   Loader,
-  MailSearch,
   MailCheck,
   CopyCheck,
   MailOpen,
@@ -13,7 +13,8 @@ import {
   Settings,
   User,
   HelpCircle,
-  LogOut
+  LogOut,
+  X
 } from "lucide-react";
 
 axios.defaults.baseURL = "http://localhost:8000";
@@ -24,7 +25,6 @@ function SettingsModal({ initial, onCancel, onSave }) {
     app_title: initial.app_title,
     full_name: initial.full_name,
     outlook_email: initial.outlook_email,
-    // NEW: user aliases
     aliases: (initial.aliases || []).join("\n"),
     vip_group_name: initial.vip_group_name,
     vip_emails: (initial.vip_emails || []).join("\n"),
@@ -44,7 +44,16 @@ function SettingsModal({ initial, onCancel, onSave }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white w-[90%] max-w-3xl h-[90%] rounded-lg shadow-lg overflow-auto p-6">
+      <div className="relative bg-white w-[90%] max-w-3xl h-[90%] rounded-lg shadow-lg overflow-auto p-6">
+        {/* Close button in top-right */}
+        <button
+          onClick={onCancel}
+          aria-label="Close settings"
+          className="absolute top-4 right-4 p-1 hover:bg-gray-200 rounded-full"
+        >
+          <X className="h-5 w-5 text-gray-600" />
+        </button>
+
         <h2 className="text-2xl font-semibold mb-4">Settings</h2>
 
         {/* App Branding */}
@@ -76,7 +85,6 @@ function SettingsModal({ initial, onCancel, onSave }) {
             onChange={e => updateField("outlook_email", e.target.value)}
             className="w-full border rounded px-3 py-2 text-sm"
           />
-          {/* NEW: Additional Aliases */}
           <label className="block text-sm">Additional Aliases (one per line)</label>
           <textarea
             rows={3}
@@ -96,9 +104,7 @@ function SettingsModal({ initial, onCancel, onSave }) {
             onChange={e => updateField("vip_group_name", e.target.value)}
             className="w-full border rounded px-3 py-2 text-sm"
           />
-          <label className="block text-sm">
-            VIP Email Addresses (one per line)
-          </label>
+          <label className="block text-sm">VIP Email Addresses (one per line)</label>
           <textarea
             rows={4}
             value={form.vip_emails}
@@ -118,9 +124,7 @@ function SettingsModal({ initial, onCancel, onSave }) {
               <input
                 type="text"
                 value={form[`label_${tier}`]}
-                onChange={e =>
-                  updateField(`label_${tier}`, e.target.value)
-                }
+                onChange={e => updateField(`label_${tier}`, e.target.value)}
                 className="w-full border rounded px-3 py-2 text-sm"
               />
             </div>
@@ -135,9 +139,7 @@ function SettingsModal({ initial, onCancel, onSave }) {
             <input
               type="number"
               value={form.fetch_interval_minutes}
-              onChange={e =>
-                updateField("fetch_interval_minutes", +e.target.value)
-              }
+              onChange={e => updateField("fetch_interval_minutes", +e.target.value)}
               className="w-full border rounded px-3 py-2 text-sm"
             />
           </div>
@@ -146,9 +148,7 @@ function SettingsModal({ initial, onCancel, onSave }) {
             <input
               type="number"
               value={form.lookback_hours}
-              onChange={e =>
-                updateField("lookback_hours", +e.target.value)
-              }
+              onChange={e => updateField("lookback_hours", +e.target.value)}
               className="w-full border rounded px-3 py-2 text-sm"
             />
           </div>
@@ -157,9 +157,7 @@ function SettingsModal({ initial, onCancel, onSave }) {
             <input
               type="number"
               value={form.entries_per_page}
-              onChange={e =>
-                updateField("entries_per_page", +e.target.value)
-              }
+              onChange={e => updateField("entries_per_page", +e.target.value)}
               className="w-full border rounded px-3 py-2 text-sm"
             />
           </div>
@@ -186,7 +184,7 @@ function SettingsModal({ initial, onCancel, onSave }) {
           </button>
           <button
             onClick={() => {
-              const payload = {
+              onSave({
                 app_title: form.app_title,
                 full_name: form.full_name,
                 outlook_email: form.outlook_email,
@@ -207,8 +205,7 @@ function SettingsModal({ initial, onCancel, onSave }) {
                 lookback_hours: form.lookback_hours,
                 entries_per_page: form.entries_per_page,
                 default_sort: form.default_sort
-              };
-              onSave(payload);
+              });
             }}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
           >
@@ -265,7 +262,8 @@ function ConfigPanel({ config, onSave, onFetch, loading }) {
         setError("Both start and end are required for custom range.");
         return;
       }
-      const s = new Date(customStart), e = new Date(customEnd);
+      const s = new Date(customStart),
+            e = new Date(customEnd);
       if (e <= s) {
         setError("End must be after start.");
         return;
@@ -274,19 +272,9 @@ function ConfigPanel({ config, onSave, onFetch, loading }) {
         setError("Range cannot exceed 31 days.");
         return;
       }
-      onSave({
-        fetch_interval_minutes: interval,
-        lookback_hours: lookback,
-        start: customStart,
-        end: customEnd
-      });
+      onSave({ fetch_interval_minutes: interval, lookback_hours: lookback, start: customStart, end: customEnd });
     } else {
-      onSave({
-        fetch_interval_minutes: interval,
-        lookback_hours: lookback,
-        start: null,
-        end: null
-      });
+      onSave({ fetch_interval_minutes: interval, lookback_hours: lookback, start: null, end: null });
     }
   };
 
@@ -322,9 +310,7 @@ function ConfigPanel({ config, onSave, onFetch, loading }) {
             className="border rounded-md px-2 py-1 text-sm"
           >
             {LOOKBACK_OPTIONS.map(opt => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
         </div>
@@ -369,27 +355,55 @@ function ConfigPanel({ config, onSave, onFetch, loading }) {
 
 // --- MainApp Component ---
 export default function MainApp({ userSettings }) {
+  const [settings, setSettingsState] = useState(userSettings);
+  useEffect(() => {
+    setSettingsState(userSettings);
+  }, [userSettings]);
+
   const {
     user_id,
     app_title,
+    full_name,
+    outlook_email,
+    aliases,
+    vip_group_name,
+    vip_emails,
     label_5,
     label_4,
     label_3,
     label_2,
-    vip_group_name,
-    vip_emails,
     fetch_interval_minutes,
     lookback_hours,
     entries_per_page,
-    default_sort,
-    // NEW: aliases from userSettings
-    aliases
-  } = userSettings;
+    default_sort
+  } = settings;
 
-  axios.defaults.baseURL = "http://localhost:8000";
   const DEFAULT_SORT_KEY = default_sort.toLowerCase();
 
-  // core state
+  // sync user-config (send raw Supabase arrays)
+  const [userSynced, setUserSynced] = useState(false);
+  useEffect(() => {
+    (async () => {
+      if (!outlook_email) {
+        setUserSynced(true);
+        return;
+      }
+      try {
+        await axios.post("/user-config", {
+          outlook_email,
+          full_name,
+          aliases,
+          vip_group_name,
+          vip_emails
+        });
+      } catch (e) {
+        console.error("Error syncing user-config:", e);
+      } finally {
+        setUserSynced(true);
+      }
+    })();
+  }, [outlook_email, full_name, aliases, vip_group_name, vip_emails]);
+
   const [emails, setEmails] = useState([]);
   const [config, setConfig] = useState({
     fetch_interval_minutes,
@@ -398,6 +412,7 @@ export default function MainApp({ userSettings }) {
     end: null
   });
   const [configLoaded, setConfigLoaded] = useState(false);
+
   const [sortKey, setSortKey] = useState(DEFAULT_SORT_KEY);
   const [sortDir, setSortDir] = useState("desc");
   const [search, setSearch] = useState("");
@@ -408,11 +423,8 @@ export default function MainApp({ userSettings }) {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [collapsed, setCollapsed] = useState({});
-
-  // new state for SettingsModal
   const [showSettings, setShowSettings] = useState(false);
 
-  // --- NEW: service health state ---
   const [cloudOk, setCloudOk] = useState(navigator.onLine);
   const [outlookOk, setOutlookOk] = useState(true);
   const [localOk, setLocalOk] = useState(true);
@@ -421,45 +433,6 @@ export default function MainApp({ userSettings }) {
   const intervalRef = useRef(null);
   const modalTimerRef = useRef(null);
 
-  // Electron shell
-  let shell;
-  try { shell = window.require("electron").shell; } catch {}
-
-  function openExternal(url) {
-    if (shell) shell.openExternal(url);
-    else window.open(url, "_blank");
-  }
-
-  // LOGOUT: sign out via Supabase
-  async function handleLogout() {
-    const { error } = await supabase.auth.signOut();
-    if (error) console.error("Logout error:", error.message);
-  }
-
-  // --- NEW: health check polling ---
-  const checkHealth = () => {
-    setCloudOk(navigator.onLine);
-    axios.get("/health/outlook")
-      .then(() => setOutlookOk(true))
-      .catch(() => setOutlookOk(false));
-    axios.get("/health/local")
-      .then(() => setLocalOk(true))
-      .catch(() => setLocalOk(false));
-  };
-
-  useEffect(() => {
-    checkHealth();
-    window.addEventListener("online", () => setCloudOk(true));
-    window.addEventListener("offline", () => setCloudOk(false));
-    const healthInterval = setInterval(checkHealth, 60_000);
-    return () => {
-      window.removeEventListener("online", () => setCloudOk(true));
-      window.removeEventListener("offline", () => setCloudOk(false));
-      clearInterval(healthInterval);
-    };
-  }, []);
-
-  // date helpers
   function parseLocal(iso) {
     const [date, time] = iso.split("T");
     const [Y, M, D] = date.split("-").map(Number);
@@ -476,13 +449,7 @@ export default function MainApp({ userSettings }) {
       .join(" ");
   }
 
-  const IMPORTANCE_LABELS = {
-    5: label_5,
-    4: label_4,
-    3: label_3,
-    2: label_2
-  };
-
+  const IMPORTANCE_LABELS = { 5: label_5, 4: label_4, 3: label_3, 2: label_2 };
   const COLUMNS = [
     { key: "received", label: "Datetime" },
     { key: "sender", label: "From" },
@@ -499,23 +466,18 @@ export default function MainApp({ userSettings }) {
     dt
       ? `${dt.toLocaleDateString("en-GB",{timeZone:"Asia/Dubai"})} ${dt.toLocaleTimeString("en-GB",{hour:'2-digit',minute:'2-digit',timeZone:"Asia/Dubai"})}`
       : "---";
-
   const fmtEmailDT = iso => {
     const d = parseLocal(iso);
     return `${d.toLocaleDateString("en-GB",{timeZone:"Asia/Dubai"})} ${d.toLocaleTimeString("en-GB",{hour:'2-digit',minute:'2-digit',timeZone:"Asia/Dubai"})}`;
   };
 
-  // load config on mount
+  // load timing config
   useEffect(() => {
     setLoading(true);
-    axios
-      .get("/config")
+    axios.get("/config")
       .then(r => {
         setConfig(r.data);
-        if (
-          !modalTimerRef.current &&
-          (r.data.start !== null || r.data.lookback_hours > 3)
-        ) {
+        if (!modalTimerRef.current && (r.data.start !== null || r.data.lookback_hours > 3)) {
           setShowModal(true);
           modalTimerRef.current = setTimeout(handleResetDefault, 60000);
         }
@@ -527,9 +489,9 @@ export default function MainApp({ userSettings }) {
       });
   }, []);
 
-  // polling & immediate fetch
+  // fetch loop
   useEffect(() => {
-    if (!configLoaded || showModal) return;
+    if (!configLoaded || showModal || !userSynced) return;
     if (intervalRef.current) clearInterval(intervalRef.current);
 
     async function fetchLoop() {
@@ -554,7 +516,7 @@ export default function MainApp({ userSettings }) {
     fetchLoop();
     intervalRef.current = setInterval(fetchLoop, config.fetch_interval_minutes * 60000);
     return () => clearInterval(intervalRef.current);
-  }, [configLoaded, showModal, config]);
+  }, [configLoaded, showModal, userSynced, config]);
 
   async function saveConfig(newCfg) {
     setLoading(true);
@@ -570,13 +532,9 @@ export default function MainApp({ userSettings }) {
 
   function fetchNow(startIso, endIso) {
     setLoading(true);
-    axios
-      .get("/emails", {
-        params:
-          startIso && endIso
-            ? { start: startIso, end: endIso }
-            : undefined
-      })
+    axios.get("/emails", {
+      params: startIso && endIso ? { start: startIso, end: endIso } : undefined
+    })
       .then(r => { setEmails(r.data); setPage(1); })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -585,14 +543,8 @@ export default function MainApp({ userSettings }) {
   function handleResetDefault() {
     setShowModal(false);
     clearTimeout(modalTimerRef.current);
-    saveConfig({
-      fetch_interval_minutes: config.fetch_interval_minutes,
-      lookback_hours: 3,
-      start: null,
-      end: null
-    });
+    saveConfig({ fetch_interval_minutes: config.fetch_interval_minutes, lookback_hours: 3, start: null, end: null });
   }
-
   function handleContinue() {
     setShowModal(false);
     clearTimeout(modalTimerRef.current);
@@ -612,7 +564,6 @@ export default function MainApp({ userSettings }) {
     catch { alert("Could not open Outlook."); }
   }
 
-  // filtering, sorting, grouping
   const filtered = useMemo(
     () =>
       emails.filter(e =>
@@ -630,8 +581,7 @@ export default function MainApp({ userSettings }) {
           ? a.importance - b.importance
           : b.importance - a.importance;
       }
-      const da = Date.parse(a.received),
-        db = Date.parse(b.received);
+      const da = Date.parse(a.received), db = Date.parse(b.received);
       return sortDir === "asc" ? da - db : db - da;
     });
   }, [filtered, sortKey, sortDir]);
@@ -639,17 +589,14 @@ export default function MainApp({ userSettings }) {
   const groupedData = useMemo(() => {
     if (sortKey === "importance") {
       const buckets = { 5: [], 4: [], 3: [], 2: [] };
-      sorted.forEach(e => {
-        if (buckets[e.importance]) buckets[e.importance].push(e);
-      });
+      sorted.forEach(e => { if (buckets[e.importance]) buckets[e.importance].push(e); });
       return buckets;
     }
     if (sortKey === "received") {
       const now = new Date();
       const buckets = { Today: [], "This week": [], Older: [] };
       sorted.forEach(e => {
-        const d = parseLocal(e.received),
-          diff = now - d;
+        const d = parseLocal(e.received), diff = now - d;
         if (d.toDateString() === now.toDateString()) buckets.Today.push(e);
         else if (diff < 1000 * 60 * 60 * 24 * 7) buckets["This week"].push(e);
         else buckets.Older.push(e);
@@ -660,27 +607,17 @@ export default function MainApp({ userSettings }) {
   }, [sorted, sortKey]);
 
   const groupKeys = useMemo(() => {
-    if (sortKey === "importance") {
-      return [5, 4, 3, 2].filter(k => groupedData[k].length);
-    }
-    if (sortKey === "received") {
-      return ["Today", "This week", "Older"].filter(
-        k => groupedData[k].length
-      );
-    }
+    if (sortKey === "importance") return [5,4,3,2].filter(k => groupedData[k].length);
+    if (sortKey === "received") return ["Today","This week","Older"].filter(k => groupedData[k].length);
     return ["All"];
   }, [groupedData, sortKey]);
 
-  const toggleGroup = key =>
-    setCollapsed(c => ({ ...c, [key]: !c[key] }));
+  const toggleGroup = key => setCollapsed(c => ({ ...c, [key]: !c[key] }));
   const pageCount = Math.ceil(sorted.length / pageSize);
 
   function onHeaderClick(key) {
     if (sortKey === key) setSortDir(d => (d === "asc" ? "desc" : "asc"));
-    else {
-      setSortKey(key);
-      setSortDir("desc");
-    }
+    else { setSortKey(key); setSortDir("desc"); }
   }
 
   const renderPill = imp => {
@@ -715,6 +652,24 @@ export default function MainApp({ userSettings }) {
       </span>
     );
   };
+
+  // health polling
+  const checkHealth = () => {
+    setCloudOk(navigator.onLine);
+    axios.get("/health/outlook").then(() => setOutlookOk(true)).catch(() => setOutlookOk(false));
+    axios.get("/health/local").then(() => setLocalOk(true)).catch(() => setLocalOk(false));
+  };
+  useEffect(() => {
+    checkHealth();
+    window.addEventListener("online",  () => setCloudOk(true));
+    window.addEventListener("offline", () => setCloudOk(false));
+    const hInt = setInterval(checkHealth, 60000);
+    return () => {
+      window.removeEventListener("online",  () => setCloudOk(true));
+      window.removeEventListener("offline", () => setCloudOk(false));
+      clearInterval(hInt);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -769,13 +724,19 @@ export default function MainApp({ userSettings }) {
           <button onClick={() => setShowSettings(true)} title="Settings">
             <Settings className="h-5 w-5" />
           </button>
-          <button onClick={() => openExternal("/profile")} title="Account">
+          <button onClick={() => window.open("/profile", "_blank")} title="Account">
             <User className="h-5 w-5" />
           </button>
-          <button onClick={() => openExternal("/help")} title="Help">
+          <button onClick={() => window.open("/help", "_blank")} title="Help">
             <HelpCircle className="h-5 w-5" />
           </button>
-          <button onClick={handleLogout} title="Logout">
+          <button
+            onClick={async () => {
+              const { error } = await supabase.auth.signOut();
+              if (error) console.error(error);
+            }}
+            title="Logout"
+          >
             <LogOut className="h-5 w-5" />
           </button>
         </div>
@@ -783,7 +744,7 @@ export default function MainApp({ userSettings }) {
 
       <div className="p-10">
         <div className="bg-white rounded-2xl shadow-lg p-8 overflow-hidden">
-          {/* Original Header */}
+          {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-semibold">{app_title}</h1>
             <div className="text-right text-sm text-gray-600 space-y-1">
@@ -806,26 +767,18 @@ export default function MainApp({ userSettings }) {
               type="text"
               placeholder="Search emails…"
               value={search}
-              onChange={e => {
-                setSearch(e.target.value);
-                setPage(1);
-              }}
+              onChange={e => { setSearch(e.target.value); setPage(1); }}
               className="w-full max-w-xs border rounded-lg px-4 py-2 text-sm shadow-inner focus:ring-2 focus:ring-blue-200"
             />
             <div className="flex items-center space-x-2">
               <span className="text-gray-600 text-sm">Show</span>
               <select
                 value={pageSize}
-                onChange={e => {
-                  setPageSize(+e.target.value);
-                  setPage(1);
-                }}
+                onChange={e => { setPageSize(+e.target.value); setPage(1); }}
                 className="border rounded-lg px-3 py-2 text-sm"
               >
                 {[50, 100, 200].map(n => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
+                  <option key={n} value={n}>{n}</option>
                 ))}
               </select>
               <span className="text-gray-600 text-sm">entries</span>
@@ -842,9 +795,7 @@ export default function MainApp({ userSettings }) {
                       key={key}
                       onClick={() => onHeaderClick(key)}
                       className={`px-4 py-2 text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer ${
-                        key === "importance" || key === "reason"
-                          ? "text-center"
-                          : "text-left"
+                        (key==="importance"||key==="reason") ? "text-center" : "text-left"
                       }`}
                     >
                       <div className="inline-flex items-center">
@@ -862,7 +813,6 @@ export default function MainApp({ userSettings }) {
               <tbody>
                 {groupKeys.map(groupKey => (
                   <Fragment key={groupKey}>
-                    {/* Group header */}
                     <tr
                       className="bg-gray-100 cursor-pointer"
                       onClick={() => toggleGroup(groupKey)}
@@ -881,8 +831,6 @@ export default function MainApp({ userSettings }) {
                         </span>
                       </td>
                     </tr>
-
-                    {/* Group rows */}
                     {!collapsed[groupKey] &&
                       groupedData[groupKey].map(e => (
                         <tr
@@ -905,23 +853,24 @@ export default function MainApp({ userSettings }) {
                             {renderPill(e.importance)}
                           </td>
                           <td className="px-4 py-2 text-center">
-                            {e.reason
-                              .split("+")
-                              .map(r => r.trim())
-                              .map((segment, i) => {
-                                const displayLabel = segment.replace(/ELT/gi, vip_group_name);
-                                return (
-                                  <div
-                                    key={i}
-                                    className="flex items-center mb-1 whitespace-nowrap justify-center"
-                                  >
-                                    <Tag className="h-3 w-3 text-gray-500 mr-1" />
-                                    <span className="bg-red-100 text-gray-800 text-xs font-medium px-2 py-1 rounded">
-                                      {displayLabel}
-                                    </span>
-                                  </div>
-                                );
-                              })}
+                            {e.reason.split("+").map((r, i) => {
+                              const seg = r.trim();
+                              const disp = seg.replace(
+                                new RegExp(vip_group_name, "gi"),
+                                vip_group_name
+                              );
+                              return (
+                                <div
+                                  key={i}
+                                  className="flex items-center mb-1 whitespace-nowrap justify-center"
+                                >
+                                  <Tag className="h-3 w-3 text-gray-500 mr-1" />
+                                  <span className="bg-red-100 text-gray-800 text-xs font-medium px-2 py-1 rounded">
+                                    {disp}
+                                  </span>
+                                </div>
+                              );
+                            })}
                           </td>
                           <td className="px-4 py-2 text-center">
                             <MailOpen
@@ -942,10 +891,7 @@ export default function MainApp({ userSettings }) {
                               strokeWidth={1.5}
                               className="h-5 w-5 text-red-600 hover:text-red-800 cursor-pointer"
                               onClick={() =>
-                                dismissConversation(
-                                  e.message_id,
-                                  e.conversation_id
-                                )
+                                dismissConversation(e.message_id, e.conversation_id)
                               }
                             />
                           </td>
@@ -995,16 +941,11 @@ export default function MainApp({ userSettings }) {
             </div>
             <select
               value={pageSize}
-              onChange={e => {
-                setPageSize(+e.target.value);
-                setPage(1);
-              }}
+              onChange={e => { setPageSize(+e.target.value); setPage(1); }}
               className="border rounded-lg px-3 py-1 text-sm"
             >
               {[50, 100, 200].map(n => (
-                <option key={n} value={n}>
-                  {n}
-                </option>
+                <option key={n} value={n}>{n}</option>
               ))}
             </select>
           </div>
@@ -1046,15 +987,45 @@ export default function MainApp({ userSettings }) {
       {/* Settings Modal */}
       {showSettings && (
         <SettingsModal
-          initial={{ ...userSettings, aliases }}
+          initial={{ ...settings, aliases }}
           onCancel={() => setShowSettings(false)}
           onSave={async newSettings => {
             const payload = { user_id, ...newSettings };
-            const { error } = await supabase
+            const { error: upsertError, data: upserted } = await supabase
               .from("user_settings")
-              .upsert(payload);
-            if (error) console.error("Settings save error:", error);
-            else window.location.reload();
+              .upsert(payload)
+              .select()
+              .single();
+            if (upsertError) {
+              console.error("Supabase upsert error:", upsertError);
+              return;
+            }
+            // re-sync identity & VIP with raw arrays
+            try {
+              await axios.post("/user-config", {
+                outlook_email: newSettings.outlook_email,
+                full_name: newSettings.full_name,
+                aliases: newSettings.aliases,
+                vip_group_name: newSettings.vip_group_name,
+                vip_emails: newSettings.vip_emails
+              });
+            } catch (e) {
+              console.error("Error syncing user-config:", e);
+            }
+            // re-sync timing config
+            try {
+              const { data: cfgData } = await axios.post("/config", {
+                fetch_interval_minutes: newSettings.fetch_interval_minutes,
+                lookback_hours: newSettings.lookback_hours,
+                start: null,
+                end: null
+              });
+              setConfig(cfgData);
+            } catch (e) {
+              console.error("Error updating timing config:", e);
+            }
+            setSettingsState(upserted);
+            setShowSettings(false);
           }}
         />
       )}
