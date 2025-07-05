@@ -96,8 +96,7 @@ def extract_last_email(body: str) -> str:
             ^[ \t]*On\s+\d{1,2}\s+\w+\s+\d{4},\s*at\s*\d{1,2}:\d{2},\s*.+?\s+wrote:
           | ^[ \t]*On\s+.+\s+wrote:
           | ^[ \t]*-----Original Message-----
-          | ^[ \t]*From:.+
-          | ^[ \t]*De\s*:.+
+          | ^[ \t]*(?:From|De|Von|Da|От|发件人|寄件者|差出人|보낸\s+사람)\s*:.+
         )""",
         body,
         flags=re.IGNORECASE | re.MULTILINE | re.VERBOSE
