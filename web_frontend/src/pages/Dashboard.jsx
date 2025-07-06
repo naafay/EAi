@@ -33,9 +33,9 @@ export default function Dashboard() {
       const { data, error: pf } = await supabase.from('profiles').select('*').eq('id', user.id).single();
       if (!pf && data) {
         setProfile(data);
-        setFirstName(data.first_name);
-        setLastName(data.last_name);
-        setEmail(data.email);
+        setFirstName(data.first_name || '');
+        setLastName(data.last_name || '');
+        setEmail(data.email || '');
         if (data.subscription_id) fetchSub(data.subscription_id);
       }
     })();
@@ -52,40 +52,66 @@ export default function Dashboard() {
 
   const handleStartTrial = async () => {
     const now = new Date();
-    const expires = new Date(now.getTime() + 3*24*60*60*1000);
-    await supabase.from('profiles').update({ trial_start: now.toISOString(), trial_expires: expires.toISOString() }).eq('id', user.id);
+    const expires = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+    await supabase.from('profiles').update({ trial_start: now.toISOString().split('T')[0], trial_expires: expires.toISOString().split('T')[0] }).eq('id', user.id);
     window.location.reload();
   };
 
   const handleSubscription = async (priceId) => {
     setLoading(true);
-    const res = await fetch(`${BACKEND}/create-checkout-session`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ price_id: priceId, customer_email: email }) });
+    const res = await fetch(`${BACKEND}/create-checkout-session`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ price_id: priceId, customer_email: email }) });
     const data = await res.json();
-    if(data.url) window.location.href = data.url;
+    if (data.url) window.location.href = data.url;
     else alert('Checkout error');
     setLoading(false);
   };
 
   const handleCancel = async () => {
-    if(!profile.subscription_id) return;
-    const res = await fetch(`${BACKEND}/cancel-subscription/${profile.subscription_id}`,{method:'POST'});
+    if (!profile.subscription_id) return;
+    const res = await fetch(`${BACKEND}/cancel-subscription/${profile.subscription_id}`, { method: 'POST' });
     const data = await res.json();
-    if(data.status==='success') alert('Cancelled');
+    if (data.status === 'success') alert('Cancelled');
     else alert('Cancel error');
+  };
+
+  const handleResetPassword = async () => {
+    setMessage('');
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/reset-password',
+    });
+    if (error) setMessage(error.message);
+    else setMessage('✅ Password reset email sent. Check your inbox.');
   };
 
   if (!user || !profile) return null;
 
-  // License status
+  // License details
   const today = new Date();
   const trialStart = profile.trial_start ? new Date(profile.trial_start) : null;
   const trialExpires = profile.trial_expires ? new Date(profile.trial_expires) : null;
-  let status='⏳ Not Started'; let days=0;
-  if(profile.is_paid) status='✅ Paid';
-  else if(trialStart && trialExpires){ days=Math.ceil((trialExpires-today)/(1000*60*60*24)); status= days>0?'🧪 Trial Active':'⚠️ Trial Expired'; }
+  const subscriptionStart = profile.subscription_start ? new Date(profile.subscription_start) : null;
+  const subscriptionEnd = profile.subscription_end ? new Date(profile.subscription_end) : null;
+  let status = '⏳ Not Started';
+  let days = 0;
+  let licenseType = '';
+  let startDate = null;
+  let endDate = null;
+
+  if (profile.is_paid) {
+    status = '✅ Paid';
+    licenseType = profile.subscription_type || 'Premium';
+    startDate = subscriptionStart;
+    endDate = subscriptionEnd;
+  } else if (trialStart && trialExpires) {
+    days = Math.ceil((trialExpires - today) / (1000 * 60 * 60 * 24));
+    status = days > 0 ? '🧪 Trial Active' : '⚠️ Trial Expired';
+    licenseType = 'Trial';
+    startDate = trialStart;
+    endDate = trialExpires;
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-900 to-indigo-800 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-[#0b0b1a] to-[#37123d] relative overflow-hidden">
       {/* Starry Background Overlay with Fixed Positions */}
       {starPositions.current.map((pos, i) => (
         <span
@@ -99,8 +125,10 @@ export default function Dashboard() {
         />
       ))}
       <nav className="flex items-center justify-between p-6">
-        <img src={logo} alt="OutPrio" className="h-10 w-auto transition-transform hover:scale-110" />
-        <button onClick={handleLogout} className="text-sm uppercase text-gray-300 hover:text-white transition-colors duration-300">Logout</button>
+        <a href="https://outprio.com" target="_blank" rel="noopener noreferrer" className="transition-transform hover:scale-110">
+          <img src={logo} alt="OutPrio" className="h-10 w-auto" />
+        </a>
+        <button onClick={handleLogout} className="text-2xl text-gray-300 hover:text-white transition-colors duration-300">⏻</button>
       </nav>
       <div className="flex-grow flex items-center justify-center p-6">
         <div className="relative w-full max-w-xl bg-white/20 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/30 glow-effect">
@@ -108,50 +136,77 @@ export default function Dashboard() {
           {message && <p className="text-center text-green-300 mb-6 animate-fade-in">{message}</p>}
           <div className="space-y-6">
             <div className="space-y-4">
-              <div><label className="block text-sm uppercase text-gray-300">Email</label><input className="w-full mt-2 p-3 rounded-xl bg-white/30 backdrop-blur-md text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300" value={email} disabled /></div>
-              <div><label className="block text-sm uppercase text-gray-300">First Name</label><input className="w-full mt-2 p-3 rounded-xl bg-white/30 backdrop-blur-md text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300" value={firstName} onChange={e=>setFirstName(e.target.value)} disabled={!editing} /></div>
-              <div><label className="block text-sm uppercase text-gray-300">Last Name</label><input className="w-full mt-2 p-3 rounded-xl bg-white/30 backdrop-blur-md text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300" value={lastName} onChange={e=>setLastName(e.target.value)} disabled={!editing} /></div>
-            </div>
-            <div className="flex justify-center space-x-4">
-              {editing ? (
-                <>
-                  <button onClick={saveProfile} className="px-6 py-2 bg-green-500 rounded-xl text-white font-semibold hover:bg-green-600 focus:ring-2 focus:ring-green-400 transition-all duration-300 transform hover:scale-105">Save</button>
-                  <button onClick={() => setEditing(false)} className="px-6 py-2 bg-gray-600 rounded-xl text-white font-semibold hover:bg-gray-700 focus:ring-2 focus:ring-gray-400 transition-all duration-300 transform hover:scale-105">Cancel</button>
-                </>
-              ) : (
-                <button onClick={() => setEditing(true)} className="w-full py-2 bg-blue-600 rounded-xl text-white font-semibold hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 transition-all duration-300 transform hover:scale-105">Edit Profile</button>
-              )}
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold uppercase text-gray-200">Personal Information</h2>
+                {!editing ? (
+                  <button onClick={() => setEditing(true)} className="text-2xl text-indigo-300 hover:text-indigo-400 transition-colors duration-300">✎</button>
+                ) : (
+                  <div className="space-x-4">
+                    <button onClick={saveProfile} className="text-xl text-teal-900 hover:text-teal-400 transition-colors duration-300">✔</button>
+                    <button onClick={() => { setEditing(false); setFirstName(profile.first_name || ''); setLastName(profile.last_name || ''); }} className="text-lg text-gray-700 hover:text-gray-500 transition-colors duration-300">❌</button>
+                  </div>
+                )}
+              </div>
+              <div className="space-y-4">
+                <div><label className="block text-sm uppercase text-gray-300">Email</label><input className="w-full mt-2 p-3 rounded-xl bg-white/30 backdrop-blur-md text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300" value={email} disabled /></div>
+                <div><label className="block text-sm uppercase text-gray-300">First Name</label><input className="w-full mt-2 p-3 rounded-xl bg-white/30 backdrop-blur-md text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300" value={firstName} onChange={(e) => setFirstName(e.target.value)} disabled={!editing} /></div>
+                <div><label className="block text-sm uppercase text-gray-300">Last Name</label><input className="w-full mt-2 p-3 rounded-xl bg-white/30 backdrop-blur-md text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300" value={lastName} onChange={(e) => setLastName(e.target.value)} disabled={!editing} /></div>
+                <a href="#" onClick={(e) => { e.preventDefault(); handleResetPassword(); }} className="text-sm text-indigo-200 hover:text-indigo-100 transition-colors duration-300">Reset Password</a>
+              </div>
             </div>
             <div className="pt-6 border-t border-white/20 space-y-4">
               <h2 className="text-lg font-semibold uppercase text-gray-200">License Information</h2>
-              <p className="text-gray-300"><strong>Status:</strong> {status}</p>
-              {!profile.is_paid && trialStart && <p className="text-gray-300"><strong>Days Remaining:</strong> {Math.max(0, days)}</p>}
-              {profile.is_paid || (trialStart && days > 0) ? (
-                <div className="space-y-4">
-                  {profile.is_paid && subscriptionInfo && (
-                    <div className="bg-white/20 p-4 rounded-xl backdrop-blur-md space-y-2">
-                      <p className="text-gray-300"><strong>Plan:</strong> {subscriptionInfo.plan.interval} (${subscriptionInfo.plan.amount / 100}/{subscriptionInfo.plan.interval})</p>
-                      <p className="text-gray-300"><strong>Renewal:</strong> {new Date(subscriptionInfo.current_period_end * 1000).toLocaleDateString()}</p>
-                      <div className="flex space-x-2">
-                        {!subscriptionInfo.cancel_at_period_end ? (
-                          <button onClick={handleCancel} className="px-4 py-2 bg-red-600 rounded-xl text-white font-semibold hover:bg-red-700 focus:ring-2 focus:ring-red-400 transition-all duration-300 transform hover:scale-105">Cancel Subscription</button>
-                        ) : (
-                          <button onClick={() => alert('Resume not implemented')} className="px-4 py-2 bg-green-600 rounded-xl text-white font-semibold hover:bg-green-700 focus:ring-2 focus:ring-green-400 transition-all duration-300 transform hover:scale-105">Resume Subscription</button>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                  {!profile.is_paid && !trialStart && (
-                    <button onClick={handleStartTrial} className="w-full px-6 py-2 bg-green-600 rounded-xl text-white font-semibold hover:bg-green-700 focus:ring-2 focus:ring-green-400 transition-all duration-300 transform hover:scale-105">Start Free 3-Day Trial</button>
-                  )}
-                  {!profile.is_paid && (
-                    <>
-                      <button onClick={() => handleSubscription('price_1RfIVDFVd7b5c6lTQrG7zUtJ')} disabled={loading} className="w-full px-6 py-2 bg-blue-600 rounded-xl text-white font-semibold hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 transition-all duration-300 transform hover:scale-105">{loading ? 'Redirecting...' : 'Buy Monthly'}</button>
-                      <button onClick={() => handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')} disabled={loading} className="w-full px-6 py-2 bg-purple-600 rounded-xl text-white font-semibold hover:bg-purple-700 focus:ring-2 focus:ring-purple-400 transition-all duration-300 transform hover:scale-105">{loading ? 'Redirecting...' : 'Buy Annual'}</button>
-                    </>
-                  )}
+              <div className="bg-white/20 p-4 rounded-xl backdrop-blur-md space-y-3">
+                <div className="flex justify-between text-gray-300">
+                  <span>Status</span><span className="font-medium">{status}</span>
                 </div>
-              ) : null}
+                {(trialStart || subscriptionStart) && (
+                  <div className="flex justify-between text-gray-300">
+                    <span>License Type</span><span className="font-medium">{licenseType}</span>
+                  </div>
+                )}
+                {startDate && (
+                  <div className="flex justify-between text-gray-300">
+                    <span>Start Date</span><span className="font-medium">{startDate.toLocaleDateString()}</span>
+                  </div>
+                )}
+                {endDate && (
+                  <div className="flex justify-between text-gray-300">
+                    <span>End Date</span><span className="font-medium">{endDate.toLocaleDateString()}</span>
+                  </div>
+                )}
+                {profile.is_paid && subscriptionInfo && (
+                  <>
+                    <div className="flex justify-between text-gray-300">
+                      <span>Plan</span><span className="font-medium">{subscriptionInfo.plan.interval} (${subscriptionInfo.plan.amount / 100}/{subscriptionInfo.plan.interval})</span>
+                    </div>
+                    <div className="flex justify-between text-gray-300">
+                      <span>Renewal</span><span className="font-medium">{new Date(subscriptionInfo.current_period_end * 1000).toLocaleDateString()}</span>
+                    </div>
+                  </>
+                )}
+                {profile.is_paid && subscriptionInfo?.plan.interval === 'month' ? (
+                  <div className="flex justify-end space-x-2">
+                    <button onClick={() => handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')} disabled={loading} className="px-4 py-2 bg-purple-600 rounded-xl text-white font-semibold hover:bg-purple-700 focus:ring-2 focus:ring-purple-400 transition-all duration-300 transform hover:scale-105">Buy Annual</button>
+                    <button onClick={handleCancel} className="px-4 py-2 bg-rose-700 rounded-lg text-white font-semibold hover:bg-rose-700 focus:ring-2 focus:ring-rose-400 shadow-md transition-all duration-300 transform hover:scale-105">Cancel Subscription</button>
+                  </div>
+                ) : profile.is_paid && subscriptionInfo?.plan.interval === 'year' ? (
+                  <div className="flex justify-end space-x-2">
+                    <button onClick={handleCancel} className="px-4 py-2 bg-rose-700 rounded-lg text-white font-semibold hover:bg-rose-700 focus:ring-2 focus:ring-rose-400 shadow-md transition-all duration-300 transform hover:scale-105">Cancel Subscription</button>
+                  </div>
+                ) : (trialStart && days > 0) ? (
+                  <div></div> // No "Cancel Subscription" during trial
+                ) : null}
+                {!profile.is_paid && !trialStart && (
+                  <button onClick={handleStartTrial} className="w-full px-6 py-2 bg-teal-600 rounded-xl text-white font-semibold hover:bg-teal-700 focus:ring-2 focus:ring-teal-400 transition-all duration-300 transform hover:scale-105">Start Free 3-Day Trial</button>
+                )}
+                {!profile.is_paid && (
+                  <div className="flex space-x-2">
+                    <button onClick={() => handleSubscription('price_1RfIVDFVd7b5c6lTQrG7zUtJ')} disabled={loading} className="flex-1 px-3 py-2 bg-blue-600 rounded-xl text-white font-semibold hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 transition-all duration-300 transform hover:scale-105">{loading ? 'Redirecting...' : 'Monthly'}</button>
+                    <button onClick={() => handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')} disabled={loading} className="flex-1 px-3 py-2 bg-purple-600 rounded-xl text-white font-semibold hover:bg-purple-700 focus:ring-2 focus:ring-purple-400 transition-all duration-300 transform hover:scale-105">{loading ? 'Redirecting...' : 'Annual'}</button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
