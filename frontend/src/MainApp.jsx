@@ -882,7 +882,7 @@ export default function MainApp({ userSettings }) {
                                   className="flex items-center mb-1 whitespace-nowrap justify-center"
                                 >
                                   <Tag className="h-3 w-3 text-[#6e506e] mr-1" />
-                                  <span className="bg-[#BA85B0] text-white text-xs font-medium px-2 py-1 rounded">
+                                  <span className="bg-[#bc5cac] text-white text-xs font-medium px-2 py-1 rounded">
                                     {disp}
                                   </span>
                                 </div>

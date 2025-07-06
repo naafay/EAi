@@ -1,3 +1,4 @@
+// src/Login.jsx
 import React, { useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
 
@@ -12,30 +13,45 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-semibold mb-6 text-center">Login to OutPrio</h2>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          className="w-full mb-4 px-3 py-2 border rounded"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          className="w-full mb-4 px-3 py-2 border rounded"
-        />
-        <button
-          onClick={handleLogin}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-        >
-          Login
-        </button>
-        {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0b0b1a] to-[#37123d]">
+      <div className="relative w-full max-w-md bg-white/20 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/30 glow-effect">
+        <h2 className="text-center text-2xl font-extrabold text-white uppercase tracking-wide mb-6 glow-text">
+          Login to OutPrio
+        </h2>
+        {error && (
+          <div className="text-center text-sm text-red-200 mb-6 animate-fade-in">{error}</div>
+        )}
+        <div className="space-y-6">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            className="w-full px-5 py-3 rounded-xl bg-white/30 backdrop-blur-md text-white placeholder-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            className="w-full px-5 py-3 rounded-xl bg-white/30 backdrop-blur-md text-white placeholder-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
+          />
+          <button
+            onClick={handleLogin}
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-700 text-white font-bold text-lg hover:from-purple-700 hover:to-indigo-800 focus:ring-4 focus:ring-purple-500 focus:outline-none transition-all duration-300 transform hover:scale-105"
+          >
+            Login
+          </button>
+        </div>
+        <div className="mt-6 text-center text-sm text-gray-300">
+          New to OutPrio?{' '}
+          <a
+            href="https://outprio.netlify.app"
+            className="underline text-indigo-200 hover:text-indigo-100 transition-colors duration-300"
+          >
+            Start here
+          </a>
+        </div>
       </div>
     </div>
   );
