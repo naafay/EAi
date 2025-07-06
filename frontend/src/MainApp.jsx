@@ -334,20 +334,25 @@ function ConfigPanel({ config, onSave, onFetch, loading }) {
             />
           </div>
         )}
-        <button
-          onClick={handleSave}
-          disabled={loading}
-          className="flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow disabled:opacity-50"
-        >
-          {loading ? <Loader className="h-4 w-4 animate-spin" /> : "Save Config"}
-        </button>
-        <button
-          onClick={() => mode === "custom" ? onFetch(customStart, customEnd) : onFetch()}
-          disabled={loading}
-          className="flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow disabled:opacity-50"
-        >
-          {loading ? <Loader className="h-4 w-4 animate-spin" /> : "Fetch Now"}
-        </button>
+<button
+  onClick={handleSave}
+  disabled={loading}
+  className="
+    flex items-center
+    bg-transparent border border-[#F4D9FF]
+    text-[#F4D9FF]
+    text-sm
+    px-4 py-2
+    rounded-lg shadow
+    hover:bg-[#643662]
+    disabled:opacity-50
+  "
+>
+  {loading
+    ? <Loader className="h-4 w-4 animate-spin text-white" />
+    : "Apply"
+  }
+</button>
       </div>
     </div>
   );
@@ -624,27 +629,27 @@ export default function MainApp({ userSettings }) {
     const label = IMPORTANCE_LABELS[imp] || "";
     return (
       <span
-        className="inline-block uppercase text-xs font-semibold px-3 py-1 rounded-full"
+        className="inline-block uppercase text-xs font-semibold px-3 py-1 rounded-half"
         style={{
           backgroundColor:
             imp === 5
-              ? "#fed7d7"
+              ? "#FBDDF0"
               : imp === 4
-              ? "#fef3c7"
+              ? "#F1D9CC"
               : imp === 3
-              ? "#dbecff"
+              ? "#D0E7F8"
               : imp === 2
-              ? "#dcfce7"
+              ? "#DBEBC7"
               : "",
           color:
             imp === 5
-              ? "#c53030"
+              ? "#C5598B"
               : imp === 4
-              ? "#b45309"
+              ? "#BF631D"
               : imp === 3
-              ? "#2c5282"
+              ? "#4C7BA8"
               : imp === 2
-              ? "#047857"
+              ? "#627513"
               : ""
         }}
       >
@@ -672,12 +677,13 @@ export default function MainApp({ userSettings }) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    //<div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-b from-[#0b0b1a] to-[#37123d]">
       {/* Top Ribbon Header */}
       <div className="flex items-center justify-between bg-transparent border-b p-3 shadow-sm">
         <div className="flex items-center">
-          <img src="./logo192.png" alt="Logo" className="h-8 w-8 mr-2" />
-          <span className="text-lg font-semibold">{app_title}</span>
+          <img src="./src/assets/outprio.png" alt="Logo" width="40%" className="mr-2 mt-2" />
+         {/* <span className="text-lg font-semibold">{app_title}</span> */}
         </div>
         <div className="flex items-center space-x-7 text-gray-200">
           {/* STATUS CIRCLE */}
@@ -743,15 +749,26 @@ export default function MainApp({ userSettings }) {
       </div>
 
       <div className="p-10">
-        <div className="bg-white rounded-2xl shadow-lg p-8 overflow-hidden">
+        <div className="bg-white/30  rounded-2xl border border-[#D6B8E8] shadow-lg p-8 overflow-hidden">
           {/* Header */}
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-semibold">{app_title}</h1>
-            <div className="text-right text-sm text-gray-600 space-y-1">
-              <div>Last update: {fmtDT(lastFetch)}</div>
-              <div>Next update: {fmtDT(nextFetch)}</div>
+          <div className="flex justify-between items-start mb-6">
+            <h1 className="text-3xl text-white font-semibold">{app_title}</h1>
+            <div className="text-right text-white space-y-2">
+              <div className="text-sm">
+                <div>Last update: {fmtDT(lastFetch)}</div>
+                <div>Next update: {fmtDT(nextFetch)}</div>
+              </div>
+              <button
+                onClick={() => fetchNow()}
+                disabled={loading}
+                className="mt-2 inline-flex items-center bg-[#365B80] border border-[#D4E5FF] hover:bg-[#2C4966] text-white text-sm px-4 py-2 rounded-lg shadow disabled:opacity-50"
+              >
+                {loading ? <Loader className="h-4 w-4 animate-spin mr-2" /> : null}
+                Fetch Now
+              </button>
             </div>
           </div>
+
 
           {/* Config Panel */}
           <ConfigPanel
@@ -771,7 +788,7 @@ export default function MainApp({ userSettings }) {
               className="w-full max-w-xs border rounded-lg px-4 py-2 text-sm shadow-inner focus:ring-2 focus:ring-blue-200"
             />
             <div className="flex items-center space-x-2">
-              <span className="text-gray-600 text-sm">Show</span>
+              <span className="text-white text-sm">Show</span>
               <select
                 value={pageSize}
                 onChange={e => { setPageSize(+e.target.value); setPage(1); }}
@@ -781,7 +798,7 @@ export default function MainApp({ userSettings }) {
                   <option key={n} value={n}>{n}</option>
                 ))}
               </select>
-              <span className="text-gray-600 text-sm">entries</span>
+              <span className="text-white text-sm">entries</span>
             </div>
           </div>
 
@@ -864,8 +881,8 @@ export default function MainApp({ userSettings }) {
                                   key={i}
                                   className="flex items-center mb-1 whitespace-nowrap justify-center"
                                 >
-                                  <Tag className="h-3 w-3 text-gray-500 mr-1" />
-                                  <span className="bg-red-100 text-gray-800 text-xs font-medium px-2 py-1 rounded">
+                                  <Tag className="h-3 w-3 text-[#6e506e] mr-1" />
+                                  <span className="bg-[#BA85B0] text-white text-xs font-medium px-2 py-1 rounded">
                                     {disp}
                                   </span>
                                 </div>
@@ -875,21 +892,21 @@ export default function MainApp({ userSettings }) {
                           <td className="px-4 py-2 text-center">
                             <MailOpen
                               strokeWidth={1.5}
-                              className="h-5 w-5 text-blue-600 hover:text-blue-800 cursor-pointer"
+                              className="h-5 w-5 text-[#1E89D1] hover:text-[#1E61B0] cursor-pointer"
                               onClick={() => openInOutlook(e.message_id)}
                             />
                           </td>
                           <td className="px-4 py-2 text-center">
                             <MailCheck
                               strokeWidth={1.5}
-                              className="h-5 w-5 text-red-600 hover:text-red-800 cursor-pointer"
+                              className="h-5 w-5 text-[#D274AA] hover:text-[#B04B79] cursor-pointer"
                               onClick={() => dismiss(e.message_id)}
                             />
                           </td>
                           <td className="px-4 py-2 text-center">
                             <CopyCheck
                               strokeWidth={1.5}
-                              className="h-5 w-5 text-red-600 hover:text-red-800 cursor-pointer"
+                              className="h-5 w-5 text-[#D274AA] hover:text-[#B04B79] cursor-pointer"
                               onClick={() =>
                                 dismissConversation(e.message_id, e.conversation_id)
                               }
@@ -905,7 +922,7 @@ export default function MainApp({ userSettings }) {
 
           {/* Pagination */}
           <div className="mt-6 flex items-center justify-between">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-white">
               Page <span className="font-medium">{page}</span> of{" "}
               <span className="font-medium">{pageCount}</span>
             </div>

@@ -1,5 +1,7 @@
+// src/pages/Dashboard.jsx
 import { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
+import logo from '../assets/outprio.png';
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
@@ -11,306 +13,126 @@ export default function Dashboard() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [subscriptionInfo, setSubscriptionInfo] = useState(null);
-
-  const BACKEND_URL = 'https://eai-uuwt.onrender.com';
+  const BACKEND = 'https://eai-uuwt.onrender.com';
 
   useEffect(() => {
-    const fetchUserAndProfile = async () => {
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-
-      if (userError || !user) {
-        window.location.href = '/';
-        return;
-      }
-
+    (async () => {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error || !user) return window.location.href = '/';
       setUser(user);
-
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-      if (!profileError && profileData) {
-        setProfile(profileData);
-        setFirstName(profileData.first_name || '');
-        setLastName(profileData.last_name || '');
-        setEmail(profileData.email || '');
-
-        if (profileData.subscription_id) {
-          fetchSubscriptionInfo(profileData.subscription_id);
-        }
+      const { data, error: pf } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+      if (!pf && data) {
+        setProfile(data);
+        setFirstName(data.first_name);
+        setLastName(data.last_name);
+        setEmail(data.email);
+        if (data.subscription_id) fetchSub(data.subscription_id);
       }
-    };
+    })();
 
-    const fetchSubscriptionInfo = async (subscriptionId) => {
+    async function fetchSub(id) {
       try {
-        const res = await fetch(`${BACKEND_URL}/subscription-info/${subscriptionId}`);
-        const data = await res.json();
-        if (!data.error) {
-          setSubscriptionInfo(data);
-        }
-      } catch (err) {
-        console.error('Failed to fetch subscription info:', err);
-      }
-    };
-
-    fetchUserAndProfile();
+        const res = await fetch(`${BACKEND}/subscription-info/${id}`);
+        const info = await res.json();
+        if (!info.error) setSubscriptionInfo(info);
+      } catch {};
+    }
   }, []);
 
-  const handleSave = async () => {
+  const saveProfile = async () => {
     setMessage('');
-    const { error } = await supabase
-      .from('profiles')
-      .update({ first_name: firstName, last_name: lastName })
-      .eq('id', user.id);
-
-    if (error) {
-      setMessage(error.message);
-    } else {
-      setMessage('✅ Profile updated successfully.');
-      setEditing(false);
-    }
+    const { error } = await supabase.from('profiles').update({ first_name: firstName, last_name: lastName }).eq('id', user.id);
+    if (error) setMessage(error.message);
+    else { setMessage('✅ Profile updated.'); setEditing(false); }
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    window.location.href = '/';
-  };
+  const handleLogout = async () => { await supabase.auth.signOut(); window.location.href = '/'; };
 
   const handleStartTrial = async () => {
     const now = new Date();
-    const trialExpires = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
-
-    const { error } = await supabase
-      .from('profiles')
-      .update({
-        trial_start: now.toISOString(),
-        trial_expires: trialExpires.toISOString(),
-      })
-      .eq('id', user.id);
-
-    if (error) {
-      alert(error.message);
-    } else {
-      window.location.reload();
-    }
+    const expires = new Date(now.getTime() + 3*24*60*60*1000);
+    await supabase.from('profiles').update({ trial_start: now.toISOString(), trial_expires: expires.toISOString() }).eq('id', user.id);
+    window.location.reload();
   };
 
   const handleSubscription = async (priceId) => {
-    if (!email) return alert('User email not loaded');
     setLoading(true);
-    try {
-      const res = await fetch(`${BACKEND_URL}/create-checkout-session`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ price_id: priceId, customer_email: email }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert('Failed to initiate checkout session.');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Error creating checkout session.');
-    } finally {
-      setLoading(false);
-    }
+    const res = await fetch(`${BACKEND}/create-checkout-session`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ price_id: priceId, customer_email: email }) });
+    const data = await res.json();
+    if(data.url) window.location.href = data.url;
+    else alert('Checkout error');
+    setLoading(false);
   };
 
-  const handleCancelSubscription = async () => {
-    if (!profile?.subscription_id) return;
-    const confirm = window.confirm('Are you sure you want to cancel your subscription?');
-    if (!confirm) return;
-
-    try {
-      const res = await fetch(`${BACKEND_URL}/cancel-subscription/${profile.subscription_id}`, {
-        method: 'POST',
-      });
-      const data = await res.json();
-      if (data.status === 'success') {
-        alert('Your subscription will be canceled at the end of the billing period.');
-        window.location.reload();
-      } else {
-        alert('Failed to cancel subscription.');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Error cancelling subscription.');
-    }
-  };
-
-  const handleResumeSubscription = async () => {
-    if (!profile?.subscription_id) return;
-    try {
-      const res = await fetch(`${BACKEND_URL}/resume-subscription/${profile.subscription_id}`, {
-        method: 'POST',
-      });
-      const data = await res.json();
-      if (data.status === 'success') {
-        alert('Subscription resumed.');
-        window.location.reload();
-      } else {
-        alert('Failed to resume subscription.');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Error resuming subscription.');
-    }
-  };
-
-  const handleUpgrade = async () => {
-    if (!email) return alert('User email not loaded');
-    const confirm = window.confirm('Upgrade to annual plan? This will prorate your current subscription.');
-    if (!confirm) return;
-
-    try {
-      const res = await fetch(`${BACKEND_URL}/upgrade-subscription`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customer_email: email,
-          price_id: 'price_1RfJ54FVd7b5c6lTbljBBCOB', // Annual Plan
-        }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert('Failed to start upgrade session.');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Error upgrading subscription.');
-    }
-  };
-
-  const today = new Date();
-  const trialStart = profile?.trial_start ? new Date(profile.trial_start) : null;
-  const trialExpires = profile?.trial_expires ? new Date(profile.trial_expires) : null;
-  const isPaid = profile?.is_paid;
-
-  let licenseStatus = '⏳ Not Started';
-  let daysRemaining = 0;
-
-  if (isPaid) {
-    licenseStatus = '✅ Paid Subscription Active';
-  } else if (trialStart && trialExpires) {
-    const daysLeft = Math.ceil((trialExpires - today) / (1000 * 60 * 60 * 24));
-    daysRemaining = Math.max(0, daysLeft);
-    licenseStatus = daysRemaining > 0 ? '🧪 Trial Active' : '⚠️ Trial Expired';
-  }
-
-  const formatDate = (timestamp) => {
-    if (!timestamp) return 'N/A';
-    return new Date(timestamp * 1000).toLocaleDateString();
-  };
-
-  const renderSubscriptionDetails = () => {
-    if (!subscriptionInfo) return null;
-
-    return (
-      <div className="mb-6 border p-4 rounded bg-gray-50">
-        <h4 className="font-semibold mb-2">Subscription Details</h4>
-        <p><strong>Plan:</strong> {subscriptionInfo.plan?.interval} (${subscriptionInfo.plan?.amount})</p>
-        <p><strong>Start Date:</strong> {formatDate(subscriptionInfo.start_date)}</p>
-        <p><strong>End Date:</strong> {formatDate(subscriptionInfo.current_period_end)}</p>
-        <p><strong>Auto-Renewal:</strong> {subscriptionInfo.cancel_at_period_end ? '❌ Off' : '✅ On'}</p>
-
-        <div className="mt-4 space-x-2">
-          {subscriptionInfo.plan?.interval === 'month' && (
-            <button onClick={handleUpgrade} className="bg-yellow-500 text-white px-3 py-1 rounded">
-              Upgrade to Annual
-            </button>
-          )}
-          {subscriptionInfo.cancel_at_period_end ? (
-            <button onClick={handleResumeSubscription} className="bg-green-600 text-white px-3 py-1 rounded">
-              Resume Subscription
-            </button>
-          ) : (
-            <button onClick={handleCancelSubscription} className="bg-red-600 text-white px-3 py-1 rounded">
-              Cancel Subscription
-            </button>
-          )}
-        </div>
-      </div>
-    );
+  const handleCancel = async () => {
+    if(!profile.subscription_id) return;
+    const res = await fetch(`${BACKEND}/cancel-subscription/${profile.subscription_id}`,{method:'POST'});
+    const data = await res.json();
+    if(data.status==='success') alert('Cancelled');
+    else alert('Cancel error');
   };
 
   if (!user || !profile) return null;
 
+  // License status
+  const today = new Date();
+  const trialStart = profile.trial_start ? new Date(profile.trial_start) : null;
+  const trialExpires = profile.trial_expires ? new Date(profile.trial_expires) : null;
+  let status='⏳ Not Started'; let days=0;
+  if(profile.is_paid) status='✅ Paid';
+  else if(trialStart && trialExpires){ days=Math.ceil((trialExpires-today)/(1000*60*60*24)); status= days>0?'🧪 Trial Active':'⚠️ Trial Expired'; }
+
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-xl mx-auto bg-white rounded shadow-md p-6">
-        <h2 className="text-xl font-bold mb-4">Welcome, {firstName || 'User'}</h2>
+    <div className="min-h-screen bg-gradient-to-b from-[#1B0A2A] to-[#330C59] text-gray-100 flex flex-col">
+      <nav className="flex items-center justify-between p-6">
+        <img src={logo} alt="OutPrio" className="h-8 w-auto" />
+        <button onClick={handleLogout} className="text-sm uppercase hover:text-white">Logout</button>
+      </nav>
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Email</label>
-          <input type="text" value={email} disabled className="w-full border px-3 py-2 rounded bg-gray-100" />
-        </div>
+      <div className="flex-grow flex items-center justify-center p-6">
+        <div className="w-full max-w-lg bg-black/30 backdrop-blur-sm border border-white/20 rounded-2xl shadow-lg p-6 space-y-6">
+          <h1 className="text-2xl font-bold uppercase text-white text-center">Welcome, {firstName}</h1>
+          {message && <p className="text-center text-green-400">{message}</p>}
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">First Name</label>
-          <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full border px-3 py-2 rounded" disabled={!editing} />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Last Name</label>
-          <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-full border px-3 py-2 rounded" disabled={!editing} />
-        </div>
-
-        {message && <div className="text-sm text-green-600 mb-3">{message}</div>}
-
-        <div className="flex gap-2 mb-6">
-          {editing ? (
-            <>
-              <button onClick={handleSave} className="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
-              <button onClick={() => setEditing(false)} className="bg-gray-300 px-4 py-2 rounded">Cancel</button>
-            </>
-          ) : (
-            <button onClick={() => setEditing(true)} className="bg-blue-600 text-white px-4 py-2 rounded">Edit Profile</button>
-          )}
-        </div>
-
-        <hr className="my-6" />
-
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">License Information</h3>
-          <p>Status: <strong>{licenseStatus}</strong></p>
-          {!isPaid && trialStart && (
-            <p>Days Remaining: <strong>{daysRemaining}</strong></p>
-          )}
-        </div>
-
-        {isPaid && renderSubscriptionDetails()}
-
-        {!trialStart && !isPaid && (
-          <div className="mb-4">
-            <button onClick={handleStartTrial} className="bg-green-600 text-white px-4 py-2 rounded">
-              Start Free 3-Day Trial
-            </button>
+          <div className="space-y-4">
+            <div><label className="block text-sm uppercase">Email</label><input className="w-full mt-1 p-2 bg-white/10 rounded text-gray-100" value={email} disabled /></div>
+            <div><label className="block text-sm uppercase">First Name</label><input className="w-full mt-1 p-2 bg-white/10 rounded text-gray-100" value={firstName} onChange={e=>setFirstName(e.target.value)} disabled={!editing} /></div>
+            <div><label className="block text-sm uppercase">Last Name</label><input className="w-full mt-1 p-2 bg-white/10 rounded text-gray-100" value={lastName} onChange={e=>setLastName(e.target.value)} disabled={!editing} /></div>
           </div>
-        )}
 
-        {!isPaid && (
-          <div className="mb-4 space-y-2">
-            <button onClick={() => handleSubscription('price_1RfIVDFVd7b5c6lTQrG7zUtJ')} disabled={loading} className="w-full bg-blue-600 text-white px-4 py-2 rounded">
-              {loading ? 'Redirecting...' : 'Buy Monthly Subscription'}
-            </button>
-            <button onClick={() => handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')} disabled={loading} className="w-full bg-blue-800 text-white px-4 py-2 rounded">
-              {loading ? 'Redirecting...' : 'Buy Annual Subscription'}
-            </button>
+          <div className="flex justify-center space-x-4">
+            {editing? <><button onClick={saveProfile} className="px-4 py-2 bg-green-500 rounded uppercase">Save</button><button onClick={()=>setEditing(false)} className="px-4 py-2 bg-gray-600 rounded uppercase">Cancel</button></>: <button onClick={()=>setEditing(true)} className="w-full py-2 bg-blue-600 rounded uppercase">Edit Profile</button>}
           </div>
-        )}
 
-        <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded mt-6">
-          Logout
-        </button>
+          {/* Subscription / License Section */}
+          <div className="pt-4 border-t border-white/20 space-y-4">
+            <h2 className="text-lg font-semibold uppercase">License Information</h2>
+            <p>Status: <strong>{status}</strong></p>
+            {!profile.is_paid && trialStart && <p>Days Remaining: <strong>{Math.max(0,days)}</strong></p>}
+
+            {profile.is_paid || (trialStart && days>0) ? (
+              // Paid or active trial: show subscription actions
+              <div className="flex flex-col space-y-2">
+                {profile.is_paid && subscriptionInfo && (
+                  <div className="bg-white/10 p-4 rounded space-y-2">
+                    <p><strong>Plan:</strong> {subscriptionInfo.plan.interval} (${subscriptionInfo.plan.amount / 100}/{subscriptionInfo.plan.interval})</p>
+                    <p><strong>Renewal:</strong> {new Date(subscriptionInfo.current_period_end*1000).toLocaleDateString()}</p>
+                    <div className="flex space-x-2">
+                      {!subscriptionInfo.cancel_at_period_end ? <button onClick={handleCancel} className="px-3 py-1 bg-red-600 rounded uppercase">Cancel Subscription</button> : <button onClick={()=>alert('Resume not implemented')} className="px-3 py-1 bg-green-600 rounded uppercase">Resume Subscription</button>}
+                    </div>
+                  </div>
+                )}
+                {!profile.is_paid && !trialStart && (
+                  <button onClick={handleStartTrial} className="w-full px-4 py-2 bg-green-600 rounded uppercase">Start Free 3-Day Trial</button>
+                )}
+                {!profile.is_paid && (
+                  <>  <button onClick={()=>handleSubscription('price_1RfIVDFVd7b5c6lTQrG7zUtJ')} disabled={loading} className="w-full px-4 py-2 bg-blue-600 rounded uppercase">{loading?'Redirecting...':'Buy Monthly'}</button>
+                    <button onClick={()=>handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')} disabled={loading} className="w-full px-4 py-2 bg-purple-600 rounded uppercase">{loading?'Redirecting...':'Buy Annual'}</button> </>
+                )}
+              </div>
+            ) : null}
+          </div>
+        </div>
       </div>
     </div>
   );
