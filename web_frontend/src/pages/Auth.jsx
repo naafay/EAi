@@ -1,9 +1,4 @@
-/* -------------------------------------------------------------------------
-  src/pages/Auth.jsx — Final Simple Tailwind Login/Signup Screen
-  - Uses Tailwind via CDN (ensure <script src="https://cdn.tailwindcss.com"></script> in index.html)
-  - Full file, clean and minimal, with gradient bg and glass card
----------------------------------------------------------------------------*/
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/outprio.png';
@@ -16,6 +11,18 @@ export default function AuthPage() {
   const [lastName, setLastName] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
+
+  // Use ref to store star positions, calculated once on mount
+  const starPositions = useRef([]);
+
+  useEffect(() => {
+    // Generate star positions on initial mount
+    starPositions.current = Array.from({ length: 50 }).map(() => ({
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+      animationDelay: `${Math.random() * 5}s`,
+    }));
+  }, []);
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -45,20 +52,34 @@ export default function AuthPage() {
       }
     }
   };
-  <div className="h-8 bg-red-500"></div>
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-800 to-indigo-900 p-6">
-      <div className="w-full max-w-sm bg-white bg-opacity-10 backdrop-blur-lg rounded-xl shadow-xl p-6">
-        <div className="flex justify-center mb-6">
-          <img src={logo} alt="OutPrio" className="h-12" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0b0b1a] to-[#37123d] relative overflow-hidden">
+      {/* Starry Background Overlay with Fixed Positions */}
+      {starPositions.current.map((pos, i) => (
+        <span
+          key={i}
+          className="absolute h-1 w-1 bg-white rounded-full opacity-10 animate-twinkle"
+          style={{
+            top: pos.top,
+            left: pos.left,
+            animationDelay: pos.animationDelay,
+          }}
+        />
+      ))}
+      <div className="relative w-full max-w-md bg-white/20 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/30 glow-effect">
+        <div className="flex justify-center mb-8">
+              <a href="https://www.outprio.com" className="transition-transform hover:scale-110">
+            <img src={logo} alt="OutPrio" className="h-12" />
+          </a>
         </div>
-        <h2 className="text-center text-3xl font-extrabold text-white mb-4">
-          {isLogin ? 'Login' : 'Sign Up'} to OutPrio
+        <h2 className="text-center text-2xl font-extrabold text-white uppercase tracking-wide mb-6 glow-text">
+          {isLogin ? 'Welcome Back' : 'Join OutPrio'}
         </h2>
         {message && (
-          <div className="text-center text-sm text-red-300 mb-4">{message}</div>
+          <div className="text-center text-sm text-red-200 mb-6 animate-fade-in">{message}</div>
         )}
-        <form onSubmit={handleAuth} className="space-y-4">
+        <form onSubmit={handleAuth} className="space-y-6">
           {!isLogin && (
             <>
               <input
@@ -66,7 +87,7 @@ export default function AuthPage() {
                 placeholder="First Name"
                 value={firstName}
                 onChange={e => setFirstName(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg bg-white bg-opacity-20 placeholder-gray-200 text-white focus:ring-2 focus:ring-purple-500"
+                className="w-full px-5 py-3 rounded-xl bg-white/30 backdrop-blur-md text-white placeholder-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
                 required
               />
               <input
@@ -74,7 +95,7 @@ export default function AuthPage() {
                 placeholder="Last Name"
                 value={lastName}
                 onChange={e => setLastName(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg bg-white bg-opacity-20 placeholder-gray-200 text-white focus:ring-2 focus:ring-purple-500"
+                className="w-full px-5 py-3 rounded-xl bg-white/30 backdrop-blur-md text-white placeholder-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
                 required
               />
             </>
@@ -84,7 +105,7 @@ export default function AuthPage() {
             placeholder="Email Address"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            className="w-full px-4 py-2 rounded-lg bg-white bg-opacity-20 placeholder-gray-200 text-white focus:ring-2 focus:ring-purple-500"
+            className="w-full px-5 py-3 rounded-xl bg-white/30 backdrop-blur-md text-white placeholder-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
             required
           />
           <input
@@ -92,26 +113,28 @@ export default function AuthPage() {
             placeholder="Password"
             value={password}
             onChange={e => setPassword(e.target.value)}
-            className="w-full px-4 py-2 rounded-lg bg-white bg-opacity-20 placeholder-gray-200 text-white focus:ring-2 focus:ring-purple-500"
+            className="w-full px-5 py-3 rounded-xl bg-white/30 backdrop-blur-md text-white placeholder-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
             required
           />
           <button
             type="submit"
-            className="w-full py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-semibold transition"
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-700 text-white font-bold text-lg hover:from-purple-700 hover:to-indigo-800 focus:ring-4 focus:ring-purple-500 focus:outline-none transition-all duration-300 transform hover:scale-105"
           >
             {isLogin ? 'Login' : 'Sign Up'}
           </button>
         </form>
-        <div className="mt-4 text-center text-sm text-gray-200">
+        <div className="mt-6 text-center text-sm text-gray-300">
           {isLogin ? (
-            <>New here?{' '}
-              <button onClick={() => setIsLogin(false)} className="underline">
+            <>
+              New to OutPrio?{' '}
+              <button onClick={() => setIsLogin(false)} className="underline text-indigo-200 hover:text-indigo-100 transition-colors duration-300">
                 Create an Account
               </button>
             </>
           ) : (
-            <>Already have an account?{' '}
-              <button onClick={() => setIsLogin(true)} className="underline">
+            <>
+              Already a member?{' '}
+              <button onClick={() => setIsLogin(true)} className="underline text-indigo-200 hover:text-indigo-100 transition-colors duration-300">
                 Login Instead
               </button>
             </>
