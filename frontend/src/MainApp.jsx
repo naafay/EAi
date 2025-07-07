@@ -682,10 +682,15 @@ export default function MainApp({ userSettings }) {
       {/* Top Ribbon Header */}
       <div className="flex items-center justify-between bg-transparent border-b p-3 shadow-sm">
         <div className="flex items-center">
-          <img src="./src/assets/outprio.png" alt="Logo" width="40%" className="mr-2 mt-2" />
+          
          {/* <span className="text-lg font-semibold">{app_title}</span> */}
+            <a href="https://www.outprio.com" className="transition-transform hover:scale-110" target="_blank">
+            <img src="./src/assets/outprio.png" alt="Logo" width="40%" className="ml-7 mt-2" />
+          </a>
+
+
         </div>
-        <div className="flex items-center space-x-7 text-gray-200">
+        <div className="flex items-center space-x-7 text-gray-200 mr-7">
           {/* STATUS CIRCLE */}
           <div className="relative">
             <div
@@ -802,123 +807,129 @@ export default function MainApp({ userSettings }) {
             </div>
           </div>
 
-          {/* Email Table */}
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white rounded-lg overflow-hidden">
-              <thead className="bg-gray-200">
-                <tr>
-                  {COLUMNS.map(({ key, label }) => (
-                    <th
-                      key={key}
-                      onClick={() => onHeaderClick(key)}
-                      className={`px-4 py-2 text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer ${
-                        (key==="importance"||key==="reason") ? "text-center" : "text-left"
-                      }`}
-                    >
-                      <div className="inline-flex items-center">
-                        {label}
-                        {sortKey === key && (
-                          <span className="ml-1 text-gray-500 text-xs">
-                            {sortDir === "asc" ? "▲" : "▼"}
-                          </span>
-                        )}
-                      </div>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {groupKeys.map(groupKey => (
-                  <Fragment key={groupKey}>
-                    <tr
-                      className="bg-gray-100 cursor-pointer"
-                      onClick={() => toggleGroup(groupKey)}
-                    >
-                      <td colSpan={COLUMNS.length} className="px-4 py-2">
-                        <span className="font-medium mr-2">
-                          {collapsed[groupKey] ? "+" : "–"}
-                        </span>
-                        <span className="text-xs font-semibold text-gray-700 uppercase">
-                          {sortKey === "importance"
-                            ? IMPORTANCE_LABELS[groupKey]
-                            : groupKey}
-                        </span>
-                        <span className="ml-1 text-gray-600">
-                          ({groupedData[groupKey].length})
-                        </span>
-                      </td>
-                    </tr>
-                    {!collapsed[groupKey] &&
-                      groupedData[groupKey].map(e => (
-                        <tr
-                          key={e.message_id}
-                          className="border-b last:border-0 hover:bg-gray-50"
+{/* Email Table */}
+{sorted.length === 0 ? (
+  <div className="py-10 text-center text-gray-200 italic">
+    🕵️‍♂️ “No mysteries to solve! You’ve got zero high-priority emails in view. Expand the look-back and see what else turns up.”
+  </div>
+) : (
+  <div className="overflow-x-auto">
+    <table className="min-w-full bg-white rounded-lg overflow-hidden">
+      <thead className="bg-gray-200">
+        <tr>
+          {COLUMNS.map(({ key, label }) => (
+            <th
+              key={key}
+              onClick={() => onHeaderClick(key)}
+              className={`px-4 py-2 text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer ${
+                (key === "importance" || key === "reason") ? "text-center" : "text-left"
+              }`}
+            >
+              <div className="inline-flex items-center">
+                {label}
+                {sortKey === key && (
+                  <span className="ml-1 text-gray-500 text-xs">
+                    {sortDir === "asc" ? "▲" : "▼"}
+                  </span>
+                )}
+              </div>
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {groupKeys.map(groupKey => (
+          <Fragment key={groupKey}>
+            <tr
+              className="bg-gray-100 cursor-pointer"
+              onClick={() => toggleGroup(groupKey)}
+            >
+              <td colSpan={COLUMNS.length} className="px-4 py-2">
+                <span className="font-medium mr-2">
+                  {collapsed[groupKey] ? "+" : "–"}
+                </span>
+                <span className="text-xs font-semibold text-gray-700 uppercase">
+                  {sortKey === "importance"
+                    ? IMPORTANCE_LABELS[groupKey]
+                    : groupKey}
+                </span>
+                <span className="ml-1 text-gray-600">
+                  ({groupedData[groupKey].length})
+                </span>
+              </td>
+            </tr>
+            {!collapsed[groupKey] &&
+              groupedData[groupKey].map(e => (
+                <tr
+                  key={e.message_id}
+                  className="border-b last:border-0 hover:bg-gray-50"
+                >
+                  <td className="px-4 py-2 text-sm text-gray-800">
+                    {fmtEmailDT(e.received)}
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-800">
+                    {e.sender}
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-800">
+                    {e.subject}
+                  </td>
+                  <td className="px-4 py-2 text-sm text-gray-800 break-words whitespace-normal">
+                    {insertZWS(e.preview)}
+                  </td>
+                  <td className="px-4 py-2 text-center">
+                    {renderPill(e.importance)}
+                  </td>
+                  <td className="px-4 py-2 text-center">
+                    {e.reason.split("+").map((r, i) => {
+                      const seg = r.trim();
+                      const disp = seg.replace(
+                        new RegExp(vip_group_name, "gi"),
+                        vip_group_name
+                      );
+                      return (
+                        <div
+                          key={i}
+                          className="flex items-center mb-1 whitespace-nowrap justify-center"
                         >
-                          <td className="px-4 py-2 text-sm text-gray-800">
-                            {fmtEmailDT(e.received)}
-                          </td>
-                          <td className="px-4 py-2 text-sm text-gray-800">
-                            {e.sender}
-                          </td>
-                          <td className="px-4 py-2 text-sm text-gray-800">
-                            {e.subject}
-                          </td>
-                          <td className="px-4 py-2 text-sm text-gray-800 break-words whitespace-normal">
-                            {insertZWS(e.preview)}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            {renderPill(e.importance)}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            {e.reason.split("+").map((r, i) => {
-                              const seg = r.trim();
-                              const disp = seg.replace(
-                                new RegExp(vip_group_name, "gi"),
-                                vip_group_name
-                              );
-                              return (
-                                <div
-                                  key={i}
-                                  className="flex items-center mb-1 whitespace-nowrap justify-center"
-                                >
-                                  <Tag className="h-3 w-3 text-[#6e506e] mr-1" />
-                                  <span className="bg-[#bc5cac] text-white text-xs font-medium px-2 py-1 rounded">
-                                    {disp}
-                                  </span>
-                                </div>
-                              );
-                            })}
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            <MailOpen
-                              strokeWidth={1.5}
-                              className="h-5 w-5 text-[#1E89D1] hover:text-[#1E61B0] cursor-pointer"
-                              onClick={() => openInOutlook(e.message_id)}
-                            />
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            <MailCheck
-                              strokeWidth={1.5}
-                              className="h-5 w-5 text-[#D274AA] hover:text-[#B04B79] cursor-pointer"
-                              onClick={() => dismiss(e.message_id)}
-                            />
-                          </td>
-                          <td className="px-4 py-2 text-center">
-                            <CopyCheck
-                              strokeWidth={1.5}
-                              className="h-5 w-5 text-[#D274AA] hover:text-[#B04B79] cursor-pointer"
-                              onClick={() =>
-                                dismissConversation(e.message_id, e.conversation_id)
-                              }
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                  </Fragment>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                          <Tag className="h-3 w-3 text-[#6e506e] mr-1" />
+                          <span className="bg-[#bc5cac] text-white text-xs font-medium px-2 py-1 rounded">
+                            {disp}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </td>
+                  <td className="px-4 py-2 text-center">
+                    <MailOpen
+                      strokeWidth={1.5}
+                      className="h-5 w-5 text-[#1E89D1] hover:text-[#1E61B0] cursor-pointer"
+                      onClick={() => openInOutlook(e.message_id)}
+                    />
+                  </td>
+                  <td className="px-4 py-2 text-center">
+                    <MailCheck
+                      strokeWidth={1.5}
+                      className="h-5 w-5 text-[#D274AA] hover:text-[#B04B79] cursor-pointer"
+                      onClick={() => dismiss(e.message_id)}
+                    />
+                  </td>
+                  <td className="px-4 py-2 text-center">
+                    <CopyCheck
+                      strokeWidth={1.5}
+                      className="h-5 w-5 text-[#D274AA] hover:text-[#B04B79] cursor-pointer"
+                      onClick={() =>
+                        dismissConversation(e.message_id, e.conversation_id)
+                      }
+                    />
+                  </td>
+                </tr>
+              ))}
+          </Fragment>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
 
           {/* Pagination */}
           <div className="mt-6 flex items-center justify-between">

@@ -1,5 +1,11 @@
 # app.py
 
+import time
+import win32gui
+import ctypes
+import win32con
+import win32api
+import win32process
 import logging
 import datetime
 import pythoncom
@@ -18,6 +24,8 @@ from starlette.concurrency import run_in_threadpool
 
 import win32com.client
 from win32com.client import gencache
+
+_user32 = ctypes.WinDLL("user32", use_last_error=True)
 
 # === Logging ===
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -418,16 +426,50 @@ def dismiss_conversation(mid: str):
 
 @app.post("/open/{mid}")
 def open_mid(mid: str):
-    pythoncom.CoInitialize()
+    # --- 1) Open the mail via COM ---
     try:
-        ns   = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
-        mail = ns.GetItemFromID(mid)
-        mail.Display()
+        pythoncom.CoInitialize()
+        ns        = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
+        mail      = ns.GetItemFromID(mid)
+        inspector = mail.GetInspector()    # <-- must call ()
+        inspector.Display()
     except Exception as e:
         logging.error(f"COM open failed: {e}")
+        # if we can't even display, treat as a real error
         raise HTTPException(500, f"COM open failed: {e}")
     finally:
         pythoncom.CoUninitialize()
+
+    # --- 2) Try to force it to the front, but degrade gracefully ---
+    try:
+        # small pause so Windows has time to create/focus the window
+        time.sleep(0.1)
+
+        # assume the new Inspector is now foreground
+        hwnd = win32gui.GetForegroundWindow()
+
+        # restore & ensure it's not minimized
+        win32gui.ShowWindow(hwnd, win32con.SW_SHOWNORMAL)
+
+        # attach our thread to the active thread so SetForegroundWindow works
+        fg_hwnd     = win32gui.GetForegroundWindow()
+        fg_thread   = win32process.GetWindowThreadProcessId(fg_hwnd)[0]
+        this_thread = win32api.GetCurrentThreadId()
+
+        if not _user32.AttachThreadInput(fg_thread, this_thread, True):
+            err = ctypes.get_last_error()
+            logging.warning(f"AttachThreadInput failed with error {err}")
+
+        # bring it fully to front
+        win32gui.SetForegroundWindow(hwnd)
+
+        # detach again
+        _user32.AttachThreadInput(fg_thread, this_thread, False)
+
+    except Exception as focus_e:
+        # just warn—mail is still open, it just might sit behind another window
+        logging.warning(f"Focus‐hack failed; window may not be front: {focus_e}")
+
     return {"ok": True}
 
 @app.get("/health/local")
