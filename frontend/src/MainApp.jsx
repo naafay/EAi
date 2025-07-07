@@ -735,9 +735,17 @@ export default function MainApp({ userSettings }) {
           <button onClick={() => setShowSettings(true)} title="Settings">
             <Settings className="h-5 w-5" />
           </button>
-          <button onClick={() => window.open("/profile", "_blank")} title="Account">
-            <User className="h-5 w-5" />
-          </button>
+          <a
+            href="https://outprio.netlify.app/dashboard"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Account"
+            className="inline-block"
+          >
+            <button>
+              <User className="h-5 w-5 mt-2" />
+            </button>
+          </a>
           <button onClick={() => window.open("/help", "_blank")} title="Help">
             <HelpCircle className="h-5 w-5" />
           </button>
