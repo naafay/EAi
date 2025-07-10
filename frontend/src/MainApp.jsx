@@ -217,7 +217,7 @@ function SettingsModal({ initial, onCancel, onSave }) {
   );
 }
 
-// --- ConfigPanel component (unchanged) ---
+// --- ConfigPanel component ---
 const LOOKBACK_OPTIONS = [
   { label: "1 hr", value: 1 },
   { label: "3 hr", value: 3 },
@@ -334,25 +334,25 @@ function ConfigPanel({ config, onSave, onFetch, loading }) {
             />
           </div>
         )}
-<button
-  onClick={handleSave}
-  disabled={loading}
-  className="
-    flex items-center
-    bg-transparent border border-[#F4D9FF]
-    text-[#F4D9FF]
-    text-sm
-    px-4 py-2
-    rounded-lg shadow
-    hover:bg-[#643662]
-    disabled:opacity-50
-  "
->
-  {loading
-    ? <Loader className="h-4 w-4 animate-spin text-white" />
-    : "Apply"
-  }
-</button>
+        <button
+          onClick={handleSave}
+          disabled={loading}
+          className="
+            flex items-center
+            bg-transparent border border-[#F4D9FF]
+            text-[#F4D9FF]
+            text-sm
+            px-4 py-2
+            rounded-lg shadow
+            hover:bg-[#643662]
+            disabled:opacity-50
+          "
+        >
+          {loading
+            ? <Loader className="h-4 w-4 animate-spin text-white" />
+            : "Apply"
+          }
+        </button>
       </div>
     </div>
   );
@@ -494,7 +494,7 @@ export default function MainApp({ userSettings }) {
       });
   }, []);
 
-  // fetch loop
+  // fetch loop (frontend-driven polling)
   useEffect(() => {
     if (!configLoaded || showModal || !userSynced) return;
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -677,18 +677,13 @@ export default function MainApp({ userSettings }) {
   }, []);
 
   return (
-    //<div className="min-h-screen bg-gray-900">
     <div className="min-h-screen bg-gradient-to-b from-[#0b0b1a] to-[#37123d]">
       {/* Top Ribbon Header */}
       <div className="flex items-center justify-between bg-transparent border-b p-3 shadow-sm">
         <div className="flex items-center">
-          
-         {/* <span className="text-lg font-semibold">{app_title}</span> */}
-            <a href="https://www.outprio.com" className="transition-transform hover:scale-110" target="_blank">
+          <a href="https://www.outprio.com" className="transition-transform hover:scale-110" target="_blank" rel="noopener noreferrer">
             <img src="./src/assets/outprio.png" alt="Logo" width="40%" className="ml-7 mt-2" />
           </a>
-
-
         </div>
         <div className="flex items-center space-x-7 text-gray-200 mr-7">
           {/* STATUS CIRCLE */}
@@ -703,29 +698,17 @@ export default function MainApp({ userSettings }) {
               onMouseLeave={() => setShowStatusDropdown(false)}
             />
             {showStatusDropdown && (
-              <div className="absolute top-6 left-0 p-2 w-44 bg-white text-black rounded shadow-lg ">
+              <div className="absolute top-6 left-0 p-2 w-44 bg-white text-black rounded shadow-lg">
                 <div className="flex items-center mb-2 text-sm text-gray-600">
-                  <span
-                    className={`h-2 w-2 rounded-full mr-2 ${
-                      cloudOk ? "bg-green-500" : "bg-amber-400"
-                    }`}
-                  />
+                  <span className={`h-2 w-2 rounded-full mr-2 ${cloudOk ? "bg-green-500" : "bg-amber-400"}`} />
                   Outprio Cloud
                 </div>
                 <div className="flex items-center mb-2 text-sm text-gray-600">
-                  <span
-                    className={`h-2 w-2 rounded-full mr-2 ${
-                      outlookOk ? "bg-green-500" : "bg-amber-400"
-                    }`}
-                  />
+                  <span className={`h-2 w-2 rounded-full mr-2 ${outlookOk ? "bg-green-500" : "bg-amber-400"}`} />
                   Outlook
                 </div>
                 <div className="flex items-center mb-2 text-sm text-gray-600">
-                  <span
-                    className={`h-2 w-2 rounded-full mr-2 ${
-                      localOk ? "bg-green-500" : "bg-amber-400"
-                    }`}
-                  />
+                  <span className={`h-2 w-2 rounded-full mr-2 ${localOk ? "bg-green-500" : "bg-amber-400"}`} />
                   Local services
                 </div>
               </div>
@@ -746,9 +729,17 @@ export default function MainApp({ userSettings }) {
               <User className="h-5 w-5 mt-2" />
             </button>
           </a>
-          <button onClick={() => window.open("/help", "_blank")} title="Help">
-            <HelpCircle className="h-5 w-5" />
-          </button>
+          <a
+            href="https://outprio.com/support"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Help"
+            className="inline-block"
+          >
+            <button>
+              <HelpCircle className="h-5 w-5 mt-2" />
+            </button>
+          </a>
           <button
             onClick={async () => {
               const { error } = await supabase.auth.signOut();
@@ -762,7 +753,7 @@ export default function MainApp({ userSettings }) {
       </div>
 
       <div className="p-10">
-        <div className="bg-white/30  rounded-2xl border border-[#D6B8E8] shadow-lg p-8 overflow-hidden">
+        <div className="bg-white/30 rounded-2xl border border-[#D6B8E8] shadow-lg p-8 overflow-hidden">
           {/* Header */}
           <div className="flex justify-between items-start mb-6">
             <h1 className="text-3xl text-white font-semibold">{app_title}</h1>
@@ -781,7 +772,6 @@ export default function MainApp({ userSettings }) {
               </button>
             </div>
           </div>
-
 
           {/* Config Panel */}
           <ConfigPanel
@@ -815,129 +805,129 @@ export default function MainApp({ userSettings }) {
             </div>
           </div>
 
-{/* Email Table */}
-{sorted.length === 0 ? (
-  <div className="py-10 text-center text-gray-200 italic">
-    🕵️‍♂️ “No mysteries to solve! You’ve got zero high-priority emails in view. Expand the look-back and see what else turns up.”
-  </div>
-) : (
-  <div className="overflow-x-auto">
-    <table className="min-w-full bg-white rounded-lg overflow-hidden">
-      <thead className="bg-gray-200">
-        <tr>
-          {COLUMNS.map(({ key, label }) => (
-            <th
-              key={key}
-              onClick={() => onHeaderClick(key)}
-              className={`px-4 py-2 text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer ${
-                (key === "importance" || key === "reason") ? "text-center" : "text-left"
-              }`}
-            >
-              <div className="inline-flex items-center">
-                {label}
-                {sortKey === key && (
-                  <span className="ml-1 text-gray-500 text-xs">
-                    {sortDir === "asc" ? "▲" : "▼"}
-                  </span>
-                )}
-              </div>
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {groupKeys.map(groupKey => (
-          <Fragment key={groupKey}>
-            <tr
-              className="bg-gray-100 cursor-pointer"
-              onClick={() => toggleGroup(groupKey)}
-            >
-              <td colSpan={COLUMNS.length} className="px-4 py-2">
-                <span className="font-medium mr-2">
-                  {collapsed[groupKey] ? "+" : "–"}
-                </span>
-                <span className="text-xs font-semibold text-gray-700 uppercase">
-                  {sortKey === "importance"
-                    ? IMPORTANCE_LABELS[groupKey]
-                    : groupKey}
-                </span>
-                <span className="ml-1 text-gray-600">
-                  ({groupedData[groupKey].length})
-                </span>
-              </td>
-            </tr>
-            {!collapsed[groupKey] &&
-              groupedData[groupKey].map(e => (
-                <tr
-                  key={e.message_id}
-                  className="border-b last:border-0 hover:bg-gray-50"
-                >
-                  <td className="px-4 py-2 text-sm text-gray-800">
-                    {fmtEmailDT(e.received)}
-                  </td>
-                  <td className="px-4 py-2 text-sm text-gray-800">
-                    {e.sender}
-                  </td>
-                  <td className="px-4 py-2 text-sm text-gray-800">
-                    {e.subject}
-                  </td>
-                  <td className="px-4 py-2 text-sm text-gray-800 break-words whitespace-normal">
-                    {insertZWS(e.preview)}
-                  </td>
-                  <td className="px-4 py-2 text-center">
-                    {renderPill(e.importance)}
-                  </td>
-                  <td className="px-4 py-2 text-center">
-                    {e.reason.split("+").map((r, i) => {
-                      const seg = r.trim();
-                      const disp = seg.replace(
-                        new RegExp(vip_group_name, "gi"),
-                        vip_group_name
-                      );
-                      return (
-                        <div
-                          key={i}
-                          className="flex items-center mb-1 whitespace-nowrap justify-center"
-                        >
-                          <Tag className="h-3 w-3 text-[#6e506e] mr-1" />
-                          <span className="bg-[#bc5cac] text-white text-xs font-medium px-2 py-1 rounded">
-                            {disp}
-                          </span>
+          {/* Email Table */}
+          {sorted.length === 0 ? (
+            <div className="py-10 text-center text-gray-200 italic">
+              🕵️‍♂️ “No mysteries to solve! You’ve got zero high-priority emails in view. Expand the look-back and see what else turns up.”
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white rounded-lg overflow-hidden">
+                <thead className="bg-gray-200">
+                  <tr>
+                    {COLUMNS.map(({ key, label }) => (
+                      <th
+                        key={key}
+                        onClick={() => onHeaderClick(key)}
+                        className={`px-4 py-2 text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer ${
+                          (key === "importance" || key === "reason") ? "text-center" : "text-left"
+                        }`}
+                      >
+                        <div className="inline-flex items-center">
+                          {label}
+                          {sortKey === key && (
+                            <span className="ml-1 text-gray-500 text-xs">
+                              {sortDir === "asc" ? "▲" : "▼"}
+                            </span>
+                          )}
                         </div>
-                      );
-                    })}
-                  </td>
-                  <td className="px-4 py-2 text-center">
-                    <MailOpen
-                      strokeWidth={1.5}
-                      className="h-5 w-5 text-[#1E89D1] hover:text-[#1E61B0] cursor-pointer"
-                      onClick={() => openInOutlook(e.message_id)}
-                    />
-                  </td>
-                  <td className="px-4 py-2 text-center">
-                    <MailCheck
-                      strokeWidth={1.5}
-                      className="h-5 w-5 text-[#D274AA] hover:text-[#B04B79] cursor-pointer"
-                      onClick={() => dismiss(e.message_id)}
-                    />
-                  </td>
-                  <td className="px-4 py-2 text-center">
-                    <CopyCheck
-                      strokeWidth={1.5}
-                      className="h-5 w-5 text-[#D274AA] hover:text-[#B04B79] cursor-pointer"
-                      onClick={() =>
-                        dismissConversation(e.message_id, e.conversation_id)
-                      }
-                    />
-                  </td>
-                </tr>
-              ))}
-          </Fragment>
-        ))}
-      </tbody>
-    </table>
-  </div>
-)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {groupKeys.map(groupKey => (
+                    <Fragment key={groupKey}>
+                      <tr
+                        className="bg-gray-100 cursor-pointer"
+                        onClick={() => toggleGroup(groupKey)}
+                      >
+                        <td colSpan={COLUMNS.length} className="px-4 py-2">
+                          <span className="font-medium mr-2">
+                            {collapsed[groupKey] ? "+" : "–"}
+                          </span>
+                          <span className="text-xs font-semibold text-gray-700 uppercase">
+                            {sortKey === "importance"
+                              ? IMPORTANCE_LABELS[groupKey]
+                              : groupKey}
+                          </span>
+                          <span className="ml-1 text-gray-600">
+                            ({groupedData[groupKey].length})
+                          </span>
+                        </td>
+                      </tr>
+                      {!collapsed[groupKey] &&
+                        groupedData[groupKey].map(e => (
+                          <tr
+                            key={e.message_id}
+                            className="border-b last:border-0 hover:bg-gray-50"
+                          >
+                            <td className="px-4 py-2 text-sm text-gray-800">
+                              {fmtEmailDT(e.received)}
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-800">
+                              {e.sender}
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-800">
+                              {e.subject}
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-800 break-words whitespace-normal">
+                              {insertZWS(e.preview)}
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              {renderPill(e.importance)}
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              {e.reason.split("+").map((r, i) => {
+                                const seg = r.trim();
+                                const disp = seg.replace(
+                                  new RegExp(vip_group_name, "gi"),
+                                  vip_group_name
+                                );
+                                return (
+                                  <div
+                                    key={i}
+                                    className="flex items-center mb-1 whitespace-nowrap justify-center"
+                                  >
+                                    <Tag className="h-3 w-3 text-[#6e506e] mr-1" />
+                                    <span className="bg-[#bc5cac] text-white text-xs font-medium px-2 py-1 rounded">
+                                      {disp}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              <MailOpen
+                                strokeWidth={1.5}
+                                className="h-5 w-5 text-[#1E89D1] hover:text-[#1E61B0] cursor-pointer"
+                                onClick={() => openInOutlook(e.message_id)}
+                              />
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              <MailCheck
+                                strokeWidth={1.5}
+                                className="h-5 w-5 text-[#D274AA] hover:text-[#B04B79] cursor-pointer"
+                                onClick={() => dismiss(e.message_id)}
+                              />
+                            </td>
+                            <td className="px-4 py-2 text-center">
+                              <CopyCheck
+                                strokeWidth={1.5}
+                                className="h-5 w-5 text-[#D274AA] hover:text-[#B04B79] cursor-pointer"
+                                onClick={() =>
+                                  dismissConversation(e.message_id, e.conversation_id)
+                                }
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                    </Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
           {/* Pagination */}
           <div className="mt-6 flex items-center justify-between">

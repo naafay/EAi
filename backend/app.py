@@ -1,5 +1,6 @@
 # app.py
 
+import os
 import time
 import win32gui
 import ctypes
@@ -14,21 +15,68 @@ import queue
 import json
 from typing import Optional, List
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.schedulers.base import SchedulerAlreadyRunningError
 from starlette.responses import StreamingResponse
 from starlette.concurrency import run_in_threadpool
 
 import win32com.client
 from win32com.client import gencache
+from logging.handlers import TimedRotatingFileHandler
 
 _user32 = ctypes.WinDLL("user32", use_last_error=True)
 
 # === Logging ===
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+os.makedirs("logs", exist_ok=True)
+logger = logging.getLogger("backend")
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
+
+console_handler = logging.StreamHandler()
+console_handler.setFormatter(formatter)
+logger.addHandler(console_handler)
+
+file_handler = TimedRotatingFileHandler("logs/backend.log", when="midnight", interval=1, backupCount=7, encoding="utf-8")
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+
+# === FastAPI + CORS ===
+app = FastAPI(title="EAi Email Assistant Backend")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    logger.info(f"→ {request.method} {request.url.path}")
+    start = time.time()
+    response = await call_next(request)
+    elapsed = (time.time() - start) * 1000
+    logger.info(f"← {request.method} {request.url.path} completed in {elapsed:.2f}ms with status {response.status_code}")
+    return response
+
+@app.on_event("startup")
+def on_startup():
+    logger.info("Starting backend service")
+    try:
+        pythoncom.CoInitialize()
+        gencache.is_readonly = False
+        gencache.Rebuild()
+        logger.info("Outlook COM cache rebuilt successfully.")
+    except Exception as e:
+        logger.warning(f"Could not rebuild Outlook COM cache: {e}")
+    finally:
+        pythoncom.CoUninitialize()
+
+@app.on_event("shutdown")
+def on_shutdown():
+    logger.info("Shutting down backend service")
+
 
 # === Runtime Config (timing only) ===
 BACKEND_CONFIG = {
@@ -42,33 +90,11 @@ BACKEND_CONFIG = {
 USER_CONFIG = {
     "outlook_email":  None,
     "full_name":      None,
-    "aliases":        [],       # extra mailbox aliases
-    "vip_group_name": None,     # e.g. "VIP"
-    "vip_emails":     [],       # list of SMTP addresses
-    "vip_names":      []        # list of lowercase display names
+    "aliases":        [],
+    "vip_group_name": None,
+    "vip_emails":     [],
+    "vip_names":      []
 }
-
-# === FastAPI + CORS ===
-app = FastAPI(title="EAi Email Assistant Backend")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.on_event("startup")
-def rebuild_com_cache():
-    try:
-        pythoncom.CoInitialize()
-        gencache.is_readonly = False
-        gencache.Rebuild()
-        logging.info("Outlook COM cache rebuilt successfully.")
-    except Exception as e:
-        logging.warning(f"Could not rebuild Outlook COM cache: {e}")
-    finally:
-        pythoncom.CoUninitialize()
 
 # === Pydantic Models ===
 class EmailItem(BaseModel):
@@ -92,7 +118,7 @@ class UserConfigItem(BaseModel):
     full_name:      str
     aliases:        Optional[List[str]] = []
     vip_group_name: str
-    vip_emails:     List[str]   # raw entries, e.g. "Pete Smith <Pete.Smith@Aviatnet.com>"
+    vip_emails:     List[str]
 
 # === SSE queue ===
 fetch_queue: queue.Queue[str] = queue.Queue()
@@ -251,7 +277,7 @@ def fetch_dicts(preset: bool,
     finally:
         pythoncom.CoUninitialize()
 
-    logging.info(f"Fetched {len(out)} emails{' in custom range' if not preset else ''}.")
+    logger.info(f"Fetched {len(out)} emails{' in custom range' if not preset else ''}.")
     return out
 
 def fetch_and_track():
@@ -261,23 +287,27 @@ def fetch_and_track():
     if not preset:
         start_dt = datetime.datetime.fromisoformat(start)
         end_dt   = datetime.datetime.fromisoformat(end)
-        items    = fetch_dicts(False, start_dt, end_dt)
+        _ = fetch_dicts(False, start_dt, end_dt)
     else:
-        items    = fetch_dicts(True)
+        _ = fetch_dicts(True)
     fetch_queue.put(datetime.datetime.utcnow().isoformat())
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(
-    fetch_and_track,
-    trigger="interval",
-    minutes=BACKEND_CONFIG["fetch_interval_minutes"],
-    id="fetch_job",
-    replace_existing=True
-)
+scheduler = None
 try:
+    from apscheduler.schedulers.background import BackgroundScheduler
+    from apscheduler.schedulers.base import SchedulerAlreadyRunningError
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(
+        fetch_and_track,
+        trigger="interval",
+        minutes=BACKEND_CONFIG["fetch_interval_minutes"],
+        id="fetch_job",
+        replace_existing=True
+    )
     scheduler.start()
-except SchedulerAlreadyRunningError:
-    pass
+    logger.info("Scheduler started")
+except Exception as e:
+    logger.warning(f"Scheduler error: {e}")
 
 # === API Endpoints ===
 
@@ -302,9 +332,9 @@ def set_config(cfg: ConfigItem):
         "start":                  cfg.start.isoformat() if cfg.start else None,
         "end":                    cfg.end.isoformat()   if cfg.end   else None,
     })
-    scheduler.reschedule_job("fetch_job",
-                             trigger="interval",
-                             minutes=cfg.fetch_interval_minutes)
+    if scheduler:
+        scheduler.reschedule_job("fetch_job", trigger="interval", minutes=cfg.fetch_interval_minutes)
+        logger.info(f"Rescheduled fetch every {cfg.fetch_interval_minutes} minutes")
     return ConfigItem(**BACKEND_CONFIG)
 
 @app.post("/user-config", response_model=UserConfigItem)
@@ -335,11 +365,13 @@ def set_user_config(cfg: UserConfigItem):
         "vip_emails":     parsed_emails,
         "vip_names":      parsed_names
     })
+    logger.info(f"User config set: {cfg.outlook_email}, VIP group {cfg.vip_group_name}")
     return cfg
 
 @app.post("/fetch-now")
 def fetch_now():
     fetch_and_track()
+    logger.info("Manual fetch triggered")
     return {"ok": True}
 
 @app.get("/events")
@@ -375,7 +407,7 @@ def get_emails(
         imp, reason = rate_and_reason(m)
         if imp < 2:
             continue
-        out.append(EmailItem(
+        email_item = EmailItem(
             message_id      = m["message_id"],
             conversation_id = m["conversation_id"],
             sender          = m["sender"],
@@ -384,7 +416,9 @@ def get_emails(
             received        = m["received"],
             importance      = imp,
             reason          = reason
-        ))
+        )
+        out.append(email_item)
+    logger.info(f"Returning {len(out)} filtered emails")
     return out
 
 @app.post("/emails/{mid}/dismiss")
@@ -395,8 +429,9 @@ def dismiss(mid: str):
         mail = ns.GetItemFromID(mid)
         mail.UnRead = False
         mail.Save()
+        logger.info(f"Dismissed email {mid}")
     except Exception as e:
-        logging.error(f"COM mark-as-read failed: {e}")
+        logger.error(f"COM mark-as-read failed: {e}")
     finally:
         pythoncom.CoUninitialize()
     return {"ok": True}
@@ -409,6 +444,7 @@ def dismiss_conversation(mid: str):
         mail = ns.GetItemFromID(mid)
         conv = mail.GetConversation()
         table = conv.GetTable()
+        count = 0
         while not table.EndOfTable:
             row = table.GetNextRow()
             try:
@@ -416,64 +452,53 @@ def dismiss_conversation(mid: str):
                 item     = ns.GetItemFromID(entry_id)
                 item.UnRead = False
                 item.Save()
+                count += 1
             except:
                 continue
+        logger.info(f"Dismissed conversation of email {mid}, total {count} messages")
     except Exception as e:
-        logging.error(f"Error dismissing conversation: {e}")
+        logger.error(f"Error dismissing conversation: {e}")
     finally:
         pythoncom.CoUninitialize()
     return {"ok": True}
 
 @app.post("/open/{mid}")
 def open_mid(mid: str):
-    # --- 1) Open the mail via COM ---
     try:
         pythoncom.CoInitialize()
         ns        = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
         mail      = ns.GetItemFromID(mid)
-        inspector = mail.GetInspector()    # <-- must call ()
+        inspector = mail.GetInspector()
         inspector.Display()
+        logger.info(f"Opened email {mid} in Outlook")
     except Exception as e:
-        logging.error(f"COM open failed: {e}")
-        # if we can't even display, treat as a real error
+        logger.error(f"COM open failed: {e}")
         raise HTTPException(500, f"COM open failed: {e}")
     finally:
         pythoncom.CoUninitialize()
 
-    # --- 2) Try to force it to the front, but degrade gracefully ---
     try:
-        # small pause so Windows has time to create/focus the window
         time.sleep(0.1)
-
-        # assume the new Inspector is now foreground
         hwnd = win32gui.GetForegroundWindow()
-
-        # restore & ensure it's not minimized
         win32gui.ShowWindow(hwnd, win32con.SW_SHOWNORMAL)
 
-        # attach our thread to the active thread so SetForegroundWindow works
         fg_hwnd     = win32gui.GetForegroundWindow()
         fg_thread   = win32process.GetWindowThreadProcessId(fg_hwnd)[0]
         this_thread = win32api.GetCurrentThreadId()
 
         if not _user32.AttachThreadInput(fg_thread, this_thread, True):
             err = ctypes.get_last_error()
-            logging.warning(f"AttachThreadInput failed with error {err}")
-
-        # bring it fully to front
+            logger.warning(f"AttachThreadInput failed with error {err}")
         win32gui.SetForegroundWindow(hwnd)
-
-        # detach again
         _user32.AttachThreadInput(fg_thread, this_thread, False)
-
     except Exception as focus_e:
-        # just warn—mail is still open, it just might sit behind another window
-        logging.warning(f"Focus‐hack failed; window may not be front: {focus_e}")
+        logger.warning(f"Focus‐hack failed; window may not be front: {focus_e}")
 
     return {"ok": True}
 
 @app.get("/health/local")
 def health_local():
+    logger.info("Health check: local OK")
     return {"ok": True}
 
 @app.get("/health/outlook")
@@ -481,8 +506,10 @@ def health_outlook():
     try:
         pythoncom.CoInitialize()
         win32com.client.GetActiveObject("Outlook.Application")
+        logger.info("Health check: outlook OK")
         return {"ok": True}
     except:
+        logger.error("Health check: outlook unavailable")
         raise HTTPException(503, "Outlook unavailable")
     finally:
         pythoncom.CoUninitialize()
