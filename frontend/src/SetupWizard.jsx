@@ -15,7 +15,7 @@ export default function SetupWizard({ onComplete }) {
   const [step, setStep] = useState(1);
 
   // Wizard state
-  const [appTitle,        setAppTitle]        = useState('Priority Mail');
+  const [appTitle,        setAppTitle]        = useState('Priority Hub');
   const [fullName,        setFullName]        = useState('');
   const [outlookEmail,    setOutlookEmail]    = useState('');
   // NEW: Additional Aliases

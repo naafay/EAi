@@ -467,14 +467,17 @@ export default function MainApp({ userSettings }) {
     { key: "dismiss_conversation", label: "" }
   ];
 
-  const fmtDT = dt =>
-    dt
-      ? `${dt.toLocaleDateString("en-GB",{timeZone:"Asia/Dubai"})} ${dt.toLocaleTimeString("en-GB",{hour:'2-digit',minute:'2-digit',timeZone:"Asia/Dubai"})}`
-      : "---";
-  const fmtEmailDT = iso => {
-    const d = parseLocal(iso);
-    return `${d.toLocaleDateString("en-GB",{timeZone:"Asia/Dubai"})} ${d.toLocaleTimeString("en-GB",{hour:'2-digit',minute:'2-digit',timeZone:"Asia/Dubai"})}`;
-  };
+// use system/browser timezone by default
+const fmtDT = dt =>
+  dt
+    ? `${dt.toLocaleDateString("en-GB")} ${dt.toLocaleTimeString("en-GB", { hour: '2-digit', minute: '2-digit' })}`
+    : "---";
+
+// same here for email timestamps
+const fmtEmailDT = iso => {
+  const d = parseLocal(iso);
+  return `${d.toLocaleDateString("en-GB")} ${d.toLocaleTimeString("en-GB", { hour: '2-digit', minute: '2-digit' })}`;
+};
 
   // load timing config
   useEffect(() => {
