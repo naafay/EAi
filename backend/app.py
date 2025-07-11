@@ -44,19 +44,27 @@ logger.addHandler(file_handler)
 # === FastAPI + CORS ===
 app = FastAPI(title="EAi Email Assistant Backend")
 app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+  CORSMiddleware,
+  allow_origins=["*"],        # ← for development only
+  allow_credentials=False,    # no cookies/auth
+  allow_methods=["*"],
+  allow_headers=["*"],
 )
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
+    # Log the method & path
     logger.info(f"→ {request.method} {request.url.path}")
+    
+    # Log whatever Origin header came in
+    origin = request.headers.get("origin")
+    logger.info(f"→ Origin header: {origin}")
+    
     start = time.time()
     response = await call_next(request)
     elapsed = (time.time() - start) * 1000
+    
+    # Log the response time & status
     logger.info(f"← {request.method} {request.url.path} completed in {elapsed:.2f}ms with status {response.status_code}")
     return response
 

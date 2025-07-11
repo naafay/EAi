@@ -1058,6 +1058,17 @@ const fmtEmailDT = iso => {
           }}
         />
       )}
+
+   {loading && (
+  <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-40">
+    <div className="bg-[#2a162e] text-[#db69ab] px-6 py-4 rounded-2xl shadow-2xl flex items-center space-x-3 animate-fade-in">
+      <Loader className="h-6 w-6 animate-spin text-[#db69ab] drop-shadow" />
+      <span className="text-lg font-medium text-white tracking-wide drop-shadow-sm">
+        Checking for high-priority messages…
+      </span>
+    </div>
+  </div>
+)}
     </div>
   );
 }

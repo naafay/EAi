@@ -1,7 +1,6 @@
-// C:\EAi\frontend\postcss.config.js
-module.exports = {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {}
-  }
+import autoprefixer from 'autoprefixer';
+import tailwindcss from 'tailwindcss';
+
+export default {
+  plugins: [autoprefixer, tailwindcss],
 };

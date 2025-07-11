@@ -1,0 +1,1382 @@
+2025-07-10 14:22:04,824 INFO Scheduler started
+2025-07-10 14:22:04,829 INFO Starting backend service
+2025-07-10 14:22:04,831 INFO Outlook COM cache rebuilt successfully.
+2025-07-10 14:22:22,250 INFO → OPTIONS /user-config
+2025-07-10 14:22:22,250 INFO ← OPTIONS /user-config completed in 0.21ms with status 400
+2025-07-10 14:22:22,252 INFO → OPTIONS /user-config
+2025-07-10 14:22:22,253 INFO ← OPTIONS /user-config completed in 0.40ms with status 400
+2025-07-10 14:22:22,254 INFO → GET /config
+2025-07-10 14:22:22,260 INFO ← GET /config completed in 5.51ms with status 200
+2025-07-10 14:22:22,261 INFO → GET /health/outlook
+2025-07-10 14:22:22,278 INFO Health check: outlook OK
+2025-07-10 14:22:22,279 INFO ← GET /health/outlook completed in 18.02ms with status 200
+2025-07-10 14:22:22,282 INFO → GET /health/local
+2025-07-10 14:22:22,283 INFO → GET /emails
+2025-07-10 14:22:22,284 INFO Health check: local OK
+2025-07-10 14:22:22,285 INFO ← GET /health/local completed in 2.43ms with status 200
+2025-07-10 14:22:22,285 INFO ← GET /emails completed in 2.09ms with status 400
+2025-07-10 14:22:36,494 INFO → GET /health/outlook
+2025-07-10 14:22:36,495 INFO → GET /health/local
+2025-07-10 14:22:36,497 INFO Health check: local OK
+2025-07-10 14:22:36,498 INFO ← GET /health/local completed in 2.49ms with status 200
+2025-07-10 14:22:36,507 INFO Health check: outlook OK
+2025-07-10 14:22:36,509 INFO ← GET /health/outlook completed in 14.54ms with status 200
+2025-07-10 14:22:52,868 INFO → OPTIONS /config
+2025-07-10 14:22:52,868 INFO ← OPTIONS /config completed in 0.26ms with status 400
+2025-07-10 14:23:16,889 INFO → OPTIONS /user-config
+2025-07-10 14:23:16,889 INFO ← OPTIONS /user-config completed in 0.36ms with status 200
+2025-07-10 14:23:16,892 INFO → POST /user-config
+2025-07-10 14:23:16,894 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 14:23:16,895 INFO ← POST /user-config completed in 2.82ms with status 200
+2025-07-10 14:23:16,898 INFO → POST /user-config
+2025-07-10 14:23:16,899 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 14:23:16,900 INFO ← POST /user-config completed in 1.39ms with status 200
+2025-07-10 14:23:17,054 INFO → POST /user-config
+2025-07-10 14:23:17,055 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 14:23:17,056 INFO ← POST /user-config completed in 2.04ms with status 200
+2025-07-10 14:23:17,084 INFO → POST /user-config
+2025-07-10 14:23:17,085 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 14:23:17,086 INFO ← POST /user-config completed in 1.72ms with status 200
+2025-07-10 14:23:17,088 INFO → GET /health/outlook
+2025-07-10 14:23:17,096 INFO Health check: outlook OK
+2025-07-10 14:23:17,098 INFO ← GET /health/outlook completed in 10.46ms with status 200
+2025-07-10 14:23:17,100 INFO → GET /health/local
+2025-07-10 14:23:17,101 INFO Health check: local OK
+2025-07-10 14:23:17,101 INFO ← GET /health/local completed in 0.95ms with status 200
+2025-07-10 14:23:17,103 INFO → GET /config
+2025-07-10 14:23:17,104 INFO ← GET /config completed in 1.06ms with status 200
+2025-07-10 14:23:17,109 INFO → GET /emails
+2025-07-10 14:23:17,229 INFO → POST /user-config
+2025-07-10 14:23:17,230 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 14:23:17,231 INFO ← POST /user-config completed in 1.87ms with status 200
+2025-07-10 14:23:17,233 INFO → POST /user-config
+2025-07-10 14:23:17,234 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 14:23:17,234 INFO ← POST /user-config completed in 1.14ms with status 200
+2025-07-10 14:23:17,390 INFO → POST /user-config
+2025-07-10 14:23:17,391 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 14:23:17,392 INFO ← POST /user-config completed in 1.31ms with status 200
+2025-07-10 14:23:17,394 INFO → POST /user-config
+2025-07-10 14:23:17,395 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 14:23:17,396 INFO ← POST /user-config completed in 1.89ms with status 200
+2025-07-10 14:23:21,989 INFO → GET /health/outlook
+2025-07-10 14:23:21,990 INFO → GET /health/local
+2025-07-10 14:23:21,992 INFO Health check: local OK
+2025-07-10 14:23:21,993 INFO ← GET /health/local completed in 2.25ms with status 200
+2025-07-10 14:23:22,208 INFO Health check: outlook OK
+2025-07-10 14:23:22,211 INFO ← GET /health/outlook completed in 221.30ms with status 200
+2025-07-10 14:23:24,854 INFO Fetched 33 emails.
+2025-07-10 14:23:24,854 INFO Returning 4 filtered emails
+2025-07-10 14:23:24,855 INFO ← GET /emails completed in 7745.45ms with status 200
+2025-07-10 14:23:36,195 INFO → GET /health/outlook
+2025-07-10 14:23:36,196 INFO → GET /health/local
+2025-07-10 14:23:36,199 INFO Health check: local OK
+2025-07-10 14:23:36,200 INFO ← GET /health/local completed in 2.83ms with status 200
+2025-07-10 14:23:36,206 INFO Health check: outlook OK
+2025-07-10 14:23:36,207 INFO ← GET /health/outlook completed in 11.58ms with status 200
+2025-07-10 14:24:22,294 INFO → GET /health/outlook
+2025-07-10 14:24:22,294 INFO → GET /health/local
+2025-07-10 14:24:22,295 INFO Health check: local OK
+2025-07-10 14:24:22,296 INFO ← GET /health/local completed in 1.54ms with status 200
+2025-07-10 14:24:22,303 INFO Health check: outlook OK
+2025-07-10 14:24:22,305 INFO ← GET /health/outlook completed in 10.75ms with status 200
+2025-07-10 14:24:36,495 INFO → GET /health/outlook
+2025-07-10 14:24:36,496 INFO → GET /health/local
+2025-07-10 14:24:36,497 INFO Health check: local OK
+2025-07-10 14:24:36,498 INFO ← GET /health/local completed in 1.75ms with status 200
+2025-07-10 14:24:36,505 INFO Health check: outlook OK
+2025-07-10 14:24:36,507 INFO ← GET /health/outlook completed in 11.14ms with status 200
+2025-07-10 14:25:22,000 INFO → GET /health/outlook
+2025-07-10 14:25:22,015 INFO Health check: outlook OK
+2025-07-10 14:25:22,016 INFO ← GET /health/outlook completed in 15.91ms with status 200
+2025-07-10 14:25:22,019 INFO → GET /health/local
+2025-07-10 14:25:22,020 INFO Health check: local OK
+2025-07-10 14:25:22,020 INFO ← GET /health/local completed in 1.05ms with status 200
+2025-07-10 14:25:36,193 INFO → GET /health/outlook
+2025-07-10 14:25:36,199 INFO Health check: outlook OK
+2025-07-10 14:25:36,201 INFO ← GET /health/outlook completed in 8.31ms with status 200
+2025-07-10 14:25:36,203 INFO → GET /health/local
+2025-07-10 14:25:36,204 INFO Health check: local OK
+2025-07-10 14:25:36,205 INFO ← GET /health/local completed in 0.94ms with status 200
+2025-07-10 14:25:36,206 INFO → GET /emails
+2025-07-10 14:25:43,892 INFO Fetched 33 emails.
+2025-07-10 14:25:43,892 INFO Returning 4 filtered emails
+2025-07-10 14:25:43,893 INFO ← GET /emails completed in 7686.24ms with status 200
+2025-07-10 14:25:46,775 INFO Shutting down backend service
+2025-07-10 14:26:44,664 INFO Scheduler started
+2025-07-10 14:26:44,669 INFO Starting backend service
+2025-07-10 14:26:44,669 INFO Outlook COM cache rebuilt successfully.
+2025-07-10 14:26:52,576 INFO → OPTIONS /config
+2025-07-10 14:26:52,577 INFO ← OPTIONS /config completed in 0.22ms with status 400
+2025-07-10 14:27:21,998 INFO → GET /health/outlook
+2025-07-10 14:27:22,012 INFO Health check: outlook OK
+2025-07-10 14:27:22,014 INFO ← GET /health/outlook completed in 14.89ms with status 200
+2025-07-10 14:27:22,016 INFO → GET /health/local
+2025-07-10 14:27:22,017 INFO Health check: local OK
+2025-07-10 14:27:22,017 INFO ← GET /health/local completed in 0.77ms with status 200
+2025-07-10 14:27:22,277 INFO → GET /emails
+2025-07-10 14:27:22,280 INFO ← GET /emails completed in 1.81ms with status 400
+2025-07-10 14:27:36,494 INFO → GET /health/outlook
+2025-07-10 14:27:36,495 INFO → GET /health/local
+2025-07-10 14:27:36,496 INFO Health check: local OK
+2025-07-10 14:27:36,496 INFO ← GET /health/local completed in 1.47ms with status 200
+2025-07-10 14:27:36,503 INFO Health check: outlook OK
+2025-07-10 14:27:36,505 INFO ← GET /health/outlook completed in 10.34ms with status 200
+2025-07-10 14:28:21,996 INFO → GET /health/outlook
+2025-07-10 14:28:22,012 INFO Health check: outlook OK
+2025-07-10 14:28:22,013 INFO ← GET /health/outlook completed in 16.49ms with status 200
+2025-07-10 14:28:22,015 INFO → GET /health/local
+2025-07-10 14:28:22,016 INFO Health check: local OK
+2025-07-10 14:28:22,016 INFO ← GET /health/local completed in 0.72ms with status 200
+2025-07-10 14:28:36,194 INFO → GET /health/outlook
+2025-07-10 14:28:36,203 INFO Health check: outlook OK
+2025-07-10 14:28:36,206 INFO ← GET /health/outlook completed in 12.05ms with status 200
+2025-07-10 14:28:36,208 INFO → GET /health/local
+2025-07-10 14:28:36,209 INFO Health check: local OK
+2025-07-10 14:28:36,209 INFO ← GET /health/local completed in 1.01ms with status 200
+2025-07-10 14:29:21,993 INFO → GET /health/outlook
+2025-07-10 14:29:22,007 INFO Health check: outlook OK
+2025-07-10 14:29:22,008 INFO ← GET /health/outlook completed in 15.05ms with status 200
+2025-07-10 14:29:22,010 INFO → GET /health/local
+2025-07-10 14:29:22,011 INFO Health check: local OK
+2025-07-10 14:29:22,012 INFO ← GET /health/local completed in 1.26ms with status 200
+2025-07-10 14:29:36,185 INFO → GET /health/outlook
+2025-07-10 14:29:36,199 INFO Health check: outlook OK
+2025-07-10 14:29:36,201 INFO ← GET /health/outlook completed in 14.76ms with status 200
+2025-07-10 14:29:36,202 INFO → GET /health/local
+2025-07-10 14:29:36,203 INFO Health check: local OK
+2025-07-10 14:29:36,204 INFO ← GET /health/local completed in 0.80ms with status 200
+2025-07-10 14:29:47,535 INFO Shutting down backend service
+2025-07-10 14:35:50,744 INFO Scheduler started
+2025-07-10 14:35:50,749 INFO Starting backend service
+2025-07-10 14:35:50,750 INFO Outlook COM cache rebuilt successfully.
+2025-07-10 14:35:58,383 INFO → OPTIONS /config
+2025-07-10 14:35:58,384 INFO → Origin header: http://localhost:5174
+2025-07-10 14:35:58,384 INFO ← OPTIONS /config completed in 0.23ms with status 200
+2025-07-10 14:35:58,386 INFO → POST /config
+2025-07-10 14:35:58,386 INFO → Origin header: http://localhost:5174
+2025-07-10 14:35:58,389 INFO Rescheduled fetch every 5 minutes
+2025-07-10 14:35:58,389 INFO ← POST /config completed in 2.68ms with status 200
+2025-07-10 14:35:58,396 INFO → GET /emails
+2025-07-10 14:35:58,396 INFO → Origin header: http://localhost:5174
+2025-07-10 14:35:58,398 INFO ← GET /emails completed in 1.20ms with status 400
+2025-07-10 14:36:21,992 INFO → GET /health/local
+2025-07-10 14:36:21,993 INFO → Origin header: http://localhost:5174
+2025-07-10 14:36:21,993 INFO Health check: local OK
+2025-07-10 14:36:21,994 INFO ← GET /health/local completed in 0.82ms with status 200
+2025-07-10 14:36:21,995 INFO → GET /health/outlook
+2025-07-10 14:36:21,996 INFO → Origin header: http://localhost:5174
+2025-07-10 14:36:22,005 INFO Health check: outlook OK
+2025-07-10 14:36:22,007 INFO ← GET /health/outlook completed in 10.97ms with status 200
+2025-07-10 14:36:36,496 INFO → GET /health/outlook
+2025-07-10 14:36:36,496 INFO → Origin header: http://localhost:5173
+2025-07-10 14:36:36,497 INFO → GET /health/local
+2025-07-10 14:36:36,497 INFO → Origin header: http://localhost:5173
+2025-07-10 14:36:36,498 INFO Health check: local OK
+2025-07-10 14:36:36,499 INFO ← GET /health/local completed in 1.34ms with status 200
+2025-07-10 14:36:36,504 INFO Health check: outlook OK
+2025-07-10 14:36:36,506 INFO ← GET /health/outlook completed in 9.36ms with status 200
+2025-07-10 14:37:21,991 INFO → GET /health/outlook
+2025-07-10 14:37:21,992 INFO → Origin header: http://localhost:5174
+2025-07-10 14:37:22,003 INFO Health check: outlook OK
+2025-07-10 14:37:22,004 INFO ← GET /health/outlook completed in 12.05ms with status 200
+2025-07-10 14:37:22,006 INFO → GET /health/local
+2025-07-10 14:37:22,006 INFO → Origin header: http://localhost:5174
+2025-07-10 14:37:22,007 INFO Health check: local OK
+2025-07-10 14:37:22,007 INFO ← GET /health/local completed in 0.73ms with status 200
+2025-07-10 14:37:36,191 INFO → GET /health/outlook
+2025-07-10 14:37:36,191 INFO → Origin header: http://localhost:5173
+2025-07-10 14:37:36,199 INFO Health check: outlook OK
+2025-07-10 14:37:36,200 INFO ← GET /health/outlook completed in 8.71ms with status 200
+2025-07-10 14:37:36,202 INFO → GET /health/local
+2025-07-10 14:37:36,203 INFO → Origin header: http://localhost:5173
+2025-07-10 14:37:36,203 INFO Health check: local OK
+2025-07-10 14:37:36,204 INFO ← GET /health/local completed in 0.63ms with status 200
+2025-07-10 14:38:21,996 INFO → GET /health/outlook
+2025-07-10 14:38:21,997 INFO → Origin header: http://localhost:5174
+2025-07-10 14:38:22,013 INFO Health check: outlook OK
+2025-07-10 14:38:22,014 INFO ← GET /health/outlook completed in 16.75ms with status 200
+2025-07-10 14:38:22,016 INFO → GET /health/local
+2025-07-10 14:38:22,017 INFO → Origin header: http://localhost:5174
+2025-07-10 14:38:22,017 INFO Health check: local OK
+2025-07-10 14:38:22,018 INFO ← GET /health/local completed in 0.74ms with status 200
+2025-07-10 14:38:36,492 INFO → GET /health/outlook
+2025-07-10 14:38:36,493 INFO → Origin header: http://localhost:5173
+2025-07-10 14:38:36,494 INFO → GET /health/local
+2025-07-10 14:38:36,495 INFO → Origin header: http://localhost:5173
+2025-07-10 14:38:36,498 INFO Health check: local OK
+2025-07-10 14:38:36,499 INFO ← GET /health/local completed in 3.14ms with status 200
+2025-07-10 14:38:36,505 INFO Health check: outlook OK
+2025-07-10 14:38:36,509 INFO ← GET /health/outlook completed in 15.03ms with status 200
+2025-07-10 14:39:21,992 INFO → GET /health/outlook
+2025-07-10 14:39:21,992 INFO → Origin header: http://localhost:5174
+2025-07-10 14:39:21,999 INFO Health check: outlook OK
+2025-07-10 14:39:22,002 INFO ← GET /health/outlook completed in 9.10ms with status 200
+2025-07-10 14:39:22,003 INFO → GET /health/local
+2025-07-10 14:39:22,003 INFO → Origin header: http://localhost:5174
+2025-07-10 14:39:22,004 INFO Health check: local OK
+2025-07-10 14:39:22,005 INFO ← GET /health/local completed in 0.91ms with status 200
+2025-07-10 14:39:36,187 INFO → GET /health/outlook
+2025-07-10 14:39:36,188 INFO → Origin header: http://localhost:5173
+2025-07-10 14:39:36,197 INFO Health check: outlook OK
+2025-07-10 14:39:36,199 INFO ← GET /health/outlook completed in 10.94ms with status 200
+2025-07-10 14:39:36,201 INFO → GET /health/local
+2025-07-10 14:39:36,202 INFO → Origin header: http://localhost:5173
+2025-07-10 14:39:36,202 INFO Health check: local OK
+2025-07-10 14:39:36,202 INFO ← GET /health/local completed in 0.73ms with status 200
+2025-07-10 14:39:40,138 INFO → OPTIONS /user-config
+2025-07-10 14:39:40,138 INFO → Origin header: http://localhost:5174
+2025-07-10 14:39:40,139 INFO ← OPTIONS /user-config completed in 0.25ms with status 200
+2025-07-10 14:39:40,141 INFO → POST /user-config
+2025-07-10 14:39:40,141 INFO → Origin header: http://localhost:5174
+2025-07-10 14:39:40,144 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 14:39:40,146 INFO ← POST /user-config completed in 4.47ms with status 200
+2025-07-10 14:39:40,148 INFO → POST /user-config
+2025-07-10 14:39:40,148 INFO → Origin header: http://localhost:5174
+2025-07-10 14:39:40,149 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 14:39:40,150 INFO ← POST /user-config completed in 1.57ms with status 200
+2025-07-10 14:39:40,151 INFO → GET /config
+2025-07-10 14:39:40,151 INFO → Origin header: http://localhost:5174
+2025-07-10 14:39:40,152 INFO ← GET /config completed in 0.77ms with status 200
+2025-07-10 14:39:40,154 INFO → GET /health/outlook
+2025-07-10 14:39:40,154 INFO → Origin header: http://localhost:5174
+2025-07-10 14:39:40,163 INFO Health check: outlook OK
+2025-07-10 14:39:40,165 INFO ← GET /health/outlook completed in 10.55ms with status 200
+2025-07-10 14:39:40,166 INFO → GET /health/local
+2025-07-10 14:39:40,167 INFO → Origin header: http://localhost:5174
+2025-07-10 14:39:40,167 INFO Health check: local OK
+2025-07-10 14:39:40,168 INFO ← GET /health/local completed in 1.21ms with status 200
+2025-07-10 14:39:40,170 INFO → GET /emails
+2025-07-10 14:39:40,170 INFO → Origin header: http://localhost:5174
+2025-07-10 14:39:47,999 INFO Fetched 32 emails.
+2025-07-10 14:39:48,000 INFO Returning 4 filtered emails
+2025-07-10 14:39:48,000 INFO ← GET /emails completed in 7830.43ms with status 200
+2025-07-10 14:40:36,184 INFO → GET /health/outlook
+2025-07-10 14:40:36,185 INFO → Origin header: http://localhost:5173
+2025-07-10 14:40:36,195 INFO Health check: outlook OK
+2025-07-10 14:40:36,197 INFO ← GET /health/outlook completed in 11.69ms with status 200
+2025-07-10 14:40:36,199 INFO → GET /health/local
+2025-07-10 14:40:36,199 INFO → Origin header: http://localhost:5173
+2025-07-10 14:40:36,199 INFO Health check: local OK
+2025-07-10 14:40:36,200 INFO ← GET /health/local completed in 0.91ms with status 200
+2025-07-10 14:40:36,201 INFO → GET /emails
+2025-07-10 14:40:36,202 INFO → Origin header: http://localhost:5173
+2025-07-10 14:40:40,161 INFO → GET /health/outlook
+2025-07-10 14:40:40,162 INFO → Origin header: http://localhost:5174
+2025-07-10 14:40:40,163 INFO → GET /health/local
+2025-07-10 14:40:40,163 INFO → Origin header: http://localhost:5174
+2025-07-10 14:40:40,166 INFO Health check: local OK
+2025-07-10 14:40:40,167 INFO ← GET /health/local completed in 2.93ms with status 200
+2025-07-10 14:40:40,650 INFO Health check: outlook OK
+2025-07-10 14:40:40,653 INFO ← GET /health/outlook completed in 490.27ms with status 200
+2025-07-10 14:40:43,409 INFO Fetched 32 emails.
+2025-07-10 14:40:43,409 INFO Returning 4 filtered emails
+2025-07-10 14:40:43,410 INFO ← GET /emails completed in 7208.22ms with status 200
+2025-07-10 14:40:55,222 INFO → POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208360000
+2025-07-10 14:40:55,222 INFO → Origin header: http://localhost:5174
+2025-07-10 14:40:55,968 INFO Opened email 00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208360000 in Outlook
+2025-07-10 14:40:56,200 INFO ← POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208360000 completed in 976.73ms with status 200
+2025-07-10 14:41:06,328 INFO Fetched 31 emails.
+2025-07-10 14:41:07,325 INFO → POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208360000
+2025-07-10 14:41:07,325 INFO → Origin header: http://localhost:5174
+2025-07-10 14:41:07,801 INFO Opened email 00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208360000 in Outlook
+2025-07-10 14:41:07,907 INFO ← POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208360000 completed in 582.04ms with status 200
+2025-07-10 14:41:21,899 INFO → POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208440000
+2025-07-10 14:41:21,900 INFO → Origin header: http://localhost:5174
+2025-07-10 14:41:22,888 INFO Opened email 00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208440000 in Outlook
+2025-07-10 14:41:23,071 INFO ← POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208440000 completed in 1170.65ms with status 200
+2025-07-10 14:41:35,429 INFO → POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208440000
+2025-07-10 14:41:35,430 INFO → Origin header: http://localhost:5174
+2025-07-10 14:41:35,449 INFO Opened email 00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208440000 in Outlook
+2025-07-10 14:41:35,566 INFO ← POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208440000 completed in 135.74ms with status 200
+2025-07-10 14:41:36,184 INFO → GET /health/outlook
+2025-07-10 14:41:36,184 INFO → Origin header: http://localhost:5173
+2025-07-10 14:41:36,185 INFO → GET /health/local
+2025-07-10 14:41:36,185 INFO → Origin header: http://localhost:5173
+2025-07-10 14:41:36,186 INFO Health check: local OK
+2025-07-10 14:41:36,187 INFO ← GET /health/local completed in 1.42ms with status 200
+2025-07-10 14:41:36,192 INFO Health check: outlook OK
+2025-07-10 14:41:36,193 INFO ← GET /health/outlook completed in 8.23ms with status 200
+2025-07-10 14:41:40,157 INFO → GET /health/outlook
+2025-07-10 14:41:40,157 INFO → Origin header: http://localhost:5174
+2025-07-10 14:41:40,169 INFO Health check: outlook OK
+2025-07-10 14:41:40,170 INFO ← GET /health/outlook completed in 12.52ms with status 200
+2025-07-10 14:41:40,172 INFO → GET /health/local
+2025-07-10 14:41:40,173 INFO → Origin header: http://localhost:5174
+2025-07-10 14:41:40,173 INFO Health check: local OK
+2025-07-10 14:41:40,173 INFO ← GET /health/local completed in 0.70ms with status 200
+2025-07-10 14:41:44,548 INFO → POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208440000
+2025-07-10 14:41:44,548 INFO → Origin header: http://localhost:5174
+2025-07-10 14:41:44,564 INFO Opened email 00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208440000 in Outlook
+2025-07-10 14:41:44,675 INFO ← POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208440000 completed in 125.91ms with status 200
+2025-07-10 14:42:01,857 INFO → POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208440000
+2025-07-10 14:42:01,857 INFO → Origin header: http://localhost:5174
+2025-07-10 14:42:01,875 INFO Opened email 00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208440000 in Outlook
+2025-07-10 14:42:01,979 INFO ← POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208440000 completed in 121.11ms with status 200
+2025-07-10 14:42:11,053 INFO → POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208360000
+2025-07-10 14:42:11,054 INFO → Origin header: http://localhost:5174
+2025-07-10 14:42:11,092 INFO Opened email 00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208360000 in Outlook
+2025-07-10 14:42:11,199 INFO ← POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208360000 completed in 144.70ms with status 200
+2025-07-10 14:42:18,219 INFO → POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208470000
+2025-07-10 14:42:18,220 INFO → Origin header: http://localhost:5174
+2025-07-10 14:42:19,013 INFO Opened email 00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208470000 in Outlook
+2025-07-10 14:42:19,146 INFO ← POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208470000 completed in 925.87ms with status 200
+2025-07-10 14:42:36,499 INFO → GET /health/outlook
+2025-07-10 14:42:36,500 INFO → Origin header: http://localhost:5173
+2025-07-10 14:42:36,501 INFO → GET /health/local
+2025-07-10 14:42:36,502 INFO → Origin header: http://localhost:5173
+2025-07-10 14:42:36,504 INFO Health check: local OK
+2025-07-10 14:42:36,505 INFO ← GET /health/local completed in 2.83ms with status 200
+2025-07-10 14:42:36,511 INFO Health check: outlook OK
+2025-07-10 14:42:36,513 INFO ← GET /health/outlook completed in 12.36ms with status 200
+2025-07-10 14:42:40,462 INFO → GET /health/outlook
+2025-07-10 14:42:40,463 INFO → Origin header: http://localhost:5174
+2025-07-10 14:42:40,464 INFO → GET /health/local
+2025-07-10 14:42:40,465 INFO → Origin header: http://localhost:5174
+2025-07-10 14:42:40,466 INFO Health check: local OK
+2025-07-10 14:42:40,467 INFO ← GET /health/local completed in 1.83ms with status 200
+2025-07-10 14:42:40,475 INFO Health check: outlook OK
+2025-07-10 14:42:40,477 INFO ← GET /health/outlook completed in 13.55ms with status 200
+2025-07-10 14:43:36,192 INFO → GET /health/outlook
+2025-07-10 14:43:36,193 INFO → Origin header: http://localhost:5173
+2025-07-10 14:43:36,203 INFO Health check: outlook OK
+2025-07-10 14:43:36,204 INFO ← GET /health/outlook completed in 11.26ms with status 200
+2025-07-10 14:43:36,206 INFO → GET /health/local
+2025-07-10 14:43:36,206 INFO → Origin header: http://localhost:5173
+2025-07-10 14:43:36,207 INFO Health check: local OK
+2025-07-10 14:43:36,207 INFO ← GET /health/local completed in 0.79ms with status 200
+2025-07-10 14:43:40,147 INFO → GET /health/outlook
+2025-07-10 14:43:40,148 INFO → Origin header: http://localhost:5174
+2025-07-10 14:43:40,159 INFO Health check: outlook OK
+2025-07-10 14:43:40,160 INFO ← GET /health/outlook completed in 11.79ms with status 200
+2025-07-10 14:43:40,162 INFO → GET /health/local
+2025-07-10 14:43:40,163 INFO → Origin header: http://localhost:5174
+2025-07-10 14:43:40,163 INFO Health check: local OK
+2025-07-10 14:43:40,164 INFO ← GET /health/local completed in 0.75ms with status 200
+2025-07-10 14:44:25,526 INFO → POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208470000
+2025-07-10 14:44:25,526 INFO → Origin header: http://localhost:5174
+2025-07-10 14:44:26,392 INFO Opened email 00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208470000 in Outlook
+2025-07-10 14:44:26,498 INFO ← POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208470000 completed in 971.77ms with status 200
+2025-07-10 14:44:36,189 INFO → GET /health/outlook
+2025-07-10 14:44:36,189 INFO → Origin header: http://localhost:5173
+2025-07-10 14:44:36,199 INFO Health check: outlook OK
+2025-07-10 14:44:36,201 INFO ← GET /health/outlook completed in 10.96ms with status 200
+2025-07-10 14:44:36,203 INFO → GET /health/local
+2025-07-10 14:44:36,203 INFO → Origin header: http://localhost:5173
+2025-07-10 14:44:36,203 INFO Health check: local OK
+2025-07-10 14:44:36,204 INFO ← GET /health/local completed in 0.68ms with status 200
+2025-07-10 14:44:40,462 INFO → GET /health/outlook
+2025-07-10 14:44:40,462 INFO → Origin header: http://localhost:5174
+2025-07-10 14:44:40,462 INFO → GET /health/local
+2025-07-10 14:44:40,463 INFO → Origin header: http://localhost:5174
+2025-07-10 14:44:40,464 INFO Health check: local OK
+2025-07-10 14:44:40,464 INFO ← GET /health/local completed in 1.33ms with status 200
+2025-07-10 14:44:40,466 INFO → GET /emails
+2025-07-10 14:44:40,466 INFO → Origin header: http://localhost:5174
+2025-07-10 14:44:40,471 INFO Health check: outlook OK
+2025-07-10 14:44:40,472 INFO ← GET /health/outlook completed in 10.16ms with status 200
+2025-07-10 14:44:48,354 INFO Fetched 29 emails.
+2025-07-10 14:44:48,354 INFO Returning 1 filtered emails
+2025-07-10 14:44:48,355 INFO ← GET /emails completed in 7888.45ms with status 200
+2025-07-10 14:45:36,190 INFO → GET /health/outlook
+2025-07-10 14:45:36,190 INFO → Origin header: http://localhost:5173
+2025-07-10 14:45:36,201 INFO Health check: outlook OK
+2025-07-10 14:45:36,203 INFO ← GET /health/outlook completed in 12.59ms with status 200
+2025-07-10 14:45:36,205 INFO → GET /health/local
+2025-07-10 14:45:36,205 INFO → Origin header: http://localhost:5173
+2025-07-10 14:45:36,206 INFO Health check: local OK
+2025-07-10 14:45:36,207 INFO ← GET /health/local completed in 0.89ms with status 200
+2025-07-10 14:45:36,208 INFO → GET /emails
+2025-07-10 14:45:36,208 INFO → Origin header: http://localhost:5173
+2025-07-10 14:45:40,147 INFO → GET /health/outlook
+2025-07-10 14:45:40,147 INFO → Origin header: http://localhost:5174
+2025-07-10 14:45:40,148 INFO → GET /health/local
+2025-07-10 14:45:40,148 INFO → Origin header: http://localhost:5174
+2025-07-10 14:45:40,149 INFO Health check: local OK
+2025-07-10 14:45:40,150 INFO ← GET /health/local completed in 1.74ms with status 200
+2025-07-10 14:45:40,516 INFO Health check: outlook OK
+2025-07-10 14:45:40,518 INFO ← GET /health/outlook completed in 369.97ms with status 200
+2025-07-10 14:45:43,964 INFO Fetched 28 emails.
+2025-07-10 14:45:43,964 INFO Returning 1 filtered emails
+2025-07-10 14:45:43,965 INFO ← GET /emails completed in 7756.22ms with status 200
+2025-07-10 14:46:06,376 INFO Fetched 28 emails.
+2025-07-10 14:46:36,186 INFO → GET /health/outlook
+2025-07-10 14:46:36,186 INFO → Origin header: http://localhost:5173
+2025-07-10 14:46:36,187 INFO → GET /health/local
+2025-07-10 14:46:36,188 INFO → Origin header: http://localhost:5173
+2025-07-10 14:46:36,189 INFO Health check: local OK
+2025-07-10 14:46:36,190 INFO ← GET /health/local completed in 1.89ms with status 200
+2025-07-10 14:46:36,197 INFO Health check: outlook OK
+2025-07-10 14:46:36,199 INFO ← GET /health/outlook completed in 12.58ms with status 200
+2025-07-10 14:47:36,493 INFO → GET /health/outlook
+2025-07-10 14:47:36,493 INFO → Origin header: http://localhost:5173
+2025-07-10 14:47:36,495 INFO → GET /health/local
+2025-07-10 14:47:36,495 INFO → Origin header: http://localhost:5173
+2025-07-10 14:47:36,498 INFO Health check: local OK
+2025-07-10 14:47:36,499 INFO ← GET /health/local completed in 3.52ms with status 200
+2025-07-10 14:47:36,511 INFO Health check: outlook OK
+2025-07-10 14:47:36,512 INFO ← GET /health/outlook completed in 18.00ms with status 200
+2025-07-10 14:48:36,185 INFO → GET /health/outlook
+2025-07-10 14:48:36,186 INFO → Origin header: http://localhost:5173
+2025-07-10 14:48:36,198 INFO Health check: outlook OK
+2025-07-10 14:48:36,199 INFO ← GET /health/outlook completed in 13.11ms with status 200
+2025-07-10 14:48:36,201 INFO → GET /health/local
+2025-07-10 14:48:36,201 INFO → Origin header: http://localhost:5173
+2025-07-10 14:48:36,202 INFO Health check: local OK
+2025-07-10 14:48:36,202 INFO ← GET /health/local completed in 0.68ms with status 200
+2025-07-10 14:49:36,190 INFO → GET /health/outlook
+2025-07-10 14:49:36,191 INFO → Origin header: http://localhost:5173
+2025-07-10 14:49:36,202 INFO Health check: outlook OK
+2025-07-10 14:49:36,204 INFO ← GET /health/outlook completed in 12.94ms with status 200
+2025-07-10 14:49:36,206 INFO → GET /health/local
+2025-07-10 14:49:36,206 INFO → Origin header: http://localhost:5173
+2025-07-10 14:49:36,207 INFO Health check: local OK
+2025-07-10 14:49:36,207 INFO ← GET /health/local completed in 0.65ms with status 200
+2025-07-10 14:50:36,182 INFO → GET /health/outlook
+2025-07-10 14:50:36,182 INFO → Origin header: http://localhost:5173
+2025-07-10 14:50:36,190 INFO Health check: outlook OK
+2025-07-10 14:50:36,191 INFO ← GET /health/outlook completed in 8.71ms with status 200
+2025-07-10 14:50:36,193 INFO → GET /health/local
+2025-07-10 14:50:36,193 INFO → Origin header: http://localhost:5173
+2025-07-10 14:50:36,194 INFO Health check: local OK
+2025-07-10 14:50:36,194 INFO ← GET /health/local completed in 0.66ms with status 200
+2025-07-10 14:50:36,195 INFO → GET /emails
+2025-07-10 14:50:36,196 INFO → Origin header: http://localhost:5173
+2025-07-10 14:50:44,097 INFO Fetched 28 emails.
+2025-07-10 14:50:44,097 INFO Returning 1 filtered emails
+2025-07-10 14:50:44,098 INFO ← GET /emails completed in 7901.89ms with status 200
+2025-07-10 14:51:06,125 INFO Fetched 28 emails.
+2025-07-10 14:51:36,193 INFO → GET /health/outlook
+2025-07-10 14:51:36,193 INFO → Origin header: http://localhost:5173
+2025-07-10 14:51:36,194 INFO → GET /health/local
+2025-07-10 14:51:36,194 INFO → Origin header: http://localhost:5173
+2025-07-10 14:51:36,195 INFO Health check: local OK
+2025-07-10 14:51:36,196 INFO ← GET /health/local completed in 1.49ms with status 200
+2025-07-10 14:51:36,204 INFO Health check: outlook OK
+2025-07-10 14:51:36,206 INFO ← GET /health/outlook completed in 12.30ms with status 200
+2025-07-10 14:52:36,500 INFO → GET /health/outlook
+2025-07-10 14:52:36,501 INFO → Origin header: http://localhost:5173
+2025-07-10 14:52:36,502 INFO → GET /health/local
+2025-07-10 14:52:36,503 INFO → Origin header: http://localhost:5173
+2025-07-10 14:52:36,505 INFO Health check: local OK
+2025-07-10 14:52:36,506 INFO ← GET /health/local completed in 2.42ms with status 200
+2025-07-10 14:52:36,515 INFO Health check: outlook OK
+2025-07-10 14:52:36,517 INFO ← GET /health/outlook completed in 15.96ms with status 200
+2025-07-10 14:53:36,189 INFO → GET /health/outlook
+2025-07-10 14:53:36,189 INFO → Origin header: http://localhost:5173
+2025-07-10 14:53:36,197 INFO Health check: outlook OK
+2025-07-10 14:53:36,199 INFO ← GET /health/outlook completed in 9.59ms with status 200
+2025-07-10 14:53:36,201 INFO → GET /health/local
+2025-07-10 14:53:36,201 INFO → Origin header: http://localhost:5173
+2025-07-10 14:53:36,202 INFO Health check: local OK
+2025-07-10 14:53:36,202 INFO ← GET /health/local completed in 0.99ms with status 200
+2025-07-10 14:54:36,178 INFO → GET /health/outlook
+2025-07-10 14:54:36,178 INFO → Origin header: http://localhost:5173
+2025-07-10 14:54:36,189 INFO Health check: outlook OK
+2025-07-10 14:54:36,191 INFO ← GET /health/outlook completed in 12.87ms with status 200
+2025-07-10 14:54:36,193 INFO → GET /health/local
+2025-07-10 14:54:36,193 INFO → Origin header: http://localhost:5173
+2025-07-10 14:54:36,194 INFO Health check: local OK
+2025-07-10 14:54:36,194 INFO ← GET /health/local completed in 0.74ms with status 200
+2025-07-10 14:55:36,186 INFO → GET /health/outlook
+2025-07-10 14:55:36,186 INFO → Origin header: http://localhost:5173
+2025-07-10 14:55:36,196 INFO Health check: outlook OK
+2025-07-10 14:55:36,198 INFO ← GET /health/outlook completed in 11.25ms with status 200
+2025-07-10 14:55:36,208 INFO → GET /health/local
+2025-07-10 14:55:36,208 INFO → Origin header: http://localhost:5173
+2025-07-10 14:55:36,209 INFO Health check: local OK
+2025-07-10 14:55:36,209 INFO ← GET /health/local completed in 0.83ms with status 200
+2025-07-10 14:55:36,211 INFO → GET /emails
+2025-07-10 14:55:36,211 INFO → Origin header: http://localhost:5173
+2025-07-10 14:55:44,111 INFO Fetched 27 emails.
+2025-07-10 14:55:44,111 INFO Returning 1 filtered emails
+2025-07-10 14:55:44,112 INFO ← GET /emails completed in 7900.18ms with status 200
+2025-07-10 14:56:07,278 INFO Fetched 28 emails.
+2025-07-10 14:56:36,181 INFO → GET /health/outlook
+2025-07-10 14:56:36,181 INFO → Origin header: http://localhost:5173
+2025-07-10 14:56:36,182 INFO → GET /health/local
+2025-07-10 14:56:36,183 INFO → Origin header: http://localhost:5173
+2025-07-10 14:56:36,185 INFO Health check: local OK
+2025-07-10 14:56:36,186 INFO ← GET /health/local completed in 3.03ms with status 200
+2025-07-10 14:56:36,193 INFO Health check: outlook OK
+2025-07-10 14:56:36,196 INFO ← GET /health/outlook completed in 13.89ms with status 200
+2025-07-10 14:57:36,492 INFO → GET /health/outlook
+2025-07-10 14:57:36,493 INFO → Origin header: http://localhost:5173
+2025-07-10 14:57:36,494 INFO → GET /health/local
+2025-07-10 14:57:36,495 INFO → Origin header: http://localhost:5173
+2025-07-10 14:57:36,497 INFO Health check: local OK
+2025-07-10 14:57:36,498 INFO ← GET /health/local completed in 2.88ms with status 200
+2025-07-10 14:57:36,506 INFO Health check: outlook OK
+2025-07-10 14:57:36,508 INFO ← GET /health/outlook completed in 14.29ms with status 200
+2025-07-10 14:58:36,186 INFO → GET /health/outlook
+2025-07-10 14:58:36,187 INFO → Origin header: http://localhost:5173
+2025-07-10 14:58:36,194 INFO Health check: outlook OK
+2025-07-10 14:58:36,196 INFO ← GET /health/outlook completed in 9.32ms with status 200
+2025-07-10 14:58:36,198 INFO → GET /health/local
+2025-07-10 14:58:36,198 INFO → Origin header: http://localhost:5173
+2025-07-10 14:58:36,198 INFO Health check: local OK
+2025-07-10 14:58:36,199 INFO ← GET /health/local completed in 0.83ms with status 200
+2025-07-10 15:01:06,664 INFO Fetched 28 emails.
+2025-07-10 15:06:08,699 INFO Fetched 29 emails.
+2025-07-10 15:11:09,166 INFO Fetched 29 emails.
+2025-07-10 15:16:09,348 INFO Fetched 32 emails.
+2025-07-10 15:21:10,705 INFO Fetched 33 emails.
+2025-07-10 15:26:11,282 INFO Fetched 34 emails.
+2025-07-10 15:31:07,164 INFO Fetched 27 emails.
+2025-07-10 15:36:07,053 INFO Fetched 26 emails.
+2025-07-10 15:41:07,780 INFO Fetched 30 emails.
+2025-07-10 15:46:07,577 INFO Fetched 28 emails.
+2025-07-10 15:51:08,748 INFO Fetched 32 emails.
+2025-07-10 15:56:08,877 INFO Fetched 32 emails.
+2025-07-10 16:01:08,898 INFO Fetched 33 emails.
+2025-07-10 16:06:09,491 INFO Fetched 33 emails.
+2025-07-10 16:11:06,982 INFO Fetched 31 emails.
+2025-07-10 16:16:06,990 INFO Fetched 31 emails.
+2025-07-10 16:21:07,296 INFO Fetched 32 emails.
+2025-07-10 16:26:07,909 INFO Fetched 32 emails.
+2025-07-10 16:31:06,172 INFO Fetched 31 emails.
+2025-07-10 16:36:06,649 INFO Fetched 31 emails.
+2025-07-10 16:41:05,934 INFO Fetched 32 emails.
+2025-07-10 16:46:06,119 INFO Fetched 31 emails.
+2025-07-10 16:51:06,577 INFO Fetched 29 emails.
+2025-07-10 16:56:06,092 INFO Fetched 29 emails.
+2025-07-10 17:01:06,142 INFO Fetched 29 emails.
+2025-07-10 17:06:04,832 INFO Fetched 27 emails.
+2025-07-10 17:11:04,773 INFO Fetched 26 emails.
+2025-07-10 17:16:05,201 INFO Fetched 28 emails.
+2025-07-10 17:21:05,616 INFO Fetched 28 emails.
+2025-07-10 17:26:06,291 INFO Fetched 29 emails.
+2025-07-10 17:31:07,186 INFO Fetched 32 emails.
+2025-07-10 17:36:07,392 INFO Fetched 32 emails.
+2025-07-10 17:41:07,695 INFO Fetched 31 emails.
+2025-07-10 17:46:07,894 INFO Fetched 32 emails.
+2025-07-10 17:51:07,375 INFO Fetched 33 emails.
+2025-07-10 17:56:08,364 INFO Fetched 34 emails.
+2025-07-10 18:01:07,901 INFO Fetched 35 emails.
+2025-07-10 18:06:07,869 INFO Fetched 35 emails.
+2025-07-10 18:11:07,859 INFO Fetched 34 emails.
+2025-07-10 18:16:08,120 INFO Fetched 33 emails.
+2025-07-10 18:21:18,705 INFO Fetched 35 emails.
+2025-07-10 18:24:01,312 INFO → OPTIONS /user-config
+2025-07-10 18:24:01,313 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:24:01,313 INFO → OPTIONS /user-config
+2025-07-10 18:24:01,314 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:24:01,314 INFO → GET /config
+2025-07-10 18:24:01,314 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:24:01,315 INFO → GET /health/local
+2025-07-10 18:24:01,315 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:24:01,315 INFO → GET /health/outlook
+2025-07-10 18:24:01,315 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:24:01,315 INFO ← OPTIONS /user-config completed in 2.41ms with status 200
+2025-07-10 18:24:01,316 INFO ← OPTIONS /user-config completed in 2.73ms with status 200
+2025-07-10 18:24:01,318 INFO Health check: local OK
+2025-07-10 18:24:01,318 INFO → POST /user-config
+2025-07-10 18:24:01,319 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:24:01,319 INFO → POST /user-config
+2025-07-10 18:24:01,319 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:24:01,320 INFO ← GET /health/local completed in 4.77ms with status 200
+2025-07-10 18:24:01,321 INFO ← GET /config completed in 6.40ms with status 200
+2025-07-10 18:24:01,322 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:24:01,322 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:24:01,323 INFO ← POST /user-config completed in 4.44ms with status 200
+2025-07-10 18:24:01,324 INFO ← POST /user-config completed in 4.48ms with status 200
+2025-07-10 18:24:01,329 INFO → GET /emails
+2025-07-10 18:24:01,330 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:24:01,331 INFO Health check: outlook OK
+2025-07-10 18:24:01,333 INFO ← GET /health/outlook completed in 17.43ms with status 200
+2025-07-10 18:24:10,795 INFO Fetched 34 emails.
+2025-07-10 18:24:10,795 INFO Returning 13 filtered emails
+2025-07-10 18:24:10,796 INFO ← GET /emails completed in 9466.05ms with status 200
+2025-07-10 18:25:00,959 INFO → GET /health/outlook
+2025-07-10 18:25:00,959 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:25:00,967 INFO Health check: outlook OK
+2025-07-10 18:25:00,969 INFO ← GET /health/outlook completed in 9.76ms with status 200
+2025-07-10 18:25:00,971 INFO → GET /health/local
+2025-07-10 18:25:00,971 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:25:00,972 INFO Health check: local OK
+2025-07-10 18:25:00,972 INFO ← GET /health/local completed in 0.60ms with status 200
+2025-07-10 18:26:02,618 INFO → OPTIONS /user-config
+2025-07-10 18:26:02,618 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:26:02,619 INFO ← OPTIONS /user-config completed in 0.37ms with status 200
+2025-07-10 18:26:02,620 INFO → OPTIONS /user-config
+2025-07-10 18:26:02,620 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:26:02,621 INFO ← OPTIONS /user-config completed in 0.70ms with status 200
+2025-07-10 18:26:02,622 INFO → GET /health/outlook
+2025-07-10 18:26:02,622 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:26:02,622 INFO → GET /config
+2025-07-10 18:26:02,623 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:26:02,624 INFO → GET /health/local
+2025-07-10 18:26:02,624 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:26:02,624 INFO → OPTIONS /user-config
+2025-07-10 18:26:02,624 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:26:02,625 INFO → OPTIONS /user-config
+2025-07-10 18:26:02,625 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:26:02,626 INFO ← OPTIONS /user-config completed in 1.58ms with status 200
+2025-07-10 18:26:02,626 INFO Health check: local OK
+2025-07-10 18:26:02,627 INFO ← OPTIONS /user-config completed in 1.57ms with status 200
+2025-07-10 18:26:02,628 INFO ← GET /health/local completed in 3.45ms with status 200
+2025-07-10 18:26:02,628 INFO → POST /user-config
+2025-07-10 18:26:02,629 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:26:02,629 INFO → POST /user-config
+2025-07-10 18:26:02,629 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:26:02,630 INFO ← GET /config completed in 6.82ms with status 200
+2025-07-10 18:26:02,631 INFO → POST /user-config
+2025-07-10 18:26:02,631 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:26:02,633 INFO → POST /user-config
+2025-07-10 18:26:02,633 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:26:02,633 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:26:02,634 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:26:02,635 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:26:02,636 INFO ← POST /user-config completed in 7.15ms with status 200
+2025-07-10 18:26:02,636 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:26:02,637 INFO ← POST /user-config completed in 7.82ms with status 200
+2025-07-10 18:26:02,638 INFO ← POST /user-config completed in 6.85ms with status 200
+2025-07-10 18:26:02,639 INFO ← POST /user-config completed in 6.19ms with status 200
+2025-07-10 18:26:02,644 INFO → GET /emails
+2025-07-10 18:26:02,644 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:26:02,815 INFO → POST /user-config
+2025-07-10 18:26:02,816 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:26:02,820 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:26:02,821 INFO → POST /user-config
+2025-07-10 18:26:02,823 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:26:02,825 INFO ← POST /user-config completed in 7.42ms with status 200
+2025-07-10 18:26:02,825 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:26:02,828 INFO ← POST /user-config completed in 4.36ms with status 200
+2025-07-10 18:26:03,207 INFO Health check: outlook OK
+2025-07-10 18:26:03,209 INFO ← GET /health/outlook completed in 586.65ms with status 200
+2025-07-10 18:26:11,632 INFO Fetched 34 emails.
+2025-07-10 18:26:16,519 INFO Fetched 34 emails.
+2025-07-10 18:26:16,520 INFO Returning 13 filtered emails
+2025-07-10 18:26:16,521 INFO ← GET /emails completed in 13876.49ms with status 200
+2025-07-10 18:27:02,330 INFO → GET /health/outlook
+2025-07-10 18:27:02,331 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:27:02,340 INFO Health check: outlook OK
+2025-07-10 18:27:02,342 INFO ← GET /health/outlook completed in 11.04ms with status 200
+2025-07-10 18:27:02,344 INFO → GET /health/local
+2025-07-10 18:27:02,344 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:27:02,345 INFO Health check: local OK
+2025-07-10 18:27:02,345 INFO ← GET /health/local completed in 0.83ms with status 200
+2025-07-10 18:28:02,640 INFO → GET /health/outlook
+2025-07-10 18:28:02,641 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:28:02,642 INFO → GET /health/local
+2025-07-10 18:28:02,642 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:28:02,644 INFO Health check: local OK
+2025-07-10 18:28:02,645 INFO ← GET /health/local completed in 2.37ms with status 200
+2025-07-10 18:28:02,655 INFO Health check: outlook OK
+2025-07-10 18:28:02,656 INFO ← GET /health/outlook completed in 15.17ms with status 200
+2025-07-10 18:29:03,500 INFO → GET /health/outlook
+2025-07-10 18:29:03,501 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:03,502 INFO → GET /health/local
+2025-07-10 18:29:03,502 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:03,505 INFO Health check: local OK
+2025-07-10 18:29:03,506 INFO ← GET /health/local completed in 3.31ms with status 200
+2025-07-10 18:29:03,514 INFO Health check: outlook OK
+2025-07-10 18:29:03,516 INFO ← GET /health/outlook completed in 14.79ms with status 200
+2025-07-10 18:29:10,143 INFO → POST /user-config
+2025-07-10 18:29:10,143 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:10,145 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:29:10,146 INFO ← POST /user-config completed in 1.91ms with status 200
+2025-07-10 18:29:10,155 INFO → POST /user-config
+2025-07-10 18:29:10,155 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:10,156 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:29:10,157 INFO ← POST /user-config completed in 1.35ms with status 200
+2025-07-10 18:29:27,163 INFO → OPTIONS /user-config
+2025-07-10 18:29:27,163 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,163 INFO → OPTIONS /user-config
+2025-07-10 18:29:27,163 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,164 INFO → GET /health/local
+2025-07-10 18:29:27,164 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,164 INFO → GET /config
+2025-07-10 18:29:27,165 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,165 INFO → GET /health/outlook
+2025-07-10 18:29:27,165 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,165 INFO ← OPTIONS /user-config completed in 2.40ms with status 200
+2025-07-10 18:29:27,166 INFO ← OPTIONS /user-config completed in 2.64ms with status 200
+2025-07-10 18:29:27,167 INFO Health check: local OK
+2025-07-10 18:29:27,172 INFO → OPTIONS /user-config
+2025-07-10 18:29:27,172 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,173 INFO → OPTIONS /user-config
+2025-07-10 18:29:27,173 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,173 INFO ← GET /health/local completed in 8.96ms with status 200
+2025-07-10 18:29:27,174 INFO ← OPTIONS /user-config completed in 1.58ms with status 200
+2025-07-10 18:29:27,174 INFO ← OPTIONS /user-config completed in 1.33ms with status 200
+2025-07-10 18:29:27,176 INFO ← GET /config completed in 10.70ms with status 200
+2025-07-10 18:29:27,177 INFO → OPTIONS /user-config
+2025-07-10 18:29:27,178 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,179 INFO → OPTIONS /user-config
+2025-07-10 18:29:27,179 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,180 INFO → POST /user-config
+2025-07-10 18:29:27,180 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,181 INFO → POST /user-config
+2025-07-10 18:29:27,181 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,182 INFO ← OPTIONS /user-config completed in 2.69ms with status 200
+2025-07-10 18:29:27,182 INFO ← OPTIONS /user-config completed in 2.35ms with status 200
+2025-07-10 18:29:27,184 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:29:27,184 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:29:27,184 INFO → POST /user-config
+2025-07-10 18:29:27,185 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,185 INFO Health check: outlook OK
+2025-07-10 18:29:27,186 INFO → POST /user-config
+2025-07-10 18:29:27,186 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,187 INFO ← POST /user-config completed in 5.52ms with status 200
+2025-07-10 18:29:27,188 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:29:27,189 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:29:27,189 INFO ← GET /health/outlook completed in 23.40ms with status 200
+2025-07-10 18:29:27,190 INFO ← POST /user-config completed in 9.36ms with status 200
+2025-07-10 18:29:27,190 INFO → POST /user-config
+2025-07-10 18:29:27,191 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,192 INFO → POST /user-config
+2025-07-10 18:29:27,192 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,193 INFO ← POST /user-config completed in 8.15ms with status 200
+2025-07-10 18:29:27,193 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:29:27,194 INFO ← POST /user-config completed in 7.80ms with status 200
+2025-07-10 18:29:27,195 INFO → GET /emails
+2025-07-10 18:29:27,195 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:29:27,196 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:29:27,196 INFO ← POST /user-config completed in 5.47ms with status 200
+2025-07-10 18:29:27,197 INFO ← POST /user-config completed in 5.48ms with status 200
+2025-07-10 18:29:36,673 INFO Fetched 34 emails.
+2025-07-10 18:29:36,674 INFO Returning 13 filtered emails
+2025-07-10 18:29:36,675 INFO ← GET /emails completed in 9479.67ms with status 200
+2025-07-10 18:30:27,165 INFO → GET /health/outlook
+2025-07-10 18:30:27,166 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:30:27,167 INFO → GET /health/local
+2025-07-10 18:30:27,167 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:30:27,169 INFO Health check: local OK
+2025-07-10 18:30:27,170 INFO ← GET /health/local completed in 1.86ms with status 200
+2025-07-10 18:30:27,178 INFO Health check: outlook OK
+2025-07-10 18:30:27,180 INFO ← GET /health/outlook completed in 13.75ms with status 200
+2025-07-10 18:31:07,760 INFO Fetched 34 emails.
+2025-07-10 18:31:26,854 INFO → GET /health/outlook
+2025-07-10 18:31:26,854 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:31:26,862 INFO Health check: outlook OK
+2025-07-10 18:31:26,864 INFO ← GET /health/outlook completed in 9.17ms with status 200
+2025-07-10 18:31:26,866 INFO → GET /health/local
+2025-07-10 18:31:26,866 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:31:26,866 INFO Health check: local OK
+2025-07-10 18:31:26,867 INFO ← GET /health/local completed in 0.89ms with status 200
+2025-07-10 18:32:12,756 INFO → POST /user-config
+2025-07-10 18:32:12,757 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:32:12,758 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:32:12,759 INFO ← POST /user-config completed in 1.66ms with status 200
+2025-07-10 18:32:12,770 INFO → POST /user-config
+2025-07-10 18:32:12,771 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:32:12,772 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:32:12,773 INFO ← POST /user-config completed in 2.21ms with status 200
+2025-07-10 18:32:27,169 INFO → GET /health/outlook
+2025-07-10 18:32:27,169 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:32:27,170 INFO → GET /health/local
+2025-07-10 18:32:27,171 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:32:27,173 INFO Health check: local OK
+2025-07-10 18:32:27,174 INFO ← GET /health/local completed in 2.96ms with status 200
+2025-07-10 18:32:27,183 INFO Health check: outlook OK
+2025-07-10 18:32:27,186 INFO ← GET /health/outlook completed in 15.75ms with status 200
+2025-07-10 18:34:16,216 INFO → OPTIONS /user-config
+2025-07-10 18:34:16,216 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:16,217 INFO ← OPTIONS /user-config completed in 0.28ms with status 200
+2025-07-10 18:34:16,219 INFO → OPTIONS /user-config
+2025-07-10 18:34:16,219 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:16,219 INFO ← OPTIONS /user-config completed in 0.23ms with status 200
+2025-07-10 18:34:16,221 INFO → GET /config
+2025-07-10 18:34:16,221 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:16,222 INFO ← GET /config completed in 1.31ms with status 200
+2025-07-10 18:34:16,224 INFO → GET /health/outlook
+2025-07-10 18:34:16,224 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:16,231 INFO Health check: outlook OK
+2025-07-10 18:34:16,232 INFO ← GET /health/outlook completed in 7.92ms with status 200
+2025-07-10 18:34:16,234 INFO → GET /health/local
+2025-07-10 18:34:16,235 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:16,235 INFO → OPTIONS /user-config
+2025-07-10 18:34:16,235 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:16,236 INFO → OPTIONS /user-config
+2025-07-10 18:34:16,236 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:16,236 INFO → POST /user-config
+2025-07-10 18:34:16,236 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:16,237 INFO → POST /user-config
+2025-07-10 18:34:16,237 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:16,237 INFO Health check: local OK
+2025-07-10 18:34:16,237 INFO ← OPTIONS /user-config completed in 2.00ms with status 200
+2025-07-10 18:34:16,238 INFO ← OPTIONS /user-config completed in 2.04ms with status 200
+2025-07-10 18:34:16,239 INFO ← GET /health/local completed in 4.56ms with status 200
+2025-07-10 18:34:16,240 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:34:16,241 INFO → POST /user-config
+2025-07-10 18:34:16,241 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:34:16,241 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:16,242 INFO → POST /user-config
+2025-07-10 18:34:16,242 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:16,243 INFO → POST /user-config
+2025-07-10 18:34:16,243 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:16,245 INFO ← POST /user-config completed in 8.23ms with status 200
+2025-07-10 18:34:16,245 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:34:16,245 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:34:16,246 INFO ← POST /user-config completed in 8.65ms with status 200
+2025-07-10 18:34:16,247 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:34:16,248 INFO → POST /user-config
+2025-07-10 18:34:16,248 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:16,249 INFO ← POST /user-config completed in 6.97ms with status 200
+2025-07-10 18:34:16,251 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:34:16,251 INFO ← POST /user-config completed in 9.53ms with status 200
+2025-07-10 18:34:16,252 INFO ← POST /user-config completed in 8.71ms with status 200
+2025-07-10 18:34:16,253 INFO ← POST /user-config completed in 4.77ms with status 200
+2025-07-10 18:34:16,256 INFO → GET /emails
+2025-07-10 18:34:16,256 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:25,670 INFO Fetched 33 emails.
+2025-07-10 18:34:25,671 INFO Returning 12 filtered emails
+2025-07-10 18:34:25,671 INFO ← GET /emails completed in 9415.11ms with status 200
+2025-07-10 18:34:39,187 INFO → OPTIONS /user-config
+2025-07-10 18:34:39,189 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,191 INFO ← OPTIONS /user-config completed in 0.32ms with status 200
+2025-07-10 18:34:39,193 INFO → OPTIONS /user-config
+2025-07-10 18:34:39,194 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,194 INFO ← OPTIONS /user-config completed in 0.19ms with status 200
+2025-07-10 18:34:39,195 INFO → GET /config
+2025-07-10 18:34:39,195 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,196 INFO ← GET /config completed in 1.01ms with status 200
+2025-07-10 18:34:39,199 INFO → GET /health/outlook
+2025-07-10 18:34:39,201 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,214 INFO → GET /health/local
+2025-07-10 18:34:39,214 INFO Health check: outlook OK
+2025-07-10 18:34:39,215 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,217 INFO → OPTIONS /user-config
+2025-07-10 18:34:39,217 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,218 INFO ← OPTIONS /user-config completed in 0.88ms with status 200
+2025-07-10 18:34:39,218 INFO Health check: local OK
+2025-07-10 18:34:39,219 INFO → OPTIONS /user-config
+2025-07-10 18:34:39,219 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,220 INFO → OPTIONS /user-config
+2025-07-10 18:34:39,220 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,220 INFO ← GET /health/outlook completed in 17.68ms with status 200
+2025-07-10 18:34:39,221 INFO ← OPTIONS /user-config completed in 1.40ms with status 200
+2025-07-10 18:34:39,222 INFO ← OPTIONS /user-config completed in 1.49ms with status 200
+2025-07-10 18:34:39,224 INFO ← GET /health/local completed in 7.80ms with status 200
+2025-07-10 18:34:39,224 INFO → OPTIONS /user-config
+2025-07-10 18:34:39,226 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,226 INFO → POST /user-config
+2025-07-10 18:34:39,227 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,228 INFO → POST /user-config
+2025-07-10 18:34:39,228 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,229 INFO → POST /user-config
+2025-07-10 18:34:39,229 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,229 INFO ← OPTIONS /user-config completed in 3.31ms with status 200
+2025-07-10 18:34:39,230 INFO → POST /user-config
+2025-07-10 18:34:39,230 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,232 INFO → POST /user-config
+2025-07-10 18:34:39,232 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:34:39,232 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,233 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:34:39,234 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:34:39,234 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:34:39,240 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:34:39,241 INFO ← POST /user-config completed in 13.13ms with status 200
+2025-07-10 18:34:39,242 INFO ← POST /user-config completed in 13.49ms with status 200
+2025-07-10 18:34:39,244 INFO ← POST /user-config completed in 15.24ms with status 200
+2025-07-10 18:34:39,246 INFO ← POST /user-config completed in 15.28ms with status 200
+2025-07-10 18:34:39,249 INFO → POST /user-config
+2025-07-10 18:34:39,249 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,252 INFO ← POST /user-config completed in 18.84ms with status 200
+2025-07-10 18:34:39,255 INFO → GET /emails
+2025-07-10 18:34:39,257 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:34:39,261 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:34:39,263 INFO ← POST /user-config completed in 12.02ms with status 200
+2025-07-10 18:34:48,430 INFO Fetched 33 emails.
+2025-07-10 18:34:48,431 INFO Returning 12 filtered emails
+2025-07-10 18:34:48,431 INFO ← GET /emails completed in 9172.25ms with status 200
+2025-07-10 18:35:39,210 INFO → GET /health/outlook
+2025-07-10 18:35:39,210 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:35:39,211 INFO → GET /health/local
+2025-07-10 18:35:39,211 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:35:39,212 INFO Health check: local OK
+2025-07-10 18:35:39,213 INFO ← GET /health/local completed in 1.42ms with status 200
+2025-07-10 18:35:39,219 INFO Health check: outlook OK
+2025-07-10 18:35:39,221 INFO ← GET /health/outlook completed in 10.32ms with status 200
+2025-07-10 18:36:07,829 INFO Fetched 33 emails.
+2025-07-10 18:36:10,755 INFO → OPTIONS /user-config
+2025-07-10 18:36:10,755 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,756 INFO → OPTIONS /user-config
+2025-07-10 18:36:10,756 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,756 INFO → GET /config
+2025-07-10 18:36:10,757 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,757 INFO → GET /health/outlook
+2025-07-10 18:36:10,757 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,757 INFO → GET /health/local
+2025-07-10 18:36:10,758 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,758 INFO ← OPTIONS /user-config completed in 2.61ms with status 200
+2025-07-10 18:36:10,759 INFO ← OPTIONS /user-config completed in 2.96ms with status 200
+2025-07-10 18:36:10,760 INFO Health check: local OK
+2025-07-10 18:36:10,761 INFO → OPTIONS /user-config
+2025-07-10 18:36:10,761 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,762 INFO → OPTIONS /user-config
+2025-07-10 18:36:10,762 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,762 INFO ← OPTIONS /user-config completed in 1.23ms with status 200
+2025-07-10 18:36:10,763 INFO ← GET /health/local completed in 4.99ms with status 200
+2025-07-10 18:36:10,763 INFO ← OPTIONS /user-config completed in 1.31ms with status 200
+2025-07-10 18:36:10,764 INFO ← GET /config completed in 7.63ms with status 200
+2025-07-10 18:36:10,765 INFO → OPTIONS /user-config
+2025-07-10 18:36:10,765 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,766 INFO → OPTIONS /user-config
+2025-07-10 18:36:10,766 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,766 INFO → POST /user-config
+2025-07-10 18:36:10,767 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,767 INFO ← OPTIONS /user-config completed in 1.53ms with status 200
+2025-07-10 18:36:10,768 INFO → POST /user-config
+2025-07-10 18:36:10,768 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,768 INFO ← OPTIONS /user-config completed in 2.08ms with status 200
+2025-07-10 18:36:10,770 INFO → POST /user-config
+2025-07-10 18:36:10,770 INFO Health check: outlook OK
+2025-07-10 18:36:10,771 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,772 INFO → POST /user-config
+2025-07-10 18:36:10,773 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,774 INFO ← GET /health/outlook completed in 16.32ms with status 200
+2025-07-10 18:36:10,774 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:36:10,774 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:36:10,775 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:36:10,775 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:36:10,776 INFO → POST /user-config
+2025-07-10 18:36:10,776 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,777 INFO ← POST /user-config completed in 9.23ms with status 200
+2025-07-10 18:36:10,778 INFO ← POST /user-config completed in 11.41ms with status 200
+2025-07-10 18:36:10,779 INFO ← POST /user-config completed in 8.04ms with status 200
+2025-07-10 18:36:10,780 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:36:10,780 INFO ← POST /user-config completed in 7.13ms with status 200
+2025-07-10 18:36:10,781 INFO → POST /user-config
+2025-07-10 18:36:10,781 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:10,782 INFO ← POST /user-config completed in 5.54ms with status 200
+2025-07-10 18:36:10,783 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:36:10,784 INFO ← POST /user-config completed in 2.31ms with status 200
+2025-07-10 18:36:10,784 INFO → GET /emails
+2025-07-10 18:36:10,785 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:36:20,029 INFO Fetched 33 emails.
+2025-07-10 18:36:20,029 INFO Returning 12 filtered emails
+2025-07-10 18:36:20,030 INFO ← GET /emails completed in 9245.21ms with status 200
+2025-07-10 18:37:10,756 INFO → GET /health/outlook
+2025-07-10 18:37:10,757 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:37:10,758 INFO → GET /health/local
+2025-07-10 18:37:10,759 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:37:10,761 INFO Health check: local OK
+2025-07-10 18:37:10,762 INFO ← GET /health/local completed in 3.25ms with status 200
+2025-07-10 18:37:10,772 INFO Health check: outlook OK
+2025-07-10 18:37:10,774 INFO ← GET /health/outlook completed in 16.56ms with status 200
+2025-07-10 18:37:15,537 INFO → POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E2088A0000
+2025-07-10 18:37:15,538 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:37:16,236 INFO Opened email 00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E2088A0000 in Outlook
+2025-07-10 18:37:16,364 INFO ← POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E2088A0000 completed in 826.08ms with status 200
+2025-07-10 18:37:23,348 INFO → POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208850000
+2025-07-10 18:37:23,349 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:37:24,168 INFO Opened email 00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208850000 in Outlook
+2025-07-10 18:37:24,339 INFO ← POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208850000 completed in 990.27ms with status 200
+2025-07-10 18:37:40,376 INFO → POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208650000
+2025-07-10 18:37:40,377 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:37:41,020 INFO Opened email 00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208650000 in Outlook
+2025-07-10 18:37:41,140 INFO ← POST /open/00000000529F4CA1CFE28042BE76954AE4446A290700C902281C156D3449865E2565F65BD3B000000000010C0000C902281C156D3449865E2565F65BD3B00002D8E208650000 completed in 762.87ms with status 200
+2025-07-10 18:38:10,450 INFO → GET /health/outlook
+2025-07-10 18:38:10,451 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:38:10,465 INFO Health check: outlook OK
+2025-07-10 18:38:10,467 INFO ← GET /health/outlook completed in 15.06ms with status 200
+2025-07-10 18:38:10,469 INFO → GET /health/local
+2025-07-10 18:38:10,469 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:38:10,469 INFO Health check: local OK
+2025-07-10 18:38:10,470 INFO ← GET /health/local completed in 0.81ms with status 200
+2025-07-10 18:39:10,456 INFO → GET /health/outlook
+2025-07-10 18:39:10,457 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:39:10,471 INFO Health check: outlook OK
+2025-07-10 18:39:10,473 INFO ← GET /health/outlook completed in 15.27ms with status 200
+2025-07-10 18:39:10,475 INFO → GET /health/local
+2025-07-10 18:39:10,475 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:39:10,476 INFO Health check: local OK
+2025-07-10 18:39:10,476 INFO ← GET /health/local completed in 0.69ms with status 200
+2025-07-10 18:40:10,455 INFO → GET /health/outlook
+2025-07-10 18:40:10,455 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:40:10,469 INFO Health check: outlook OK
+2025-07-10 18:40:10,470 INFO ← GET /health/outlook completed in 14.90ms with status 200
+2025-07-10 18:40:10,472 INFO → GET /health/local
+2025-07-10 18:40:10,473 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:40:10,473 INFO Health check: local OK
+2025-07-10 18:40:10,474 INFO ← GET /health/local completed in 0.72ms with status 200
+2025-07-10 18:41:06,995 INFO Fetched 20 emails.
+2025-07-10 18:41:10,448 INFO → GET /health/outlook
+2025-07-10 18:41:10,449 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:41:10,462 INFO Health check: outlook OK
+2025-07-10 18:41:10,463 INFO ← GET /health/outlook completed in 13.69ms with status 200
+2025-07-10 18:41:10,465 INFO → GET /health/local
+2025-07-10 18:41:10,465 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:41:10,466 INFO Health check: local OK
+2025-07-10 18:41:10,466 INFO ← GET /health/local completed in 0.67ms with status 200
+2025-07-10 18:41:10,787 INFO → GET /emails
+2025-07-10 18:41:10,788 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:41:18,389 INFO Fetched 18 emails.
+2025-07-10 18:41:18,390 INFO Returning 7 filtered emails
+2025-07-10 18:41:18,391 INFO ← GET /emails completed in 7602.02ms with status 200
+2025-07-10 18:42:10,449 INFO → GET /health/outlook
+2025-07-10 18:42:10,449 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:42:10,468 INFO Health check: outlook OK
+2025-07-10 18:42:10,470 INFO ← GET /health/outlook completed in 20.54ms with status 200
+2025-07-10 18:42:10,472 INFO → GET /health/local
+2025-07-10 18:42:10,472 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:42:10,473 INFO Health check: local OK
+2025-07-10 18:42:10,473 INFO ← GET /health/local completed in 0.77ms with status 200
+2025-07-10 18:43:10,461 INFO → GET /health/outlook
+2025-07-10 18:43:10,462 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:43:10,474 INFO Health check: outlook OK
+2025-07-10 18:43:10,476 INFO ← GET /health/outlook completed in 13.60ms with status 200
+2025-07-10 18:43:10,478 INFO → GET /health/local
+2025-07-10 18:43:10,478 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:43:10,478 INFO Health check: local OK
+2025-07-10 18:43:10,479 INFO ← GET /health/local completed in 0.59ms with status 200
+2025-07-10 18:44:10,462 INFO → GET /health/outlook
+2025-07-10 18:44:10,462 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:44:10,480 INFO Health check: outlook OK
+2025-07-10 18:44:10,481 INFO ← GET /health/outlook completed in 18.23ms with status 200
+2025-07-10 18:44:10,483 INFO → GET /health/local
+2025-07-10 18:44:10,483 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:44:10,484 INFO Health check: local OK
+2025-07-10 18:44:10,484 INFO ← GET /health/local completed in 0.83ms with status 200
+2025-07-10 18:45:10,453 INFO → GET /health/outlook
+2025-07-10 18:45:10,454 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:45:10,468 INFO Health check: outlook OK
+2025-07-10 18:45:10,469 INFO ← GET /health/outlook completed in 15.24ms with status 200
+2025-07-10 18:45:10,471 INFO → GET /health/local
+2025-07-10 18:45:10,472 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:45:10,472 INFO Health check: local OK
+2025-07-10 18:45:10,473 INFO ← GET /health/local completed in 0.80ms with status 200
+2025-07-10 18:46:08,118 INFO Fetched 17 emails.
+2025-07-10 18:46:10,460 INFO → GET /health/outlook
+2025-07-10 18:46:10,460 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:46:10,467 INFO Health check: outlook OK
+2025-07-10 18:46:10,470 INFO ← GET /health/outlook completed in 9.69ms with status 200
+2025-07-10 18:46:10,472 INFO → GET /health/local
+2025-07-10 18:46:10,473 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:46:10,473 INFO Health check: local OK
+2025-07-10 18:46:10,474 INFO ← GET /health/local completed in 1.20ms with status 200
+2025-07-10 18:46:10,799 INFO → GET /emails
+2025-07-10 18:46:10,799 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:46:19,686 INFO Fetched 17 emails.
+2025-07-10 18:46:19,687 INFO Returning 7 filtered emails
+2025-07-10 18:46:19,688 INFO ← GET /emails completed in 8888.62ms with status 200
+2025-07-10 18:47:10,452 INFO → GET /health/outlook
+2025-07-10 18:47:10,452 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:47:10,463 INFO Health check: outlook OK
+2025-07-10 18:47:10,464 INFO ← GET /health/outlook completed in 12.10ms with status 200
+2025-07-10 18:47:10,466 INFO → GET /health/local
+2025-07-10 18:47:10,466 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:47:10,466 INFO Health check: local OK
+2025-07-10 18:47:10,467 INFO ← GET /health/local completed in 0.80ms with status 200
+2025-07-10 18:48:10,446 INFO → GET /health/outlook
+2025-07-10 18:48:10,446 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:48:10,456 INFO Health check: outlook OK
+2025-07-10 18:48:10,458 INFO ← GET /health/outlook completed in 11.50ms with status 200
+2025-07-10 18:48:10,460 INFO → GET /health/local
+2025-07-10 18:48:10,461 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:48:10,461 INFO Health check: local OK
+2025-07-10 18:48:10,462 INFO ← GET /health/local completed in 0.92ms with status 200
+2025-07-10 18:49:10,463 INFO → GET /health/outlook
+2025-07-10 18:49:10,464 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:49:10,479 INFO Health check: outlook OK
+2025-07-10 18:49:10,481 INFO ← GET /health/outlook completed in 16.82ms with status 200
+2025-07-10 18:49:10,483 INFO → GET /health/local
+2025-07-10 18:49:10,483 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:49:10,484 INFO Health check: local OK
+2025-07-10 18:49:10,484 INFO ← GET /health/local completed in 0.78ms with status 200
+2025-07-10 18:50:10,458 INFO → GET /health/outlook
+2025-07-10 18:50:10,459 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:50:10,469 INFO Health check: outlook OK
+2025-07-10 18:50:10,471 INFO ← GET /health/outlook completed in 11.28ms with status 200
+2025-07-10 18:50:10,473 INFO → GET /health/local
+2025-07-10 18:50:10,473 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:50:10,473 INFO Health check: local OK
+2025-07-10 18:50:10,474 INFO ← GET /health/local completed in 0.72ms with status 200
+2025-07-10 18:51:08,754 INFO Fetched 18 emails.
+2025-07-10 18:51:10,463 INFO → GET /health/outlook
+2025-07-10 18:51:10,464 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:51:10,472 INFO Health check: outlook OK
+2025-07-10 18:51:10,473 INFO ← GET /health/outlook completed in 9.48ms with status 200
+2025-07-10 18:51:10,475 INFO → GET /health/local
+2025-07-10 18:51:10,475 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:51:10,476 INFO Health check: local OK
+2025-07-10 18:51:10,476 INFO ← GET /health/local completed in 0.68ms with status 200
+2025-07-10 18:51:10,801 INFO → GET /emails
+2025-07-10 18:51:10,802 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:51:21,067 INFO Fetched 18 emails.
+2025-07-10 18:51:21,067 INFO Returning 9 filtered emails
+2025-07-10 18:51:21,069 INFO ← GET /emails completed in 10267.36ms with status 200
+2025-07-10 18:52:10,456 INFO → GET /health/outlook
+2025-07-10 18:52:10,457 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:52:10,470 INFO Health check: outlook OK
+2025-07-10 18:52:10,471 INFO ← GET /health/outlook completed in 14.23ms with status 200
+2025-07-10 18:52:10,473 INFO → GET /health/local
+2025-07-10 18:52:10,473 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:52:10,474 INFO Health check: local OK
+2025-07-10 18:52:10,474 INFO ← GET /health/local completed in 0.69ms with status 200
+2025-07-10 18:53:10,452 INFO → GET /health/outlook
+2025-07-10 18:53:10,453 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:53:10,466 INFO Health check: outlook OK
+2025-07-10 18:53:10,468 INFO ← GET /health/outlook completed in 14.72ms with status 200
+2025-07-10 18:53:10,470 INFO → GET /health/local
+2025-07-10 18:53:10,470 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:53:10,470 INFO Health check: local OK
+2025-07-10 18:53:10,471 INFO ← GET /health/local completed in 0.78ms with status 200
+2025-07-10 18:54:10,455 INFO → GET /health/outlook
+2025-07-10 18:54:10,455 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:54:10,465 INFO Health check: outlook OK
+2025-07-10 18:54:10,467 INFO ← GET /health/outlook completed in 11.65ms with status 200
+2025-07-10 18:54:10,469 INFO → GET /health/local
+2025-07-10 18:54:10,469 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:54:10,470 INFO Health check: local OK
+2025-07-10 18:54:10,470 INFO ← GET /health/local completed in 0.87ms with status 200
+2025-07-10 18:55:10,464 INFO → GET /health/outlook
+2025-07-10 18:55:10,464 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:10,476 INFO Health check: outlook OK
+2025-07-10 18:55:10,478 INFO ← GET /health/outlook completed in 13.58ms with status 200
+2025-07-10 18:55:10,480 INFO → GET /health/local
+2025-07-10 18:55:10,480 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:10,481 INFO Health check: local OK
+2025-07-10 18:55:10,481 INFO ← GET /health/local completed in 0.85ms with status 200
+2025-07-10 18:55:13,319 INFO → OPTIONS /user-config
+2025-07-10 18:55:13,319 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:13,320 INFO ← OPTIONS /user-config completed in 0.37ms with status 200
+2025-07-10 18:55:13,325 INFO → OPTIONS /user-config
+2025-07-10 18:55:13,325 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:13,326 INFO → GET /health/outlook
+2025-07-10 18:55:13,326 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:13,327 INFO → GET /health/local
+2025-07-10 18:55:13,327 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:13,328 INFO → OPTIONS /user-config
+2025-07-10 18:55:13,328 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:13,328 INFO → GET /config
+2025-07-10 18:55:13,329 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:13,329 INFO ← OPTIONS /user-config completed in 3.59ms with status 200
+2025-07-10 18:55:13,330 INFO ← OPTIONS /user-config completed in 2.11ms with status 200
+2025-07-10 18:55:13,330 INFO Health check: local OK
+2025-07-10 18:55:13,332 INFO → OPTIONS /user-config
+2025-07-10 18:55:13,332 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:13,332 INFO ← GET /health/local completed in 4.92ms with status 200
+2025-07-10 18:55:13,333 INFO → POST /user-config
+2025-07-10 18:55:13,333 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:13,334 INFO ← OPTIONS /user-config completed in 1.77ms with status 200
+2025-07-10 18:55:13,336 INFO → POST /user-config
+2025-07-10 18:55:13,336 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:13,336 INFO ← GET /config completed in 7.57ms with status 200
+2025-07-10 18:55:13,338 INFO → POST /user-config
+2025-07-10 18:55:13,338 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:13,339 INFO → POST /user-config
+2025-07-10 18:55:13,339 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:55:13,339 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:13,341 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:55:13,341 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:55:13,342 INFO ← POST /user-config completed in 7.86ms with status 200
+2025-07-10 18:55:13,342 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:55:13,343 INFO ← POST /user-config completed in 6.94ms with status 200
+2025-07-10 18:55:13,343 INFO Health check: outlook OK
+2025-07-10 18:55:13,344 INFO ← POST /user-config completed in 6.04ms with status 200
+2025-07-10 18:55:13,345 INFO ← POST /user-config completed in 5.27ms with status 200
+2025-07-10 18:55:13,346 INFO ← GET /health/outlook completed in 19.74ms with status 200
+2025-07-10 18:55:13,348 INFO → GET /emails
+2025-07-10 18:55:13,348 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:13,491 INFO → POST /user-config
+2025-07-10 18:55:13,492 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:13,493 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:55:13,494 INFO ← POST /user-config completed in 2.06ms with status 200
+2025-07-10 18:55:13,495 INFO → POST /user-config
+2025-07-10 18:55:13,496 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:55:13,496 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:55:13,497 INFO ← POST /user-config completed in 1.33ms with status 200
+2025-07-10 18:55:23,968 INFO Fetched 20 emails.
+2025-07-10 18:55:23,968 INFO Returning 10 filtered emails
+2025-07-10 18:55:23,969 INFO ← GET /emails completed in 10620.63ms with status 200
+2025-07-10 18:56:08,668 INFO Fetched 20 emails.
+2025-07-10 18:56:13,309 INFO → GET /health/outlook
+2025-07-10 18:56:13,309 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:56:13,310 INFO → GET /health/local
+2025-07-10 18:56:13,311 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:56:13,312 INFO Health check: local OK
+2025-07-10 18:56:13,313 INFO ← GET /health/local completed in 2.13ms with status 200
+2025-07-10 18:56:13,319 INFO Health check: outlook OK
+2025-07-10 18:56:13,320 INFO ← GET /health/outlook completed in 10.77ms with status 200
+2025-07-10 18:57:13,008 INFO → GET /health/outlook
+2025-07-10 18:57:13,009 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:57:13,017 INFO Health check: outlook OK
+2025-07-10 18:57:13,019 INFO ← GET /health/outlook completed in 10.13ms with status 200
+2025-07-10 18:57:13,021 INFO → GET /health/local
+2025-07-10 18:57:13,021 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:57:13,022 INFO Health check: local OK
+2025-07-10 18:57:13,022 INFO ← GET /health/local completed in 0.69ms with status 200
+2025-07-10 18:58:19,152 INFO → OPTIONS /user-config
+2025-07-10 18:58:19,152 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,153 INFO → OPTIONS /user-config
+2025-07-10 18:58:19,153 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,153 INFO → GET /config
+2025-07-10 18:58:19,153 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,154 INFO → GET /health/outlook
+2025-07-10 18:58:19,154 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,154 INFO → GET /health/local
+2025-07-10 18:58:19,155 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,155 INFO ← OPTIONS /user-config completed in 2.52ms with status 200
+2025-07-10 18:58:19,156 INFO ← OPTIONS /user-config completed in 2.74ms with status 200
+2025-07-10 18:58:19,157 INFO Health check: local OK
+2025-07-10 18:58:19,157 INFO → OPTIONS /user-config
+2025-07-10 18:58:19,157 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,158 INFO → OPTIONS /user-config
+2025-07-10 18:58:19,158 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,158 INFO ← OPTIONS /user-config completed in 0.87ms with status 200
+2025-07-10 18:58:19,159 INFO ← GET /health/local completed in 4.06ms with status 200
+2025-07-10 18:58:19,159 INFO ← OPTIONS /user-config completed in 1.10ms with status 200
+2025-07-10 18:58:19,160 INFO ← GET /config completed in 6.74ms with status 200
+2025-07-10 18:58:19,161 INFO → OPTIONS /user-config
+2025-07-10 18:58:19,161 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,162 INFO → POST /user-config
+2025-07-10 18:58:19,162 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,162 INFO → OPTIONS /user-config
+2025-07-10 18:58:19,162 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,163 INFO → POST /user-config
+2025-07-10 18:58:19,163 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,163 INFO ← OPTIONS /user-config completed in 1.86ms with status 200
+2025-07-10 18:58:19,164 INFO ← OPTIONS /user-config completed in 1.76ms with status 200
+2025-07-10 18:58:19,164 INFO Health check: outlook OK
+2025-07-10 18:58:19,165 INFO → POST /user-config
+2025-07-10 18:58:19,165 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,167 INFO → POST /user-config
+2025-07-10 18:58:19,167 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:58:19,167 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,167 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:58:19,168 INFO ← GET /health/outlook completed in 13.88ms with status 200
+2025-07-10 18:58:19,169 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:58:19,170 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:58:19,170 INFO ← POST /user-config completed in 7.81ms with status 200
+2025-07-10 18:58:19,171 INFO → POST /user-config
+2025-07-10 18:58:19,171 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,171 INFO ← POST /user-config completed in 8.37ms with status 200
+2025-07-10 18:58:19,172 INFO → POST /user-config
+2025-07-10 18:58:19,172 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,173 INFO ← POST /user-config completed in 7.40ms with status 200
+2025-07-10 18:58:19,174 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:58:19,174 INFO ← POST /user-config completed in 6.69ms with status 200
+2025-07-10 18:58:19,175 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:58:19,176 INFO ← POST /user-config completed in 4.61ms with status 200
+2025-07-10 18:58:19,177 INFO → GET /emails
+2025-07-10 18:58:19,177 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:19,178 INFO ← POST /user-config completed in 5.10ms with status 200
+2025-07-10 18:58:29,789 INFO Fetched 20 emails.
+2025-07-10 18:58:29,789 INFO Returning 10 filtered emails
+2025-07-10 18:58:29,790 INFO ← GET /emails completed in 10613.03ms with status 200
+2025-07-10 18:58:49,197 INFO → POST /user-config
+2025-07-10 18:58:49,198 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:49,201 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:58:49,202 INFO ← POST /user-config completed in 3.30ms with status 200
+2025-07-10 18:58:49,204 INFO → POST /user-config
+2025-07-10 18:58:49,204 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:58:49,205 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:58:49,205 INFO ← POST /user-config completed in 1.18ms with status 200
+2025-07-10 18:59:04,177 INFO → POST /user-config
+2025-07-10 18:59:04,177 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:59:04,178 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:59:04,179 INFO ← POST /user-config completed in 1.65ms with status 200
+2025-07-10 18:59:04,186 INFO → POST /user-config
+2025-07-10 18:59:04,187 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:59:04,188 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 18:59:04,188 INFO ← POST /user-config completed in 1.46ms with status 200
+2025-07-10 18:59:18,851 INFO → GET /health/outlook
+2025-07-10 18:59:18,852 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:59:18,865 INFO Health check: outlook OK
+2025-07-10 18:59:18,866 INFO ← GET /health/outlook completed in 14.03ms with status 200
+2025-07-10 18:59:18,868 INFO → GET /health/local
+2025-07-10 18:59:18,868 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 18:59:18,869 INFO Health check: local OK
+2025-07-10 18:59:18,869 INFO ← GET /health/local completed in 0.77ms with status 200
+2025-07-10 19:00:18,849 INFO → GET /health/outlook
+2025-07-10 19:00:18,849 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 19:00:18,857 INFO Health check: outlook OK
+2025-07-10 19:00:18,859 INFO ← GET /health/outlook completed in 9.23ms with status 200
+2025-07-10 19:00:18,861 INFO → GET /health/local
+2025-07-10 19:00:18,861 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 19:00:18,861 INFO Health check: local OK
+2025-07-10 19:00:18,862 INFO ← GET /health/local completed in 0.70ms with status 200
+2025-07-10 19:01:08,987 INFO Fetched 20 emails.
+2025-07-10 19:01:18,855 INFO → GET /health/outlook
+2025-07-10 19:01:18,855 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 19:01:18,865 INFO Health check: outlook OK
+2025-07-10 19:01:18,866 INFO ← GET /health/outlook completed in 10.25ms with status 200
+2025-07-10 19:01:18,868 INFO → GET /health/local
+2025-07-10 19:01:18,868 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 19:01:18,869 INFO Health check: local OK
+2025-07-10 19:01:18,870 INFO ← GET /health/local completed in 0.87ms with status 200
+2025-07-10 19:02:33,951 INFO Shutting down backend service
+2025-07-10 20:28:30,424 INFO Scheduler started
+2025-07-10 20:28:30,429 INFO Starting backend service
+2025-07-10 20:28:30,430 INFO Outlook COM cache rebuilt successfully.
+2025-07-10 20:29:01,410 INFO → OPTIONS /user-config
+2025-07-10 20:29:01,410 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,411 INFO → OPTIONS /user-config
+2025-07-10 20:29:01,411 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,412 INFO → OPTIONS /user-config
+2025-07-10 20:29:01,412 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,412 INFO → GET /config
+2025-07-10 20:29:01,412 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,413 INFO → GET /health/outlook
+2025-07-10 20:29:01,413 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,413 INFO → GET /health/local
+2025-07-10 20:29:01,413 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,414 INFO ← OPTIONS /user-config completed in 2.90ms with status 200
+2025-07-10 20:29:01,415 INFO ← OPTIONS /user-config completed in 3.42ms with status 200
+2025-07-10 20:29:01,416 INFO ← OPTIONS /user-config completed in 3.59ms with status 200
+2025-07-10 20:29:01,417 INFO Health check: local OK
+2025-07-10 20:29:01,418 INFO → OPTIONS /user-config
+2025-07-10 20:29:01,418 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,419 INFO → OPTIONS /user-config
+2025-07-10 20:29:01,419 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,419 INFO → OPTIONS /user-config
+2025-07-10 20:29:01,419 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,420 INFO ← OPTIONS /user-config completed in 1.55ms with status 200
+2025-07-10 20:29:01,420 INFO ← GET /health/local completed in 6.74ms with status 200
+2025-07-10 20:29:01,421 INFO ← OPTIONS /user-config completed in 1.78ms with status 200
+2025-07-10 20:29:01,421 INFO ← OPTIONS /user-config completed in 1.73ms with status 200
+2025-07-10 20:29:01,422 INFO ← GET /config completed in 9.42ms with status 200
+2025-07-10 20:29:01,422 INFO → POST /user-config
+2025-07-10 20:29:01,423 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,423 INFO → POST /user-config
+2025-07-10 20:29:01,423 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,423 INFO → POST /user-config
+2025-07-10 20:29:01,424 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,424 INFO → POST /user-config
+2025-07-10 20:29:01,424 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,425 INFO → POST /user-config
+2025-07-10 20:29:01,425 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,428 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 20:29:01,428 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 20:29:01,428 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 20:29:01,429 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 20:29:01,429 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 20:29:01,429 INFO Health check: outlook OK
+2025-07-10 20:29:01,430 INFO ← POST /user-config completed in 7.79ms with status 200
+2025-07-10 20:29:01,431 INFO ← POST /user-config completed in 7.50ms with status 200
+2025-07-10 20:29:01,432 INFO ← POST /user-config completed in 7.89ms with status 200
+2025-07-10 20:29:01,433 INFO → POST /user-config
+2025-07-10 20:29:01,433 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:01,433 INFO ← POST /user-config completed in 7.42ms with status 200
+2025-07-10 20:29:01,433 INFO ← GET /health/outlook completed in 20.36ms with status 200
+2025-07-10 20:29:01,434 INFO ← POST /user-config completed in 9.31ms with status 200
+2025-07-10 20:29:01,435 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-10 20:29:01,436 INFO ← POST /user-config completed in 3.07ms with status 200
+2025-07-10 20:29:01,436 INFO → GET /emails
+2025-07-10 20:29:01,437 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:06,237 INFO Fetched 21 emails.
+2025-07-10 20:29:06,237 INFO Returning 9 filtered emails
+2025-07-10 20:29:06,238 INFO ← GET /emails completed in 4801.54ms with status 200
+2025-07-10 20:29:42,411 INFO → OPTIONS /config
+2025-07-10 20:29:42,411 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:42,411 INFO ← OPTIONS /config completed in 0.18ms with status 200
+2025-07-10 20:29:42,413 INFO → POST /config
+2025-07-10 20:29:42,413 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:42,415 INFO Rescheduled fetch every 360 minutes
+2025-07-10 20:29:42,416 INFO ← POST /config completed in 2.81ms with status 200
+2025-07-10 20:29:42,423 INFO → GET /emails
+2025-07-10 20:29:42,423 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:29:46,810 INFO Fetched 21 emails.
+2025-07-10 20:29:46,810 INFO Returning 9 filtered emails
+2025-07-10 20:29:46,811 INFO ← GET /emails completed in 4387.37ms with status 200
+2025-07-10 20:30:00,920 INFO → GET /health/outlook
+2025-07-10 20:30:00,921 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:30:00,933 INFO Health check: outlook OK
+2025-07-10 20:30:00,934 INFO ← GET /health/outlook completed in 12.75ms with status 200
+2025-07-10 20:30:00,936 INFO → GET /health/local
+2025-07-10 20:30:00,936 INFO → Origin header: http://127.0.0.1:5173
+2025-07-10 20:30:00,937 INFO Health check: local OK
+2025-07-10 20:30:00,937 INFO ← GET /health/local completed in 0.79ms with status 200
+2025-07-10 21:09:49,511 INFO Shutting down backend service

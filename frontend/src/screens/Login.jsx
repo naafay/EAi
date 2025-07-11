@@ -1,6 +1,6 @@
-// src/Login.jsx
 import React, { useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
+import { open } from '@tauri-apps/api/shell'; // Updated for Tauri v1
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -8,8 +8,23 @@ const Login = () => {
   const [error, setError] = useState('');
 
   const handleLogin = async () => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) setError(error.message);
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        setError(error.message);
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    }
+  };
+
+  const openExternal = async (url) => {
+    try {
+      await open(url);
+    } catch (err) {
+      console.error('Failed to open URL in Tauri:', err);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
   };
 
   return (
@@ -26,15 +41,17 @@ const Login = () => {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full px-5 py-3 rounded-xl bg-white/30 backdrop-blur-md text-white placeholder-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
+            required
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full px-5 py-3 rounded-xl bg-white/30 backdrop-blur-md text-white placeholder-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
+            required
           />
           <button
             onClick={handleLogin}
@@ -45,12 +62,13 @@ const Login = () => {
         </div>
         <div className="mt-6 text-center text-sm text-gray-300">
           New to OutPrio?{' '}
-          <a
-            href="https://outprio.netlify.app"
-            className="underline text-indigo-200 hover:text-indigo-100 transition-colors duration-300"
+          <button
+            type="button"
+            onClick={() => openExternal('https://outprio.netlify.app')}
+            className="underline text-indigo-200 hover:text-indigo-100 transition-colors duration-300 bg-transparent border-0 p-0 cursor-pointer"
           >
             Start here
-          </a>
+          </button>
         </div>
       </div>
     </div>

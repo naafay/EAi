@@ -1,26 +1,32 @@
 {
   "name": "eaifrontend",
   "version": "0.0.1",
+  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "serve": "vite preview"
+    "dev:web": "vite --config vite.config.mjs --host 127.0.0.1 --port 5173",
+    "build:web": "vite build",
+    "preview": "vite preview",
+    "dev": "concurrently \"vite --config vite.config.tauri.mjs\" \"tauri dev\"",
+    "build": "tauri build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.50.2",
+    "@tauri-apps/api": "^1.5.0",
+    "@tauri-apps/cli": "^1.5.0",
     "axios": "^1.7.2",
     "dayjs": "^1.11.13",
     "lucide-react": "^0.523.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^7.6.3",
-    "react-table": "^7.8.0"
+    "react-router-dom": "^6.26.2",
+    "react-table": "^7.8.0",
+    "concurrently": "^8.2.2"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.3.2",
-    "vite": "^4.3.9"
+    "vite": "^4.5.3"
   }
 }

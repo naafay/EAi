@@ -1,0 +1,35 @@
+{
+  "$schema": "https://tauri.app/v1/config.schema.json",
+  "package": {
+    "productName": "OutPrio",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "shell": {
+        "open": true
+      }
+    },
+    "windows": [
+      {
+        "label": "main",
+        "title": "OutPrio",
+        "width": 1280,
+        "height": 800,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    
+    "security": {
+      "csp": null
+    }
+    
+  },
+  "build": {
+    "distDir": "../dist",
+    "devPath": "http://127.0.0.1:5173",
+    "beforeDevCommand": "npm run dev:web",
+    "beforeBuildCommand": "npm run build:web"
+  }
+}
