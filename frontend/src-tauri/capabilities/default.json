@@ -6,6 +6,9 @@
     "main"
   ],
   "permissions": [
-    "core:default"
+    "core:default",
+    "log:default",
+    "opener:allow-default-urls",
+    "shell:default"
   ]
 }

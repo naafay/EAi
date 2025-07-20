@@ -1,15 +1,15 @@
 {
-  "$schema": "https://tauri.app/v1/config.schema.json",
-  "package": {
-    "productName": "OutPrio",
-    "version": "0.1.0"
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "OutPrio",
+  "version": "0.1.0",
+  "identifier": "com.outprio.desktop",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://127.0.0.1:5173",
+    "beforeDevCommand": "npm run dev:web",
+    "beforeBuildCommand": "npm run build:web"
   },
-  "tauri": {
-    "allowlist": {
-      "shell": {
-        "open": true
-      }
-    },
+  "app": {
     "windows": [
       {
         "label": "main",
@@ -17,19 +17,27 @@
         "width": 1280,
         "height": 800,
         "resizable": true,
-        "fullscreen": false
+        "fullscreen": false,
+        "devtools": true
       }
     ],
-    
     "security": {
-      "csp": null
+      "csp": "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https://*.supabase.co https://*.supabase.io; connect-src 'self' http://localhost:8000 http://127.0.0.1:8000 https://*.supabase.co https://*.supabase.io; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';"
     }
-    
   },
-  "build": {
-    "distDir": "../dist",
-    "devPath": "http://127.0.0.1:5173",
-    "beforeDevCommand": "npm run dev:web",
-    "beforeBuildCommand": "npm run build:web"
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+    "icons/icon.ico",
+    "icons/icon.icns",
+    "icons/16x16.png",
+    "icons/32x32.png",
+    "icons/128x128.png",
+    "icons/128x128@2x.png"
+    ],      
+    "resources": [
+      "bin/outprioAPI.exe"
+    ]
   }
 }

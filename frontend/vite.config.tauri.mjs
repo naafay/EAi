@@ -10,6 +10,11 @@ export default defineConfig({
     strictPort: true
   },
   build: {
-    target: 'esnext'
+    target: 'esnext',
+    base: './'
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react/jsx-dev-runtime'],
+    force: true // Force re-optimization
   }
 });

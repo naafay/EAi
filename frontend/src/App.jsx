@@ -10,7 +10,7 @@ import LicenseGate from "./screens/LicenseGate";
 import MainApp from "./MainApp";
 import SetupWizard from "./SetupWizard";
 
-axios.defaults.baseURL = "http://localhost:8000";
+axios.defaults.baseURL = "http://127.0.0.1:8000";
 
 function AppRoutes() {
   const { session, licenseStatus, loading: authLoading } = useAuth();

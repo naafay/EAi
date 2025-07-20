@@ -1,16 +1,17 @@
-# app.py
-
 import os
+import sys
 import time
 import win32gui
 import ctypes
 import win32con
 import win32api
 import win32process
+import win32timezone
 import logging
 import datetime
 import pythoncom
 import re
+import uvicorn
 import queue
 import json
 from typing import Optional, List
@@ -24,11 +25,15 @@ from starlette.concurrency import run_in_threadpool
 import win32com.client
 from win32com.client import gencache
 from logging.handlers import TimedRotatingFileHandler
-
+from contextlib import asynccontextmanager
 _user32 = ctypes.WinDLL("user32", use_last_error=True)
 
-# === Logging ===
-os.makedirs("logs", exist_ok=True)
+
+# === Logging Setup ===
+base_dir = os.path.dirname(sys.executable if getattr(sys, 'frozen', False) else __file__)
+log_path = os.path.join(base_dir, "logs")
+os.makedirs(log_path, exist_ok=True)
+
 logger = logging.getLogger("backend")
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
@@ -37,39 +42,18 @@ console_handler = logging.StreamHandler()
 console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 
-file_handler = TimedRotatingFileHandler("logs/backend.log", when="midnight", interval=1, backupCount=7, encoding="utf-8")
+file_handler = TimedRotatingFileHandler(
+    os.path.join(log_path, "backend.log"),
+    when="midnight",
+    interval=1,
+    backupCount=7,
+    encoding="utf-8"
+)
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
-# === FastAPI + CORS ===
-app = FastAPI(title="EAi Email Assistant Backend")
-app.add_middleware(
-  CORSMiddleware,
-  allow_origins=["*"],        # ← for development only
-  allow_credentials=False,    # no cookies/auth
-  allow_methods=["*"],
-  allow_headers=["*"],
-)
-
-@app.middleware("http")
-async def log_requests(request: Request, call_next):
-    # Log the method & path
-    logger.info(f"→ {request.method} {request.url.path}")
-    
-    # Log whatever Origin header came in
-    origin = request.headers.get("origin")
-    logger.info(f"→ Origin header: {origin}")
-    
-    start = time.time()
-    response = await call_next(request)
-    elapsed = (time.time() - start) * 1000
-    
-    # Log the response time & status
-    logger.info(f"← {request.method} {request.url.path} completed in {elapsed:.2f}ms with status {response.status_code}")
-    return response
-
-@app.on_event("startup")
-def on_startup():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     logger.info("Starting backend service")
     try:
         pythoncom.CoInitialize()
@@ -80,64 +64,82 @@ def on_startup():
         logger.warning(f"Could not rebuild Outlook COM cache: {e}")
     finally:
         pythoncom.CoUninitialize()
-
-@app.on_event("shutdown")
-def on_shutdown():
+    yield
     logger.info("Shutting down backend service")
 
+# === FastAPI App ===
+app = FastAPI(title="EAi Email Assistant Backend", lifespan=lifespan)
 
-# === Runtime Config (timing only) ===
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    logger.info(f"→ {request.method} {request.url.path}")
+    origin = request.headers.get("origin")
+    logger.info(f"→ Origin header: {origin}")
+    start = time.time()
+    response = await call_next(request)
+    elapsed = (time.time() - start) * 1000
+    logger.info(f"← {request.method} {request.url.path} completed in {elapsed:.2f}ms with status {response.status_code}")
+    return response
+
+
+# === Config ===
 BACKEND_CONFIG = {
     "fetch_interval_minutes": 5,
-    "lookback_hours":         3,
-    "start":                  None,  # ISO strings or None
-    "end":                    None,
+    "lookback_hours": 3,
+    "start": None,
+    "end": None,
 }
 
-# === Dynamic User Config (identity & VIP list) ===
 USER_CONFIG = {
-    "outlook_email":  None,
-    "full_name":      None,
-    "aliases":        [],
+    "outlook_email": None,
+    "full_name": None,
+    "aliases": [],
     "vip_group_name": None,
-    "vip_emails":     [],
-    "vip_names":      []
+    "vip_emails": [],
+    "vip_names": []
 }
 
-# === Pydantic Models ===
 class EmailItem(BaseModel):
-    message_id:      str
+    message_id: str
     conversation_id: str
-    sender:          str
-    subject:         str
-    preview:         str
-    received:        str
-    importance:      int
-    reason:          str
+    sender: str
+    subject: str
+    preview: str
+    received: str
+    importance: int
+    reason: str
 
 class ConfigItem(BaseModel):
     fetch_interval_minutes: int
-    lookback_hours:         int
-    start:                  Optional[datetime.datetime]
-    end:                    Optional[datetime.datetime]
+    lookback_hours: int
+    start: Optional[datetime.datetime]
+    end: Optional[datetime.datetime]
 
 class UserConfigItem(BaseModel):
-    outlook_email:  str
-    full_name:      str
-    aliases:        Optional[List[str]] = []
+    outlook_email: str
+    full_name: str
+    aliases: Optional[List[str]] = []
     vip_group_name: str
-    vip_emails:     List[str]
+    vip_emails: List[str]
 
-# === SSE queue ===
 fetch_queue: queue.Queue[str] = queue.Queue()
 
-# === Helpers ===
 def extract_last_email(body: str) -> str:
     parts = re.split(
         r"""(
             ^[ \t]*On\s+\d{1,2}\s+\w+\s+\d{4},\s*at\s*\d{1,2}:\d{2},\s*.+?\s+wrote:
           | ^[ \t]*On\s+.+\s+wrote:
-          | ^[ \t]*-----Original Message-----
+          | ^[ \t]*-----Original Message----- 
           | ^[ \t]*(?:From|De|Von|Da|От|发件人|寄件者|差出人|보낸\s+사람)\s*:.+
         )""",
         body,
@@ -149,34 +151,28 @@ def normalize_sender(name: str, smtp: str) -> str:
     if name.startswith("/o="):
         seg = name.split("/cn=")[-1]
         if "-" in seg:
-            fn_ln = seg.split("-",1)[1]
+            fn_ln = seg.split("-", 1)[1]
             if "." in fn_ln:
-                f,l = fn_ln.split(".",1)
+                f, l = fn_ln.split(".", 1)
                 return f.capitalize() + " " + l.capitalize()
         return smtp or name
     return name or smtp
 
-def rate_and_reason(m: dict) -> tuple[int,str]:
-    outlook    = USER_CONFIG["outlook_email"].lower()
-    full_name  = (USER_CONFIG["full_name"] or "").lower()
-    aliases    = [a.lower() for a in USER_CONFIG["aliases"]]
+def rate_and_reason(m: dict) -> tuple[int, str]:
+    outlook = USER_CONFIG["outlook_email"].lower()
+    full_name = (USER_CONFIG["full_name"] or "").lower()
+    aliases = [a.lower() for a in USER_CONFIG["aliases"]]
     vip_emails = USER_CONFIG["vip_emails"]
-    vip_names  = USER_CONFIG["vip_names"]
-    vip_name   = USER_CONFIG["vip_group_name"]
+    vip_names = USER_CONFIG["vip_names"]
+    vip_name = USER_CONFIG["vip_group_name"]
 
     sender_smtp = m["sender_smtp"].lower()
     sender_name = m["sender"].lower()
-    last_body   = m["last_body"]
+    last_body = m["last_body"]
 
-    is_vip  = sender_smtp in vip_emails or sender_name in vip_names
+    is_vip = sender_smtp in vip_emails or sender_name in vip_names
     sole_to = (len(m["to_smtp"]) == 1 and m["to_smtp"][0] == outlook)
-    mention = False
-    if full_name and full_name in last_body:
-        mention = True
-    for alias in aliases:
-        if alias and alias in last_body:
-            mention = True
-            break
+    mention = any(alias in last_body for alias in [full_name] + aliases)
 
     if is_vip and sole_to:
         return 5, f"From {vip_name} + Direct To You"
@@ -188,48 +184,34 @@ def rate_and_reason(m: dict) -> tuple[int,str]:
         return 4, "Mentioned You"
     if sole_to:
         return 3, "Direct To You"
-    if (
-        not is_vip
-        and outlook in m["to_smtp"]
-        and 2 <= len(m["to_smtp"]) <= 3
-    ):
+    if not is_vip and outlook in m["to_smtp"] and 2 <= len(m["to_smtp"]) <= 3:
         return 2, "Small Group"
-    if (
-        not is_vip
-        and outlook in m["rec_smtp"]
-        and any(addr in vip_emails for addr in m["to_smtp"])
-    ):
+    if not is_vip and outlook in m["rec_smtp"] and any(addr in vip_emails for addr in m["to_smtp"]):
         return 2, f"{vip_name} Recipients"
     return 0, ""
 
-def fetch_dicts(preset: bool,
-                start: Optional[datetime.datetime]=None,
-                end:   Optional[datetime.datetime]=None) -> list[dict]:
+def fetch_dicts(preset: bool, start: Optional[datetime.datetime] = None, end: Optional[datetime.datetime] = None) -> list[dict]:
     pythoncom.CoInitialize()
     out = []
     try:
-        ns    = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
+        ns = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
         inbox = ns.GetDefaultFolder(6)
 
         if not preset:
             fmt = "%m/%d/%Y %I:%M %p"
-            flt = (
-                f"[UnRead]=True "
-                f"AND [ReceivedTime]>='{start.strftime(fmt)}' "
-                f"AND [ReceivedTime]<='{end.strftime(fmt)}'"
-            )
+            flt = f"[UnRead]=True AND [ReceivedTime]>='{start.strftime(fmt)}' AND [ReceivedTime]<='{end.strftime(fmt)}'"
         else:
             cutoff = datetime.datetime.now() - datetime.timedelta(hours=BACKEND_CONFIG["lookback_hours"])
-            flt    = f"[UnRead]=True AND [ReceivedTime]>='{cutoff.strftime('%m/%d/%Y %I:%M %p')}'"
+            flt = f"[UnRead]=True AND [ReceivedTime]>='{cutoff.strftime('%m/%d/%Y %I:%M %p')}'"
 
         try:
             items = inbox.Items.Restrict(flt)
         except Exception:
             items = []
 
-        outlook   = USER_CONFIG["outlook_email"].lower()
+        outlook = USER_CONFIG["outlook_email"].lower()
         full_name = (USER_CONFIG["full_name"] or "").lower()
-        aliases   = [a.lower() for a in USER_CONFIG["aliases"]]
+        aliases = [a.lower() for a in USER_CONFIG["aliases"]]
 
         for msg in items:
             try:
@@ -241,7 +223,7 @@ def fetch_dicts(preset: bool,
             rec_smtp, rec_names, to_smtp = [], [], []
             for r in msg.Recipients:
                 try:
-                    ex   = r.AddressEntry.GetExchangeUser()
+                    ex = r.AddressEntry.GetExchangeUser()
                     addr = (ex.PrimarySmtpAddress or r.Address).lower()
                 except:
                     addr = r.Address.lower()
@@ -250,11 +232,7 @@ def fetch_dicts(preset: bool,
                 if r.Type == 1:
                     to_smtp.append(addr)
 
-            if (
-                outlook not in rec_smtp
-                and full_name not in rec_names
-                and not any(alias in rec_names for alias in aliases)
-            ):
+            if outlook not in rec_smtp and full_name not in rec_names and not any(alias in rec_names for alias in aliases):
                 continue
 
             try:
@@ -262,25 +240,25 @@ def fetch_dicts(preset: bool,
                 raw_smtp = (exch.PrimarySmtpAddress or msg.SenderEmailAddress).lower()
             except:
                 raw_smtp = (msg.SenderEmailAddress or "").lower()
-            raw_name  = (msg.Sender.Name or "").strip()
+            raw_name = (msg.Sender.Name or "").strip()
 
-            body      = msg.Body or ""
+            body = msg.Body or ""
             last_body = extract_last_email(body)
-            snippet   = last_body[:200].replace("\r", " ").replace("\n", " ")
-            received  = msg.ReceivedTime.isoformat()
-            conv_id   = msg.ConversationID
+            snippet = last_body[:200].replace("\r", " ").replace("\n", " ")
+            received = msg.ReceivedTime.isoformat()
+            conv_id = msg.ConversationID
 
             out.append({
-                "message_id":      msg.EntryID,
+                "message_id": msg.EntryID,
                 "conversation_id": conv_id,
-                "sender":          normalize_sender(raw_name, raw_smtp),
-                "sender_smtp":     raw_smtp,
-                "subject":         msg.Subject or "",
-                "preview":         snippet,
-                "received":        received,
-                "rec_smtp":        rec_smtp,
-                "to_smtp":         to_smtp,
-                "last_body":       last_body.lower(),
+                "sender": normalize_sender(raw_name, raw_smtp),
+                "sender_smtp": raw_smtp,
+                "subject": msg.Subject or "",
+                "preview": snippet,
+                "received": received,
+                "rec_smtp": rec_smtp,
+                "to_smtp": to_smtp,
+                "last_body": last_body.lower(),
             })
     finally:
         pythoncom.CoUninitialize()
@@ -521,3 +499,23 @@ def health_outlook():
         raise HTTPException(503, "Outlook unavailable")
     finally:
         pythoncom.CoUninitialize()
+
+if __name__ == "__main__":
+    logger.info("Launching via uvicorn.Server")
+
+    config = uvicorn.Config(
+        app=app,
+        host="127.0.0.1",
+        port=8000,
+        log_level="info",
+        log_config=None,
+        reload=False,       # prevent auto-reload (causes multiple processes)
+        workers=1           # ensure single worker process
+    )
+
+    server = uvicorn.Server(config)
+    try:
+        result = server.run()
+        logger.info(f"Uvicorn server run result: {result}")
+    except Exception as e:
+        logger.error(f"Uvicorn failed: {e}")

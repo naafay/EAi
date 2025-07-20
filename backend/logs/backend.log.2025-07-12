@@ -1,0 +1,2394 @@
+2025-07-12 03:37:30,525 INFO Scheduler started
+2025-07-12 03:37:30,532 INFO Starting backend service
+2025-07-12 03:37:30,533 INFO Outlook COM cache rebuilt successfully.
+2025-07-12 03:44:39,544 INFO Shutting down backend service
+2025-07-12 03:44:40,274 INFO Scheduler started
+2025-07-12 03:44:40,280 INFO Starting backend service
+2025-07-12 03:44:40,281 INFO Outlook COM cache rebuilt successfully.
+2025-07-12 03:59:03,924 INFO Shutting down backend service
+2025-07-12 03:59:04,603 INFO Scheduler started
+2025-07-12 03:59:04,608 INFO Starting backend service
+2025-07-12 03:59:04,609 INFO Outlook COM cache rebuilt successfully.
+2025-07-12 04:02:16,970 INFO Shutting down backend service
+2025-07-12 04:16:10,231 INFO Scheduler started
+2025-07-12 04:16:10,237 INFO Starting backend service
+2025-07-12 04:16:10,238 INFO Outlook COM cache rebuilt successfully.
+2025-07-12 04:16:21,145 INFO → POST /config
+2025-07-12 04:16:21,145 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:21,147 INFO Rescheduled fetch every 5 minutes
+2025-07-12 04:16:21,148 INFO ← POST /config completed in 3.19ms with status 200
+2025-07-12 04:16:21,153 INFO → GET /emails
+2025-07-12 04:16:21,153 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:21,155 INFO ← GET /emails completed in 1.13ms with status 400
+2025-07-12 04:16:24,102 INFO → GET /health/outlook
+2025-07-12 04:16:24,102 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:24,103 INFO → GET /health/local
+2025-07-12 04:16:24,104 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:24,105 INFO Health check: local OK
+2025-07-12 04:16:24,105 INFO ← GET /health/local completed in 1.68ms with status 200
+2025-07-12 04:16:24,113 INFO Health check: outlook OK
+2025-07-12 04:16:24,116 INFO ← GET /health/outlook completed in 13.16ms with status 200
+2025-07-12 04:16:35,124 INFO → POST /config
+2025-07-12 04:16:35,124 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:35,125 INFO Rescheduled fetch every 5 minutes
+2025-07-12 04:16:35,126 INFO ← POST /config completed in 1.44ms with status 200
+2025-07-12 04:16:35,130 INFO → GET /emails
+2025-07-12 04:16:35,130 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:35,131 INFO ← GET /emails completed in 0.74ms with status 400
+2025-07-12 04:16:40,377 INFO → POST /user-config
+2025-07-12 04:16:40,377 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:40,381 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-12 04:16:40,382 INFO ← POST /user-config completed in 4.35ms with status 200
+2025-07-12 04:16:40,383 INFO → POST /user-config
+2025-07-12 04:16:40,384 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:40,384 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-12 04:16:40,385 INFO ← POST /user-config completed in 1.38ms with status 200
+2025-07-12 04:16:40,387 INFO → GET /config
+2025-07-12 04:16:40,387 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:40,388 INFO ← GET /config completed in 1.32ms with status 200
+2025-07-12 04:16:40,391 INFO → GET /health/outlook
+2025-07-12 04:16:40,391 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:40,401 INFO Health check: outlook OK
+2025-07-12 04:16:40,404 INFO ← GET /health/outlook completed in 12.10ms with status 200
+2025-07-12 04:16:40,406 INFO → GET /health/local
+2025-07-12 04:16:40,406 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:40,406 INFO Health check: local OK
+2025-07-12 04:16:40,406 INFO ← GET /health/local completed in 0.61ms with status 200
+2025-07-12 04:16:42,002 INFO → GET /emails
+2025-07-12 04:16:42,002 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:42,111 INFO Fetched 1 emails.
+2025-07-12 04:16:42,111 INFO Returning 0 filtered emails
+2025-07-12 04:16:42,112 INFO ← GET /emails completed in 109.46ms with status 200
+2025-07-12 04:16:44,005 INFO → POST /config
+2025-07-12 04:16:44,005 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:44,006 INFO Rescheduled fetch every 5 minutes
+2025-07-12 04:16:44,007 INFO ← POST /config completed in 1.83ms with status 200
+2025-07-12 04:16:44,017 INFO → GET /emails
+2025-07-12 04:16:44,018 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:44,121 INFO Fetched 1 emails.
+2025-07-12 04:16:44,121 INFO Returning 0 filtered emails
+2025-07-12 04:16:44,122 INFO ← GET /emails completed in 103.52ms with status 200
+2025-07-12 04:16:50,715 INFO → POST /config
+2025-07-12 04:16:50,716 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:50,717 INFO Rescheduled fetch every 5 minutes
+2025-07-12 04:16:50,718 INFO ← POST /config completed in 2.02ms with status 200
+2025-07-12 04:16:50,723 INFO → GET /emails
+2025-07-12 04:16:50,724 INFO → Origin header: http://localhost:5173
+2025-07-12 04:16:58,342 INFO Fetched 22 emails.
+2025-07-12 04:16:58,343 INFO Returning 17 filtered emails
+2025-07-12 04:16:58,343 INFO ← GET /emails completed in 7619.45ms with status 200
+2025-07-12 04:17:41,148 INFO → GET /health/outlook
+2025-07-12 04:17:41,148 INFO → Origin header: http://localhost:5173
+2025-07-12 04:17:41,150 INFO → GET /health/local
+2025-07-12 04:17:41,150 INFO → Origin header: http://localhost:5173
+2025-07-12 04:17:41,153 INFO Health check: local OK
+2025-07-12 04:17:41,154 INFO ← GET /health/local completed in 2.73ms with status 200
+2025-07-12 04:17:41,160 INFO Health check: outlook OK
+2025-07-12 04:17:41,162 INFO ← GET /health/outlook completed in 12.80ms with status 200
+2025-07-12 04:18:40,839 INFO → GET /health/outlook
+2025-07-12 04:18:40,840 INFO → Origin header: http://localhost:5173
+2025-07-12 04:18:40,852 INFO Health check: outlook OK
+2025-07-12 04:18:40,854 INFO ← GET /health/outlook completed in 13.52ms with status 200
+2025-07-12 04:18:40,856 INFO → GET /health/local
+2025-07-12 04:18:40,856 INFO → Origin header: http://localhost:5173
+2025-07-12 04:18:40,857 INFO Health check: local OK
+2025-07-12 04:18:40,858 INFO ← GET /health/local completed in 1.06ms with status 200
+2025-07-12 04:19:40,836 INFO → GET /health/outlook
+2025-07-12 04:19:40,836 INFO → Origin header: http://localhost:5173
+2025-07-12 04:19:40,846 INFO Health check: outlook OK
+2025-07-12 04:19:40,849 INFO ← GET /health/outlook completed in 11.97ms with status 200
+2025-07-12 04:19:40,851 INFO → GET /health/local
+2025-07-12 04:19:40,851 INFO → Origin header: http://localhost:5173
+2025-07-12 04:19:40,852 INFO Health check: local OK
+2025-07-12 04:19:40,852 INFO ← GET /health/local completed in 0.73ms with status 200
+2025-07-12 04:20:40,837 INFO → GET /health/outlook
+2025-07-12 04:20:40,838 INFO → Origin header: http://localhost:5173
+2025-07-12 04:20:40,851 INFO Health check: outlook OK
+2025-07-12 04:20:40,854 INFO ← GET /health/outlook completed in 15.22ms with status 200
+2025-07-12 04:20:40,856 INFO → GET /health/local
+2025-07-12 04:20:40,856 INFO → Origin header: http://localhost:5173
+2025-07-12 04:20:40,856 INFO Health check: local OK
+2025-07-12 04:20:40,857 INFO ← GET /health/local completed in 0.80ms with status 200
+2025-07-12 04:21:40,844 INFO → GET /health/outlook
+2025-07-12 04:21:40,845 INFO → Origin header: http://localhost:5173
+2025-07-12 04:21:40,855 INFO Health check: outlook OK
+2025-07-12 04:21:40,857 INFO ← GET /health/outlook completed in 12.49ms with status 200
+2025-07-12 04:21:40,859 INFO → GET /health/local
+2025-07-12 04:21:40,860 INFO → Origin header: http://localhost:5173
+2025-07-12 04:21:40,860 INFO Health check: local OK
+2025-07-12 04:21:40,861 INFO ← GET /health/local completed in 0.90ms with status 200
+2025-07-12 04:21:50,840 INFO → GET /emails
+2025-07-12 04:21:50,840 INFO → Origin header: http://localhost:5173
+2025-07-12 04:22:04,914 INFO Fetched 22 emails.
+2025-07-12 04:22:04,991 INFO Fetched 22 emails.
+2025-07-12 04:22:04,991 INFO Returning 17 filtered emails
+2025-07-12 04:22:04,992 INFO ← GET /emails completed in 14151.71ms with status 200
+2025-07-12 04:22:41,147 INFO → GET /health/outlook
+2025-07-12 04:22:41,148 INFO → Origin header: http://localhost:5173
+2025-07-12 04:22:41,149 INFO → GET /health/local
+2025-07-12 04:22:41,150 INFO → Origin header: http://localhost:5173
+2025-07-12 04:22:41,152 INFO Health check: local OK
+2025-07-12 04:22:41,153 INFO ← GET /health/local completed in 2.89ms with status 200
+2025-07-12 04:22:41,161 INFO Health check: outlook OK
+2025-07-12 04:22:41,163 INFO ← GET /health/outlook completed in 14.37ms with status 200
+2025-07-12 04:24:37,148 INFO → GET /health/outlook
+2025-07-12 04:24:37,148 INFO → Origin header: http://localhost:5173
+2025-07-12 04:24:37,149 INFO → GET /health/local
+2025-07-12 04:24:37,150 INFO → Origin header: http://localhost:5173
+2025-07-12 04:24:37,151 INFO Health check: local OK
+2025-07-12 04:24:37,152 INFO ← GET /health/local completed in 2.21ms with status 200
+2025-07-12 04:24:37,158 INFO Health check: outlook OK
+2025-07-12 04:24:37,161 INFO ← GET /health/outlook completed in 12.46ms with status 200
+2025-07-12 04:25:36,844 INFO → GET /health/outlook
+2025-07-12 04:25:36,845 INFO → Origin header: http://localhost:5173
+2025-07-12 04:25:36,855 INFO Health check: outlook OK
+2025-07-12 04:25:36,857 INFO ← GET /health/outlook completed in 12.32ms with status 200
+2025-07-12 04:25:36,859 INFO → GET /health/local
+2025-07-12 04:25:36,859 INFO → Origin header: http://localhost:5173
+2025-07-12 04:25:36,860 INFO Health check: local OK
+2025-07-12 04:25:36,861 INFO ← GET /health/local completed in 0.86ms with status 200
+2025-07-12 04:26:36,847 INFO → GET /health/outlook
+2025-07-12 04:26:36,847 INFO → Origin header: http://localhost:5173
+2025-07-12 04:26:36,855 INFO Health check: outlook OK
+2025-07-12 04:26:36,857 INFO ← GET /health/outlook completed in 10.10ms with status 200
+2025-07-12 04:26:36,859 INFO → GET /health/local
+2025-07-12 04:26:36,859 INFO → Origin header: http://localhost:5173
+2025-07-12 04:26:36,860 INFO Health check: local OK
+2025-07-12 04:26:36,860 INFO ← GET /health/local completed in 0.67ms with status 200
+2025-07-12 04:26:50,834 INFO → GET /emails
+2025-07-12 04:26:50,834 INFO → Origin header: http://localhost:5173
+2025-07-12 04:27:04,490 INFO Fetched 20 emails.
+2025-07-12 04:27:04,567 INFO Fetched 20 emails.
+2025-07-12 04:27:04,568 INFO Returning 15 filtered emails
+2025-07-12 04:27:04,569 INFO ← GET /emails completed in 13734.54ms with status 200
+2025-07-12 04:27:37,139 INFO → GET /health/outlook
+2025-07-12 04:27:37,139 INFO → Origin header: http://localhost:5173
+2025-07-12 04:27:37,141 INFO → GET /health/local
+2025-07-12 04:27:37,141 INFO → Origin header: http://localhost:5173
+2025-07-12 04:27:37,143 INFO Health check: local OK
+2025-07-12 04:27:37,145 INFO ← GET /health/local completed in 3.24ms with status 200
+2025-07-12 04:27:37,151 INFO Health check: outlook OK
+2025-07-12 04:27:37,153 INFO ← GET /health/outlook completed in 13.02ms with status 200
+2025-07-12 04:28:36,834 INFO → GET /health/outlook
+2025-07-12 04:28:36,834 INFO → Origin header: http://localhost:5173
+2025-07-12 04:28:36,842 INFO Health check: outlook OK
+2025-07-12 04:28:36,844 INFO ← GET /health/outlook completed in 9.96ms with status 200
+2025-07-12 04:28:36,846 INFO → GET /health/local
+2025-07-12 04:28:36,846 INFO → Origin header: http://localhost:5173
+2025-07-12 04:28:36,847 INFO Health check: local OK
+2025-07-12 04:28:36,847 INFO ← GET /health/local completed in 0.72ms with status 200
+2025-07-12 04:29:36,836 INFO → GET /health/outlook
+2025-07-12 04:29:36,837 INFO → Origin header: http://localhost:5173
+2025-07-12 04:29:36,846 INFO Health check: outlook OK
+2025-07-12 04:29:36,848 INFO ← GET /health/outlook completed in 11.05ms with status 200
+2025-07-12 04:29:36,850 INFO → GET /health/local
+2025-07-12 04:29:36,850 INFO → Origin header: http://localhost:5173
+2025-07-12 04:29:36,851 INFO Health check: local OK
+2025-07-12 04:29:36,851 INFO ← GET /health/local completed in 0.71ms with status 200
+2025-07-12 04:30:36,844 INFO → GET /health/outlook
+2025-07-12 04:30:36,845 INFO → Origin header: http://localhost:5173
+2025-07-12 04:30:36,853 INFO Health check: outlook OK
+2025-07-12 04:30:36,855 INFO ← GET /health/outlook completed in 9.81ms with status 200
+2025-07-12 04:30:36,857 INFO → GET /health/local
+2025-07-12 04:30:36,857 INFO → Origin header: http://localhost:5173
+2025-07-12 04:30:36,858 INFO Health check: local OK
+2025-07-12 04:30:36,858 INFO ← GET /health/local completed in 0.90ms with status 200
+2025-07-12 04:31:36,846 INFO → GET /health/outlook
+2025-07-12 04:31:36,846 INFO → Origin header: http://localhost:5173
+2025-07-12 04:31:36,856 INFO Health check: outlook OK
+2025-07-12 04:31:36,858 INFO ← GET /health/outlook completed in 11.75ms with status 200
+2025-07-12 04:31:36,860 INFO → GET /health/local
+2025-07-12 04:31:36,860 INFO → Origin header: http://localhost:5173
+2025-07-12 04:31:36,861 INFO Health check: local OK
+2025-07-12 04:31:36,861 INFO ← GET /health/local completed in 0.82ms with status 200
+2025-07-12 04:31:50,840 INFO → GET /emails
+2025-07-12 04:31:50,840 INFO → Origin header: http://localhost:5173
+2025-07-12 04:32:04,370 INFO Fetched 20 emails.
+2025-07-12 04:32:04,442 INFO Fetched 20 emails.
+2025-07-12 04:32:04,442 INFO Returning 15 filtered emails
+2025-07-12 04:32:04,443 INFO ← GET /emails completed in 13602.69ms with status 200
+2025-07-12 04:32:37,151 INFO → GET /health/outlook
+2025-07-12 04:32:37,152 INFO → Origin header: http://localhost:5173
+2025-07-12 04:32:37,153 INFO → GET /health/local
+2025-07-12 04:32:37,154 INFO → Origin header: http://localhost:5173
+2025-07-12 04:32:37,156 INFO Health check: local OK
+2025-07-12 04:32:37,158 INFO ← GET /health/local completed in 3.08ms with status 200
+2025-07-12 04:32:37,167 INFO Health check: outlook OK
+2025-07-12 04:32:37,169 INFO ← GET /health/outlook completed in 16.23ms with status 200
+2025-07-12 04:33:36,843 INFO → GET /health/outlook
+2025-07-12 04:33:36,844 INFO → Origin header: http://localhost:5173
+2025-07-12 04:33:36,854 INFO Health check: outlook OK
+2025-07-12 04:33:36,856 INFO ← GET /health/outlook completed in 11.91ms with status 200
+2025-07-12 04:33:36,858 INFO → GET /health/local
+2025-07-12 04:33:36,858 INFO → Origin header: http://localhost:5173
+2025-07-12 04:33:36,859 INFO Health check: local OK
+2025-07-12 04:33:36,859 INFO ← GET /health/local completed in 0.71ms with status 200
+2025-07-12 04:34:36,843 INFO → GET /health/outlook
+2025-07-12 04:34:36,843 INFO → Origin header: http://localhost:5173
+2025-07-12 04:34:36,851 INFO Health check: outlook OK
+2025-07-12 04:34:36,853 INFO ← GET /health/outlook completed in 10.08ms with status 200
+2025-07-12 04:34:36,855 INFO → GET /health/local
+2025-07-12 04:34:36,855 INFO → Origin header: http://localhost:5173
+2025-07-12 04:34:36,856 INFO Health check: local OK
+2025-07-12 04:34:36,856 INFO ← GET /health/local completed in 0.84ms with status 200
+2025-07-12 04:35:36,842 INFO → GET /health/outlook
+2025-07-12 04:35:36,843 INFO → Origin header: http://localhost:5173
+2025-07-12 04:35:36,850 INFO Health check: outlook OK
+2025-07-12 04:35:36,852 INFO ← GET /health/outlook completed in 9.33ms with status 200
+2025-07-12 04:35:36,854 INFO → GET /health/local
+2025-07-12 04:35:36,854 INFO → Origin header: http://localhost:5173
+2025-07-12 04:35:36,854 INFO Health check: local OK
+2025-07-12 04:35:36,855 INFO ← GET /health/local completed in 0.84ms with status 200
+2025-07-12 04:36:36,841 INFO → GET /health/outlook
+2025-07-12 04:36:36,842 INFO → Origin header: http://localhost:5173
+2025-07-12 04:36:36,853 INFO Health check: outlook OK
+2025-07-12 04:36:36,855 INFO ← GET /health/outlook completed in 12.48ms with status 200
+2025-07-12 04:36:36,856 INFO → GET /health/local
+2025-07-12 04:36:36,857 INFO → Origin header: http://localhost:5173
+2025-07-12 04:36:36,857 INFO Health check: local OK
+2025-07-12 04:36:36,858 INFO ← GET /health/local completed in 0.89ms with status 200
+2025-07-12 04:36:50,841 INFO → GET /emails
+2025-07-12 04:36:50,841 INFO → Origin header: http://localhost:5173
+2025-07-12 04:37:04,585 INFO Fetched 20 emails.
+2025-07-12 04:37:04,669 INFO Fetched 20 emails.
+2025-07-12 04:37:04,670 INFO Returning 15 filtered emails
+2025-07-12 04:37:04,671 INFO ← GET /emails completed in 13829.01ms with status 200
+2025-07-12 04:37:37,148 INFO → GET /health/outlook
+2025-07-12 04:37:37,149 INFO → Origin header: http://localhost:5173
+2025-07-12 04:37:37,150 INFO → GET /health/local
+2025-07-12 04:37:37,151 INFO → Origin header: http://localhost:5173
+2025-07-12 04:37:37,153 INFO Health check: local OK
+2025-07-12 04:37:37,154 INFO ← GET /health/local completed in 3.01ms with status 200
+2025-07-12 04:37:37,164 INFO Health check: outlook OK
+2025-07-12 04:37:37,167 INFO ← GET /health/outlook completed in 16.98ms with status 200
+2025-07-12 04:38:37,154 INFO → GET /health/outlook
+2025-07-12 04:38:37,155 INFO → Origin header: http://localhost:5173
+2025-07-12 04:38:37,156 INFO → GET /health/local
+2025-07-12 04:38:37,157 INFO → Origin header: http://localhost:5173
+2025-07-12 04:38:37,159 INFO Health check: local OK
+2025-07-12 04:38:37,160 INFO ← GET /health/local completed in 3.09ms with status 200
+2025-07-12 04:38:37,169 INFO Health check: outlook OK
+2025-07-12 04:38:37,171 INFO ← GET /health/outlook completed in 15.69ms with status 200
+2025-07-12 04:39:36,839 INFO → GET /health/outlook
+2025-07-12 04:39:36,839 INFO → Origin header: http://localhost:5173
+2025-07-12 04:39:36,846 INFO Health check: outlook OK
+2025-07-12 04:39:36,848 INFO ← GET /health/outlook completed in 9.00ms with status 200
+2025-07-12 04:39:36,850 INFO → GET /health/local
+2025-07-12 04:39:36,850 INFO → Origin header: http://localhost:5173
+2025-07-12 04:39:36,851 INFO Health check: local OK
+2025-07-12 04:39:36,851 INFO ← GET /health/local completed in 0.99ms with status 200
+2025-07-12 04:40:36,842 INFO → GET /health/outlook
+2025-07-12 04:40:36,843 INFO → Origin header: http://localhost:5173
+2025-07-12 04:40:36,854 INFO Health check: outlook OK
+2025-07-12 04:40:36,856 INFO ← GET /health/outlook completed in 12.51ms with status 200
+2025-07-12 04:40:36,858 INFO → GET /health/local
+2025-07-12 04:40:36,858 INFO → Origin header: http://localhost:5173
+2025-07-12 04:40:36,858 INFO Health check: local OK
+2025-07-12 04:40:36,859 INFO ← GET /health/local completed in 0.75ms with status 200
+2025-07-12 04:41:36,842 INFO → GET /health/outlook
+2025-07-12 04:41:36,842 INFO → Origin header: http://localhost:5173
+2025-07-12 04:41:36,850 INFO Health check: outlook OK
+2025-07-12 04:41:36,852 INFO ← GET /health/outlook completed in 10.07ms with status 200
+2025-07-12 04:41:36,854 INFO → GET /health/local
+2025-07-12 04:41:36,855 INFO → Origin header: http://localhost:5173
+2025-07-12 04:41:36,855 INFO Health check: local OK
+2025-07-12 04:41:36,856 INFO ← GET /health/local completed in 0.91ms with status 200
+2025-07-12 04:41:50,843 INFO → GET /emails
+2025-07-12 04:41:50,844 INFO → Origin header: http://localhost:5173
+2025-07-12 04:42:04,282 INFO Fetched 20 emails.
+2025-07-12 04:42:04,352 INFO Fetched 20 emails.
+2025-07-12 04:42:04,353 INFO Returning 15 filtered emails
+2025-07-12 04:42:04,354 INFO ← GET /emails completed in 13509.86ms with status 200
+2025-07-12 04:42:37,155 INFO → GET /health/outlook
+2025-07-12 04:42:37,156 INFO → Origin header: http://localhost:5173
+2025-07-12 04:42:37,157 INFO → GET /health/local
+2025-07-12 04:42:37,157 INFO → Origin header: http://localhost:5173
+2025-07-12 04:42:37,159 INFO Health check: local OK
+2025-07-12 04:42:37,160 INFO ← GET /health/local completed in 2.31ms with status 200
+2025-07-12 04:42:37,167 INFO Health check: outlook OK
+2025-07-12 04:42:37,170 INFO ← GET /health/outlook completed in 13.18ms with status 200
+2025-07-12 04:43:36,847 INFO → GET /health/outlook
+2025-07-12 04:43:36,847 INFO → Origin header: http://localhost:5173
+2025-07-12 04:43:36,854 INFO Health check: outlook OK
+2025-07-12 04:43:36,855 INFO ← GET /health/outlook completed in 8.15ms with status 200
+2025-07-12 04:43:36,857 INFO → GET /health/local
+2025-07-12 04:43:36,857 INFO → Origin header: http://localhost:5173
+2025-07-12 04:43:36,857 INFO Health check: local OK
+2025-07-12 04:43:36,858 INFO ← GET /health/local completed in 0.71ms with status 200
+2025-07-12 04:44:36,842 INFO → GET /health/outlook
+2025-07-12 04:44:36,842 INFO → Origin header: http://localhost:5173
+2025-07-12 04:44:36,851 INFO Health check: outlook OK
+2025-07-12 04:44:36,852 INFO ← GET /health/outlook completed in 10.07ms with status 200
+2025-07-12 04:44:36,854 INFO → GET /health/local
+2025-07-12 04:44:36,855 INFO → Origin header: http://localhost:5173
+2025-07-12 04:44:36,855 INFO Health check: local OK
+2025-07-12 04:44:36,856 INFO ← GET /health/local completed in 0.90ms with status 200
+2025-07-12 04:45:36,854 INFO → GET /health/outlook
+2025-07-12 04:45:36,854 INFO → Origin header: http://localhost:5173
+2025-07-12 04:45:36,863 INFO Health check: outlook OK
+2025-07-12 04:45:36,865 INFO ← GET /health/outlook completed in 10.82ms with status 200
+2025-07-12 04:45:36,867 INFO → GET /health/local
+2025-07-12 04:45:36,867 INFO → Origin header: http://localhost:5173
+2025-07-12 04:45:36,868 INFO Health check: local OK
+2025-07-12 04:45:36,868 INFO ← GET /health/local completed in 0.77ms with status 200
+2025-07-12 04:46:36,843 INFO → GET /health/outlook
+2025-07-12 04:46:36,844 INFO → Origin header: http://localhost:5173
+2025-07-12 04:46:36,856 INFO Health check: outlook OK
+2025-07-12 04:46:36,858 INFO ← GET /health/outlook completed in 13.75ms with status 200
+2025-07-12 04:46:36,860 INFO → GET /health/local
+2025-07-12 04:46:36,860 INFO → Origin header: http://localhost:5173
+2025-07-12 04:46:36,860 INFO Health check: local OK
+2025-07-12 04:46:36,861 INFO ← GET /health/local completed in 0.92ms with status 200
+2025-07-12 04:46:50,838 INFO → GET /emails
+2025-07-12 04:46:50,838 INFO → Origin header: http://localhost:5173
+2025-07-12 04:47:04,318 INFO Fetched 20 emails.
+2025-07-12 04:47:04,394 INFO Fetched 20 emails.
+2025-07-12 04:47:04,394 INFO Returning 15 filtered emails
+2025-07-12 04:47:04,395 INFO ← GET /emails completed in 13557.10ms with status 200
+2025-07-12 04:47:37,157 INFO → GET /health/outlook
+2025-07-12 04:47:37,157 INFO → Origin header: http://localhost:5173
+2025-07-12 04:47:37,159 INFO → GET /health/local
+2025-07-12 04:47:37,159 INFO → Origin header: http://localhost:5173
+2025-07-12 04:47:37,161 INFO Health check: local OK
+2025-07-12 04:47:37,161 INFO ← GET /health/local completed in 1.90ms with status 200
+2025-07-12 04:47:37,168 INFO Health check: outlook OK
+2025-07-12 04:47:37,170 INFO ← GET /health/outlook completed in 11.77ms with status 200
+2025-07-12 04:48:36,849 INFO → GET /health/outlook
+2025-07-12 04:48:36,850 INFO → Origin header: http://localhost:5173
+2025-07-12 04:48:36,857 INFO Health check: outlook OK
+2025-07-12 04:48:36,859 INFO ← GET /health/outlook completed in 9.43ms with status 200
+2025-07-12 04:48:36,862 INFO → GET /health/local
+2025-07-12 04:48:36,862 INFO → Origin header: http://localhost:5173
+2025-07-12 04:48:36,863 INFO Health check: local OK
+2025-07-12 04:48:36,863 INFO ← GET /health/local completed in 0.61ms with status 200
+2025-07-12 04:49:36,847 INFO → GET /health/outlook
+2025-07-12 04:49:36,848 INFO → Origin header: http://localhost:5173
+2025-07-12 04:49:36,855 INFO Health check: outlook OK
+2025-07-12 04:49:36,856 INFO ← GET /health/outlook completed in 8.68ms with status 200
+2025-07-12 04:49:36,858 INFO → GET /health/local
+2025-07-12 04:49:36,858 INFO → Origin header: http://localhost:5173
+2025-07-12 04:49:36,859 INFO Health check: local OK
+2025-07-12 04:49:36,860 INFO ← GET /health/local completed in 0.86ms with status 200
+2025-07-12 04:50:36,847 INFO → GET /health/outlook
+2025-07-12 04:50:36,848 INFO → Origin header: http://localhost:5173
+2025-07-12 04:50:36,857 INFO Health check: outlook OK
+2025-07-12 04:50:36,859 INFO ← GET /health/outlook completed in 10.88ms with status 200
+2025-07-12 04:50:36,861 INFO → GET /health/local
+2025-07-12 04:50:36,861 INFO → Origin header: http://localhost:5173
+2025-07-12 04:50:36,862 INFO Health check: local OK
+2025-07-12 04:50:36,862 INFO ← GET /health/local completed in 0.81ms with status 200
+2025-07-12 04:51:36,841 INFO → GET /health/outlook
+2025-07-12 04:51:36,842 INFO → Origin header: http://localhost:5173
+2025-07-12 04:51:36,854 INFO Health check: outlook OK
+2025-07-12 04:51:36,856 INFO ← GET /health/outlook completed in 13.68ms with status 200
+2025-07-12 04:51:36,858 INFO → GET /health/local
+2025-07-12 04:51:36,859 INFO → Origin header: http://localhost:5173
+2025-07-12 04:51:36,859 INFO Health check: local OK
+2025-07-12 04:51:36,860 INFO ← GET /health/local completed in 0.91ms with status 200
+2025-07-12 04:51:58,565 INFO Fetched 20 emails.
+2025-07-12 04:52:36,852 INFO → GET /health/outlook
+2025-07-12 04:52:36,852 INFO → Origin header: http://localhost:5173
+2025-07-12 04:52:36,863 INFO Health check: outlook OK
+2025-07-12 04:52:36,865 INFO ← GET /health/outlook completed in 12.62ms with status 200
+2025-07-12 04:52:36,867 INFO → GET /health/local
+2025-07-12 04:52:36,867 INFO → Origin header: http://localhost:5173
+2025-07-12 04:52:36,868 INFO Health check: local OK
+2025-07-12 04:52:36,868 INFO ← GET /health/local completed in 0.85ms with status 200
+2025-07-12 04:52:36,870 INFO → GET /emails
+2025-07-12 04:52:36,870 INFO → Origin header: http://localhost:5173
+2025-07-12 04:52:44,039 INFO Fetched 20 emails.
+2025-07-12 04:52:44,040 INFO Returning 15 filtered emails
+2025-07-12 04:52:44,041 INFO ← GET /emails completed in 7170.27ms with status 200
+2025-07-12 04:53:36,849 INFO → GET /health/outlook
+2025-07-12 04:53:36,849 INFO → Origin header: http://localhost:5173
+2025-07-12 04:53:36,850 INFO → GET /health/local
+2025-07-12 04:53:36,850 INFO → Origin header: http://localhost:5173
+2025-07-12 04:53:36,851 INFO Health check: local OK
+2025-07-12 04:53:36,851 INFO ← GET /health/local completed in 1.31ms with status 200
+2025-07-12 04:53:36,857 INFO Health check: outlook OK
+2025-07-12 04:53:36,859 INFO ← GET /health/outlook completed in 10.03ms with status 200
+2025-07-12 04:54:37,148 INFO → GET /health/outlook
+2025-07-12 04:54:37,149 INFO → Origin header: http://localhost:5173
+2025-07-12 04:54:37,150 INFO → GET /health/local
+2025-07-12 04:54:37,151 INFO → Origin header: http://localhost:5173
+2025-07-12 04:54:37,152 INFO Health check: local OK
+2025-07-12 04:54:37,152 INFO ← GET /health/local completed in 1.32ms with status 200
+2025-07-12 04:54:37,160 INFO Health check: outlook OK
+2025-07-12 04:54:37,162 INFO ← GET /health/outlook completed in 12.90ms with status 200
+2025-07-12 04:55:36,845 INFO → GET /health/outlook
+2025-07-12 04:55:36,845 INFO → Origin header: http://localhost:5173
+2025-07-12 04:55:36,852 INFO Health check: outlook OK
+2025-07-12 04:55:36,855 INFO ← GET /health/outlook completed in 9.56ms with status 200
+2025-07-12 04:55:36,857 INFO → GET /health/local
+2025-07-12 04:55:36,857 INFO → Origin header: http://localhost:5173
+2025-07-12 04:55:36,857 INFO Health check: local OK
+2025-07-12 04:55:36,858 INFO ← GET /health/local completed in 0.85ms with status 200
+2025-07-12 04:56:36,845 INFO → GET /health/outlook
+2025-07-12 04:56:36,846 INFO → Origin header: http://localhost:5173
+2025-07-12 04:56:36,857 INFO Health check: outlook OK
+2025-07-12 04:56:36,859 INFO ← GET /health/outlook completed in 12.60ms with status 200
+2025-07-12 04:56:36,861 INFO → GET /health/local
+2025-07-12 04:56:36,861 INFO → Origin header: http://localhost:5173
+2025-07-12 04:56:36,862 INFO Health check: local OK
+2025-07-12 04:56:36,862 INFO ← GET /health/local completed in 0.79ms with status 200
+2025-07-12 04:56:58,631 INFO Fetched 20 emails.
+2025-07-12 04:57:36,850 INFO → GET /health/outlook
+2025-07-12 04:57:36,851 INFO → Origin header: http://localhost:5173
+2025-07-12 04:57:36,859 INFO Health check: outlook OK
+2025-07-12 04:57:36,861 INFO ← GET /health/outlook completed in 9.47ms with status 200
+2025-07-12 04:57:36,863 INFO → GET /health/local
+2025-07-12 04:57:36,863 INFO → Origin header: http://localhost:5173
+2025-07-12 04:57:36,863 INFO Health check: local OK
+2025-07-12 04:57:36,864 INFO ← GET /health/local completed in 0.97ms with status 200
+2025-07-12 04:57:36,866 INFO → GET /emails
+2025-07-12 04:57:36,866 INFO → Origin header: http://localhost:5173
+2025-07-12 04:57:44,033 INFO Fetched 20 emails.
+2025-07-12 04:57:44,033 INFO Returning 15 filtered emails
+2025-07-12 04:57:44,034 INFO ← GET /emails completed in 7167.66ms with status 200
+2025-07-12 04:58:36,840 INFO → GET /health/outlook
+2025-07-12 04:58:36,841 INFO → Origin header: http://localhost:5173
+2025-07-12 04:58:36,842 INFO → GET /health/local
+2025-07-12 04:58:36,842 INFO → Origin header: http://localhost:5173
+2025-07-12 04:58:36,844 INFO Health check: local OK
+2025-07-12 04:58:36,845 INFO ← GET /health/local completed in 1.93ms with status 200
+2025-07-12 04:58:36,852 INFO Health check: outlook OK
+2025-07-12 04:58:36,854 INFO ← GET /health/outlook completed in 12.85ms with status 200
+2025-07-12 04:59:37,156 INFO → GET /health/outlook
+2025-07-12 04:59:37,157 INFO → Origin header: http://localhost:5173
+2025-07-12 04:59:37,158 INFO → GET /health/local
+2025-07-12 04:59:37,158 INFO → Origin header: http://localhost:5173
+2025-07-12 04:59:37,161 INFO Health check: local OK
+2025-07-12 04:59:37,163 INFO ← GET /health/local completed in 3.97ms with status 200
+2025-07-12 04:59:37,171 INFO Health check: outlook OK
+2025-07-12 04:59:37,173 INFO ← GET /health/outlook completed in 15.52ms with status 200
+2025-07-12 05:00:36,846 INFO → GET /health/outlook
+2025-07-12 05:00:36,847 INFO → Origin header: http://localhost:5173
+2025-07-12 05:00:36,853 INFO Health check: outlook OK
+2025-07-12 05:00:36,855 INFO ← GET /health/outlook completed in 8.13ms with status 200
+2025-07-12 05:00:36,857 INFO → GET /health/local
+2025-07-12 05:00:36,857 INFO → Origin header: http://localhost:5173
+2025-07-12 05:00:36,857 INFO Health check: local OK
+2025-07-12 05:00:36,858 INFO ← GET /health/local completed in 0.71ms with status 200
+2025-07-12 05:01:36,845 INFO → GET /health/outlook
+2025-07-12 05:01:36,845 INFO → Origin header: http://localhost:5173
+2025-07-12 05:01:36,853 INFO Health check: outlook OK
+2025-07-12 05:01:36,856 INFO ← GET /health/outlook completed in 9.99ms with status 200
+2025-07-12 05:01:36,857 INFO → GET /health/local
+2025-07-12 05:01:36,858 INFO → Origin header: http://localhost:5173
+2025-07-12 05:01:36,858 INFO Health check: local OK
+2025-07-12 05:01:36,858 INFO ← GET /health/local completed in 0.74ms with status 200
+2025-07-12 05:01:58,557 INFO Fetched 20 emails.
+2025-07-12 05:02:36,855 INFO → GET /health/outlook
+2025-07-12 05:02:36,856 INFO → Origin header: http://localhost:5173
+2025-07-12 05:02:36,865 INFO Health check: outlook OK
+2025-07-12 05:02:36,868 INFO ← GET /health/outlook completed in 12.09ms with status 200
+2025-07-12 05:02:36,870 INFO → GET /health/local
+2025-07-12 05:02:36,870 INFO → Origin header: http://localhost:5173
+2025-07-12 05:02:36,871 INFO Health check: local OK
+2025-07-12 05:02:36,871 INFO ← GET /health/local completed in 0.77ms with status 200
+2025-07-12 05:02:36,873 INFO → GET /emails
+2025-07-12 05:02:36,873 INFO → Origin header: http://localhost:5173
+2025-07-12 05:02:44,218 INFO Fetched 20 emails.
+2025-07-12 05:02:44,219 INFO Returning 15 filtered emails
+2025-07-12 05:02:44,220 INFO ← GET /emails completed in 7345.96ms with status 200
+2025-07-12 05:03:36,849 INFO → GET /health/outlook
+2025-07-12 05:03:36,849 INFO → Origin header: http://localhost:5173
+2025-07-12 05:03:36,849 INFO → GET /health/local
+2025-07-12 05:03:36,850 INFO → Origin header: http://localhost:5173
+2025-07-12 05:03:36,851 INFO Health check: local OK
+2025-07-12 05:03:36,851 INFO ← GET /health/local completed in 1.53ms with status 200
+2025-07-12 05:03:36,857 INFO Health check: outlook OK
+2025-07-12 05:03:36,859 INFO ← GET /health/outlook completed in 9.43ms with status 200
+2025-07-12 05:04:37,161 INFO → GET /health/outlook
+2025-07-12 05:04:37,161 INFO → Origin header: http://localhost:5173
+2025-07-12 05:04:37,163 INFO → GET /health/local
+2025-07-12 05:04:37,163 INFO → Origin header: http://localhost:5173
+2025-07-12 05:04:37,166 INFO Health check: local OK
+2025-07-12 05:04:37,167 INFO ← GET /health/local completed in 2.96ms with status 200
+2025-07-12 05:04:37,176 INFO Health check: outlook OK
+2025-07-12 05:04:37,178 INFO ← GET /health/outlook completed in 15.76ms with status 200
+2025-07-12 05:05:36,848 INFO → GET /health/outlook
+2025-07-12 05:05:36,848 INFO → Origin header: http://localhost:5173
+2025-07-12 05:05:36,859 INFO Health check: outlook OK
+2025-07-12 05:05:36,861 INFO ← GET /health/outlook completed in 12.59ms with status 200
+2025-07-12 05:05:36,863 INFO → GET /health/local
+2025-07-12 05:05:36,863 INFO → Origin header: http://localhost:5173
+2025-07-12 05:05:36,863 INFO Health check: local OK
+2025-07-12 05:05:36,864 INFO ← GET /health/local completed in 0.60ms with status 200
+2025-07-12 05:06:36,845 INFO → GET /health/outlook
+2025-07-12 05:06:36,845 INFO → Origin header: http://localhost:5173
+2025-07-12 05:06:36,856 INFO Health check: outlook OK
+2025-07-12 05:06:36,858 INFO ← GET /health/outlook completed in 12.58ms with status 200
+2025-07-12 05:06:36,860 INFO → GET /health/local
+2025-07-12 05:06:36,860 INFO → Origin header: http://localhost:5173
+2025-07-12 05:06:36,861 INFO Health check: local OK
+2025-07-12 05:06:36,861 INFO ← GET /health/local completed in 0.83ms with status 200
+2025-07-12 05:06:58,729 INFO Fetched 20 emails.
+2025-07-12 05:07:36,847 INFO → GET /health/outlook
+2025-07-12 05:07:36,848 INFO → Origin header: http://localhost:5173
+2025-07-12 05:07:36,859 INFO Health check: outlook OK
+2025-07-12 05:07:36,862 INFO ← GET /health/outlook completed in 13.20ms with status 200
+2025-07-12 05:07:36,863 INFO → GET /health/local
+2025-07-12 05:07:36,864 INFO → Origin header: http://localhost:5173
+2025-07-12 05:07:36,864 INFO Health check: local OK
+2025-07-12 05:07:36,865 INFO ← GET /health/local completed in 0.85ms with status 200
+2025-07-12 05:07:36,867 INFO → GET /emails
+2025-07-12 05:07:36,867 INFO → Origin header: http://localhost:5173
+2025-07-12 05:07:44,218 INFO Fetched 20 emails.
+2025-07-12 05:07:44,218 INFO Returning 15 filtered emails
+2025-07-12 05:07:44,219 INFO ← GET /emails completed in 7351.60ms with status 200
+2025-07-12 05:08:37,162 INFO → GET /health/outlook
+2025-07-12 05:08:37,162 INFO → Origin header: http://localhost:5173
+2025-07-12 05:08:37,163 INFO → GET /health/local
+2025-07-12 05:08:37,164 INFO → Origin header: http://localhost:5173
+2025-07-12 05:08:37,166 INFO Health check: local OK
+2025-07-12 05:08:37,167 INFO ← GET /health/local completed in 2.35ms with status 200
+2025-07-12 05:08:37,173 INFO Health check: outlook OK
+2025-07-12 05:08:37,175 INFO ← GET /health/outlook completed in 12.34ms with status 200
+2025-07-12 05:09:36,849 INFO → GET /health/outlook
+2025-07-12 05:09:36,849 INFO → Origin header: http://localhost:5173
+2025-07-12 05:09:36,856 INFO Health check: outlook OK
+2025-07-12 05:09:36,858 INFO ← GET /health/outlook completed in 8.89ms with status 200
+2025-07-12 05:09:36,860 INFO → GET /health/local
+2025-07-12 05:09:36,861 INFO → Origin header: http://localhost:5173
+2025-07-12 05:09:36,861 INFO Health check: local OK
+2025-07-12 05:09:36,862 INFO ← GET /health/local completed in 0.82ms with status 200
+2025-07-12 05:10:36,852 INFO → GET /health/outlook
+2025-07-12 05:10:36,852 INFO → Origin header: http://localhost:5173
+2025-07-12 05:10:36,861 INFO Health check: outlook OK
+2025-07-12 05:10:36,863 INFO ← GET /health/outlook completed in 10.32ms with status 200
+2025-07-12 05:10:36,865 INFO → GET /health/local
+2025-07-12 05:10:36,865 INFO → Origin header: http://localhost:5173
+2025-07-12 05:10:36,866 INFO Health check: local OK
+2025-07-12 05:10:36,866 INFO ← GET /health/local completed in 0.83ms with status 200
+2025-07-12 05:11:36,849 INFO → GET /health/outlook
+2025-07-12 05:11:36,850 INFO → Origin header: http://localhost:5173
+2025-07-12 05:11:36,861 INFO Health check: outlook OK
+2025-07-12 05:11:36,863 INFO ← GET /health/outlook completed in 13.51ms with status 200
+2025-07-12 05:11:36,865 INFO → GET /health/local
+2025-07-12 05:11:36,865 INFO → Origin header: http://localhost:5173
+2025-07-12 05:11:36,866 INFO Health check: local OK
+2025-07-12 05:11:36,866 INFO ← GET /health/local completed in 0.76ms with status 200
+2025-07-12 05:11:58,501 INFO Fetched 20 emails.
+2025-07-12 05:12:36,857 INFO → GET /health/outlook
+2025-07-12 05:12:36,857 INFO → Origin header: http://localhost:5173
+2025-07-12 05:12:36,865 INFO Health check: outlook OK
+2025-07-12 05:12:36,868 INFO ← GET /health/outlook completed in 10.13ms with status 200
+2025-07-12 05:12:36,870 INFO → GET /health/local
+2025-07-12 05:12:36,870 INFO → Origin header: http://localhost:5173
+2025-07-12 05:12:36,871 INFO Health check: local OK
+2025-07-12 05:12:36,871 INFO ← GET /health/local completed in 1.10ms with status 200
+2025-07-12 05:12:36,873 INFO → GET /emails
+2025-07-12 05:12:36,873 INFO → Origin header: http://localhost:5173
+2025-07-12 05:12:44,059 INFO Fetched 20 emails.
+2025-07-12 05:12:44,060 INFO Returning 15 filtered emails
+2025-07-12 05:12:44,061 INFO ← GET /emails completed in 7187.25ms with status 200
+2025-07-12 05:13:36,855 INFO → GET /health/outlook
+2025-07-12 05:13:36,855 INFO → Origin header: http://localhost:5173
+2025-07-12 05:13:36,855 INFO → GET /health/local
+2025-07-12 05:13:36,856 INFO → Origin header: http://localhost:5173
+2025-07-12 05:13:36,857 INFO Health check: local OK
+2025-07-12 05:13:36,857 INFO ← GET /health/local completed in 1.57ms with status 200
+2025-07-12 05:13:36,862 INFO Health check: outlook OK
+2025-07-12 05:13:36,865 INFO ← GET /health/outlook completed in 9.88ms with status 200
+2025-07-12 05:14:37,156 INFO → GET /health/outlook
+2025-07-12 05:14:37,157 INFO → Origin header: http://localhost:5173
+2025-07-12 05:14:37,158 INFO → GET /health/local
+2025-07-12 05:14:37,158 INFO → Origin header: http://localhost:5173
+2025-07-12 05:14:37,159 INFO Health check: local OK
+2025-07-12 05:14:37,160 INFO ← GET /health/local completed in 1.30ms with status 200
+2025-07-12 05:14:37,167 INFO Health check: outlook OK
+2025-07-12 05:14:37,169 INFO ← GET /health/outlook completed in 12.03ms with status 200
+2025-07-12 05:15:36,862 INFO → GET /health/outlook
+2025-07-12 05:15:36,862 INFO → Origin header: http://localhost:5173
+2025-07-12 05:15:36,869 INFO Health check: outlook OK
+2025-07-12 05:15:36,871 INFO ← GET /health/outlook completed in 9.29ms with status 200
+2025-07-12 05:15:36,873 INFO → GET /health/local
+2025-07-12 05:15:36,873 INFO → Origin header: http://localhost:5173
+2025-07-12 05:15:36,874 INFO Health check: local OK
+2025-07-12 05:15:36,874 INFO ← GET /health/local completed in 0.61ms with status 200
+2025-07-12 05:16:36,853 INFO → GET /health/outlook
+2025-07-12 05:16:36,854 INFO → Origin header: http://localhost:5173
+2025-07-12 05:16:36,863 INFO Health check: outlook OK
+2025-07-12 05:16:36,865 INFO ← GET /health/outlook completed in 11.60ms with status 200
+2025-07-12 05:16:36,867 INFO → GET /health/local
+2025-07-12 05:16:36,868 INFO → Origin header: http://localhost:5173
+2025-07-12 05:16:36,868 INFO Health check: local OK
+2025-07-12 05:16:36,868 INFO ← GET /health/local completed in 0.75ms with status 200
+2025-07-12 05:16:58,024 INFO Fetched 19 emails.
+2025-07-12 05:17:36,857 INFO → GET /health/outlook
+2025-07-12 05:17:36,858 INFO → Origin header: http://localhost:5173
+2025-07-12 05:17:36,865 INFO Health check: outlook OK
+2025-07-12 05:17:36,866 INFO ← GET /health/outlook completed in 8.64ms with status 200
+2025-07-12 05:17:36,868 INFO → GET /health/local
+2025-07-12 05:17:36,869 INFO → Origin header: http://localhost:5173
+2025-07-12 05:17:36,870 INFO Health check: local OK
+2025-07-12 05:17:36,870 INFO ← GET /health/local completed in 0.98ms with status 200
+2025-07-12 05:17:36,872 INFO → GET /emails
+2025-07-12 05:17:36,872 INFO → Origin header: http://localhost:5173
+2025-07-12 05:17:44,015 INFO Fetched 19 emails.
+2025-07-12 05:17:44,015 INFO Returning 14 filtered emails
+2025-07-12 05:17:44,016 INFO ← GET /emails completed in 7143.56ms with status 200
+2025-07-12 05:18:36,842 INFO → GET /health/outlook
+2025-07-12 05:18:36,842 INFO → Origin header: http://localhost:5173
+2025-07-12 05:18:36,843 INFO → GET /health/local
+2025-07-12 05:18:36,843 INFO → Origin header: http://localhost:5173
+2025-07-12 05:18:36,844 INFO Health check: local OK
+2025-07-12 05:18:36,844 INFO ← GET /health/local completed in 1.52ms with status 200
+2025-07-12 05:18:36,850 INFO Health check: outlook OK
+2025-07-12 05:18:36,853 INFO ← GET /health/outlook completed in 10.40ms with status 200
+2025-07-12 05:19:37,159 INFO → GET /health/outlook
+2025-07-12 05:19:37,159 INFO → Origin header: http://localhost:5173
+2025-07-12 05:19:37,161 INFO → GET /health/local
+2025-07-12 05:19:37,161 INFO → Origin header: http://localhost:5173
+2025-07-12 05:19:37,164 INFO Health check: local OK
+2025-07-12 05:19:37,166 INFO ← GET /health/local completed in 3.85ms with status 200
+2025-07-12 05:19:37,174 INFO Health check: outlook OK
+2025-07-12 05:19:37,176 INFO ← GET /health/outlook completed in 15.96ms with status 200
+2025-07-12 05:20:36,855 INFO → GET /health/outlook
+2025-07-12 05:20:36,856 INFO → Origin header: http://localhost:5173
+2025-07-12 05:20:36,867 INFO Health check: outlook OK
+2025-07-12 05:20:36,869 INFO ← GET /health/outlook completed in 12.56ms with status 200
+2025-07-12 05:20:36,872 INFO → GET /health/local
+2025-07-12 05:20:36,872 INFO → Origin header: http://localhost:5173
+2025-07-12 05:20:36,873 INFO Health check: local OK
+2025-07-12 05:20:36,873 INFO ← GET /health/local completed in 0.91ms with status 200
+2025-07-12 05:21:36,856 INFO → GET /health/outlook
+2025-07-12 05:21:36,857 INFO → Origin header: http://localhost:5173
+2025-07-12 05:21:36,869 INFO Health check: outlook OK
+2025-07-12 05:21:36,871 INFO ← GET /health/outlook completed in 13.38ms with status 200
+2025-07-12 05:21:36,872 INFO → GET /health/local
+2025-07-12 05:21:36,873 INFO → Origin header: http://localhost:5173
+2025-07-12 05:21:36,873 INFO Health check: local OK
+2025-07-12 05:21:36,874 INFO ← GET /health/local completed in 1.18ms with status 200
+2025-07-12 05:21:58,696 INFO Fetched 17 emails.
+2025-07-12 05:22:36,853 INFO → GET /health/outlook
+2025-07-12 05:22:36,853 INFO → Origin header: http://localhost:5173
+2025-07-12 05:22:36,859 INFO Health check: outlook OK
+2025-07-12 05:22:36,862 INFO ← GET /health/outlook completed in 8.73ms with status 200
+2025-07-12 05:22:36,864 INFO → GET /health/local
+2025-07-12 05:22:36,864 INFO → Origin header: http://localhost:5173
+2025-07-12 05:22:36,864 INFO Health check: local OK
+2025-07-12 05:22:36,865 INFO ← GET /health/local completed in 1.19ms with status 200
+2025-07-12 05:22:36,867 INFO → GET /emails
+2025-07-12 05:22:36,867 INFO → Origin header: http://localhost:5173
+2025-07-12 05:22:43,728 INFO Fetched 17 emails.
+2025-07-12 05:22:43,729 INFO Returning 13 filtered emails
+2025-07-12 05:22:43,729 INFO ← GET /emails completed in 6861.96ms with status 200
+2025-07-12 05:23:36,858 INFO → GET /health/outlook
+2025-07-12 05:23:36,859 INFO → Origin header: http://localhost:5173
+2025-07-12 05:23:36,860 INFO → GET /health/local
+2025-07-12 05:23:36,860 INFO → Origin header: http://localhost:5173
+2025-07-12 05:23:36,861 INFO Health check: local OK
+2025-07-12 05:23:36,861 INFO ← GET /health/local completed in 1.47ms with status 200
+2025-07-12 05:23:36,867 INFO Health check: outlook OK
+2025-07-12 05:23:36,870 INFO ← GET /health/outlook completed in 10.44ms with status 200
+2025-07-12 05:24:37,155 INFO → GET /health/outlook
+2025-07-12 05:24:37,156 INFO → Origin header: http://localhost:5173
+2025-07-12 05:24:37,157 INFO → GET /health/local
+2025-07-12 05:24:37,158 INFO → Origin header: http://localhost:5173
+2025-07-12 05:24:37,160 INFO Health check: local OK
+2025-07-12 05:24:37,162 INFO ← GET /health/local completed in 3.52ms with status 200
+2025-07-12 05:24:37,170 INFO Health check: outlook OK
+2025-07-12 05:24:37,173 INFO ← GET /health/outlook completed in 16.14ms with status 200
+2025-07-12 05:25:36,857 INFO → GET /health/outlook
+2025-07-12 05:25:36,858 INFO → Origin header: http://localhost:5173
+2025-07-12 05:25:36,864 INFO Health check: outlook OK
+2025-07-12 05:25:36,866 INFO ← GET /health/outlook completed in 8.29ms with status 200
+2025-07-12 05:25:36,868 INFO → GET /health/local
+2025-07-12 05:25:36,868 INFO → Origin header: http://localhost:5173
+2025-07-12 05:25:36,868 INFO Health check: local OK
+2025-07-12 05:25:36,869 INFO ← GET /health/local completed in 0.67ms with status 200
+2025-07-12 05:26:36,846 INFO → GET /health/outlook
+2025-07-12 05:26:36,847 INFO → Origin header: http://localhost:5173
+2025-07-12 05:26:36,861 INFO Health check: outlook OK
+2025-07-12 05:26:36,863 INFO ← GET /health/outlook completed in 15.69ms with status 200
+2025-07-12 05:26:36,865 INFO → GET /health/local
+2025-07-12 05:26:36,866 INFO → Origin header: http://localhost:5173
+2025-07-12 05:26:36,866 INFO Health check: local OK
+2025-07-12 05:26:36,866 INFO ← GET /health/local completed in 0.78ms with status 200
+2025-07-12 05:26:58,249 INFO Fetched 17 emails.
+2025-07-12 05:27:36,862 INFO → GET /health/outlook
+2025-07-12 05:27:36,863 INFO → Origin header: http://localhost:5173
+2025-07-12 05:27:36,870 INFO Health check: outlook OK
+2025-07-12 05:27:36,872 INFO ← GET /health/outlook completed in 9.39ms with status 200
+2025-07-12 05:27:36,874 INFO → GET /health/local
+2025-07-12 05:27:36,874 INFO → Origin header: http://localhost:5173
+2025-07-12 05:27:36,875 INFO Health check: local OK
+2025-07-12 05:27:36,875 INFO ← GET /health/local completed in 0.86ms with status 200
+2025-07-12 05:27:36,877 INFO → GET /emails
+2025-07-12 05:27:36,877 INFO → Origin header: http://localhost:5173
+2025-07-12 05:27:43,684 INFO Fetched 17 emails.
+2025-07-12 05:27:43,685 INFO Returning 13 filtered emails
+2025-07-12 05:27:43,686 INFO ← GET /emails completed in 6808.36ms with status 200
+2025-07-12 05:28:36,861 INFO → GET /health/outlook
+2025-07-12 05:28:36,862 INFO → Origin header: http://localhost:5173
+2025-07-12 05:28:36,863 INFO → GET /health/local
+2025-07-12 05:28:36,863 INFO → Origin header: http://localhost:5173
+2025-07-12 05:28:36,865 INFO Health check: local OK
+2025-07-12 05:28:36,866 INFO ← GET /health/local completed in 1.82ms with status 200
+2025-07-12 05:28:36,871 INFO Health check: outlook OK
+2025-07-12 05:28:36,874 INFO ← GET /health/outlook completed in 11.78ms with status 200
+2025-07-12 05:29:37,169 INFO → GET /health/outlook
+2025-07-12 05:29:37,170 INFO → Origin header: http://localhost:5173
+2025-07-12 05:29:37,172 INFO → GET /health/local
+2025-07-12 05:29:37,172 INFO → Origin header: http://localhost:5173
+2025-07-12 05:29:37,174 INFO Health check: local OK
+2025-07-12 05:29:37,176 INFO ← GET /health/local completed in 3.00ms with status 200
+2025-07-12 05:29:37,185 INFO Health check: outlook OK
+2025-07-12 05:29:37,187 INFO ← GET /health/outlook completed in 16.15ms with status 200
+2025-07-12 05:30:36,848 INFO → GET /health/outlook
+2025-07-12 05:30:36,849 INFO → Origin header: http://localhost:5173
+2025-07-12 05:30:36,861 INFO Health check: outlook OK
+2025-07-12 05:30:36,865 INFO ← GET /health/outlook completed in 15.13ms with status 200
+2025-07-12 05:30:36,867 INFO → GET /health/local
+2025-07-12 05:30:36,867 INFO → Origin header: http://localhost:5173
+2025-07-12 05:30:36,868 INFO Health check: local OK
+2025-07-12 05:30:36,868 INFO ← GET /health/local completed in 1.02ms with status 200
+2025-07-12 05:31:36,850 INFO → GET /health/outlook
+2025-07-12 05:31:36,850 INFO → Origin header: http://localhost:5173
+2025-07-12 05:31:36,857 INFO Health check: outlook OK
+2025-07-12 05:31:36,859 INFO ← GET /health/outlook completed in 8.62ms with status 200
+2025-07-12 05:31:36,861 INFO → GET /health/local
+2025-07-12 05:31:36,862 INFO → Origin header: http://localhost:5173
+2025-07-12 05:31:36,862 INFO Health check: local OK
+2025-07-12 05:31:36,863 INFO ← GET /health/local completed in 0.84ms with status 200
+2025-07-12 05:31:58,011 INFO Fetched 17 emails.
+2025-07-12 05:32:36,860 INFO → GET /health/outlook
+2025-07-12 05:32:36,861 INFO → Origin header: http://localhost:5173
+2025-07-12 05:32:36,871 INFO Health check: outlook OK
+2025-07-12 05:32:36,874 INFO ← GET /health/outlook completed in 12.26ms with status 200
+2025-07-12 05:32:36,876 INFO → GET /health/local
+2025-07-12 05:32:36,876 INFO → Origin header: http://localhost:5173
+2025-07-12 05:32:36,876 INFO Health check: local OK
+2025-07-12 05:32:36,877 INFO ← GET /health/local completed in 0.75ms with status 200
+2025-07-12 05:32:36,878 INFO → GET /emails
+2025-07-12 05:32:36,879 INFO → Origin header: http://localhost:5173
+2025-07-12 05:32:43,680 INFO Fetched 17 emails.
+2025-07-12 05:32:43,680 INFO Returning 13 filtered emails
+2025-07-12 05:32:43,681 INFO ← GET /emails completed in 6802.40ms with status 200
+2025-07-12 05:33:36,860 INFO → GET /health/outlook
+2025-07-12 05:33:36,861 INFO → Origin header: http://localhost:5173
+2025-07-12 05:33:36,861 INFO → GET /health/local
+2025-07-12 05:33:36,861 INFO → Origin header: http://localhost:5173
+2025-07-12 05:33:36,862 INFO Health check: local OK
+2025-07-12 05:33:36,863 INFO ← GET /health/local completed in 1.45ms with status 200
+2025-07-12 05:33:36,869 INFO Health check: outlook OK
+2025-07-12 05:33:36,871 INFO ← GET /health/outlook completed in 10.57ms with status 200
+2025-07-12 05:34:37,159 INFO → GET /health/outlook
+2025-07-12 05:34:37,160 INFO → Origin header: http://localhost:5173
+2025-07-12 05:34:37,161 INFO → GET /health/local
+2025-07-12 05:34:37,162 INFO → Origin header: http://localhost:5173
+2025-07-12 05:34:37,163 INFO Health check: local OK
+2025-07-12 05:34:37,164 INFO ← GET /health/local completed in 2.08ms with status 200
+2025-07-12 05:34:37,171 INFO Health check: outlook OK
+2025-07-12 05:34:37,173 INFO ← GET /health/outlook completed in 12.29ms with status 200
+2025-07-12 05:35:36,865 INFO → GET /health/outlook
+2025-07-12 05:35:36,865 INFO → Origin header: http://localhost:5173
+2025-07-12 05:35:36,873 INFO Health check: outlook OK
+2025-07-12 05:35:36,875 INFO ← GET /health/outlook completed in 9.43ms with status 200
+2025-07-12 05:35:36,877 INFO → GET /health/local
+2025-07-12 05:35:36,877 INFO → Origin header: http://localhost:5173
+2025-07-12 05:35:36,878 INFO Health check: local OK
+2025-07-12 05:35:36,878 INFO ← GET /health/local completed in 1.04ms with status 200
+2025-07-12 05:36:36,863 INFO → GET /health/outlook
+2025-07-12 05:36:36,864 INFO → Origin header: http://localhost:5173
+2025-07-12 05:36:36,874 INFO Health check: outlook OK
+2025-07-12 05:36:36,876 INFO ← GET /health/outlook completed in 12.16ms with status 200
+2025-07-12 05:36:36,878 INFO → GET /health/local
+2025-07-12 05:36:36,878 INFO → Origin header: http://localhost:5173
+2025-07-12 05:36:36,879 INFO Health check: local OK
+2025-07-12 05:36:36,879 INFO ← GET /health/local completed in 0.82ms with status 200
+2025-07-12 05:36:58,196 INFO Fetched 17 emails.
+2025-07-12 05:37:36,850 INFO → GET /health/outlook
+2025-07-12 05:37:36,850 INFO → Origin header: http://localhost:5173
+2025-07-12 05:37:36,860 INFO Health check: outlook OK
+2025-07-12 05:37:36,862 INFO ← GET /health/outlook completed in 12.38ms with status 200
+2025-07-12 05:37:36,864 INFO → GET /health/local
+2025-07-12 05:37:36,865 INFO → Origin header: http://localhost:5173
+2025-07-12 05:37:36,865 INFO Health check: local OK
+2025-07-12 05:37:36,866 INFO ← GET /health/local completed in 1.06ms with status 200
+2025-07-12 05:37:36,868 INFO → GET /emails
+2025-07-12 05:37:36,868 INFO → Origin header: http://localhost:5173
+2025-07-12 05:37:43,773 INFO Fetched 17 emails.
+2025-07-12 05:37:43,774 INFO Returning 13 filtered emails
+2025-07-12 05:37:43,775 INFO ← GET /emails completed in 6906.43ms with status 200
+2025-07-12 05:38:37,159 INFO → GET /health/outlook
+2025-07-12 05:38:37,160 INFO → Origin header: http://localhost:5173
+2025-07-12 05:38:37,161 INFO → GET /health/local
+2025-07-12 05:38:37,162 INFO → Origin header: http://localhost:5173
+2025-07-12 05:38:37,164 INFO Health check: local OK
+2025-07-12 05:38:37,165 INFO ← GET /health/local completed in 3.08ms with status 200
+2025-07-12 05:38:37,172 INFO Health check: outlook OK
+2025-07-12 05:38:37,176 INFO ← GET /health/outlook completed in 15.34ms with status 200
+2025-07-12 05:39:36,860 INFO → GET /health/outlook
+2025-07-12 05:39:36,861 INFO → Origin header: http://localhost:5173
+2025-07-12 05:39:36,872 INFO Health check: outlook OK
+2025-07-12 05:39:36,874 INFO ← GET /health/outlook completed in 12.59ms with status 200
+2025-07-12 05:39:36,876 INFO → GET /health/local
+2025-07-12 05:39:36,876 INFO → Origin header: http://localhost:5173
+2025-07-12 05:39:36,877 INFO Health check: local OK
+2025-07-12 05:39:36,877 INFO ← GET /health/local completed in 0.90ms with status 200
+2025-07-12 05:40:36,857 INFO → GET /health/outlook
+2025-07-12 05:40:36,857 INFO → Origin header: http://localhost:5173
+2025-07-12 05:40:36,866 INFO Health check: outlook OK
+2025-07-12 05:40:36,869 INFO ← GET /health/outlook completed in 11.66ms with status 200
+2025-07-12 05:40:36,871 INFO → GET /health/local
+2025-07-12 05:40:36,871 INFO → Origin header: http://localhost:5173
+2025-07-12 05:40:36,872 INFO Health check: local OK
+2025-07-12 05:40:36,872 INFO ← GET /health/local completed in 0.67ms with status 200
+2025-07-12 05:41:36,863 INFO → GET /health/outlook
+2025-07-12 05:41:36,864 INFO → Origin header: http://localhost:5173
+2025-07-12 05:41:36,876 INFO Health check: outlook OK
+2025-07-12 05:41:36,878 INFO ← GET /health/outlook completed in 14.16ms with status 200
+2025-07-12 05:41:36,880 INFO → GET /health/local
+2025-07-12 05:41:36,881 INFO → Origin header: http://localhost:5173
+2025-07-12 05:41:36,881 INFO Health check: local OK
+2025-07-12 05:41:36,882 INFO ← GET /health/local completed in 0.88ms with status 200
+2025-07-12 05:41:58,105 INFO Fetched 16 emails.
+2025-07-12 05:42:36,852 INFO → GET /health/outlook
+2025-07-12 05:42:36,852 INFO → Origin header: http://localhost:5173
+2025-07-12 05:42:36,861 INFO Health check: outlook OK
+2025-07-12 05:42:36,863 INFO ← GET /health/outlook completed in 11.34ms with status 200
+2025-07-12 05:42:36,866 INFO → GET /health/local
+2025-07-12 05:42:36,866 INFO → Origin header: http://localhost:5173
+2025-07-12 05:42:36,866 INFO Health check: local OK
+2025-07-12 05:42:36,867 INFO ← GET /health/local completed in 0.77ms with status 200
+2025-07-12 05:42:36,868 INFO → GET /emails
+2025-07-12 05:42:36,869 INFO → Origin header: http://localhost:5173
+2025-07-12 05:42:43,501 INFO Fetched 16 emails.
+2025-07-12 05:42:43,501 INFO Returning 13 filtered emails
+2025-07-12 05:42:43,502 INFO ← GET /emails completed in 6633.49ms with status 200
+2025-07-12 05:43:36,854 INFO → GET /health/outlook
+2025-07-12 05:43:36,855 INFO → Origin header: http://localhost:5173
+2025-07-12 05:43:36,855 INFO → GET /health/local
+2025-07-12 05:43:36,856 INFO → Origin header: http://localhost:5173
+2025-07-12 05:43:36,857 INFO Health check: local OK
+2025-07-12 05:43:36,857 INFO ← GET /health/local completed in 1.60ms with status 200
+2025-07-12 05:43:36,862 INFO Health check: outlook OK
+2025-07-12 05:43:36,865 INFO ← GET /health/outlook completed in 9.95ms with status 200
+2025-07-12 05:44:37,166 INFO → GET /health/outlook
+2025-07-12 05:44:37,167 INFO → Origin header: http://localhost:5173
+2025-07-12 05:44:37,168 INFO → GET /health/local
+2025-07-12 05:44:37,169 INFO → Origin header: http://localhost:5173
+2025-07-12 05:44:37,170 INFO Health check: local OK
+2025-07-12 05:44:37,171 INFO ← GET /health/local completed in 1.47ms with status 200
+2025-07-12 05:44:37,178 INFO Health check: outlook OK
+2025-07-12 05:44:37,181 INFO ← GET /health/outlook completed in 13.76ms with status 200
+2025-07-12 05:45:36,860 INFO → GET /health/outlook
+2025-07-12 05:45:36,860 INFO → Origin header: http://localhost:5173
+2025-07-12 05:45:36,869 INFO Health check: outlook OK
+2025-07-12 05:45:36,871 INFO ← GET /health/outlook completed in 10.94ms with status 200
+2025-07-12 05:45:36,873 INFO → GET /health/local
+2025-07-12 05:45:36,873 INFO → Origin header: http://localhost:5173
+2025-07-12 05:45:36,874 INFO Health check: local OK
+2025-07-12 05:45:36,874 INFO ← GET /health/local completed in 0.89ms with status 200
+2025-07-12 05:46:36,853 INFO → GET /health/outlook
+2025-07-12 05:46:36,853 INFO → Origin header: http://localhost:5173
+2025-07-12 05:46:36,863 INFO Health check: outlook OK
+2025-07-12 05:46:36,865 INFO ← GET /health/outlook completed in 11.60ms with status 200
+2025-07-12 05:46:36,867 INFO → GET /health/local
+2025-07-12 05:46:36,867 INFO → Origin header: http://localhost:5173
+2025-07-12 05:46:36,867 INFO Health check: local OK
+2025-07-12 05:46:36,868 INFO ← GET /health/local completed in 0.94ms with status 200
+2025-07-12 05:46:57,891 INFO Fetched 16 emails.
+2025-07-12 05:47:36,858 INFO → GET /health/outlook
+2025-07-12 05:47:36,859 INFO → Origin header: http://localhost:5173
+2025-07-12 05:47:36,867 INFO Health check: outlook OK
+2025-07-12 05:47:36,870 INFO ← GET /health/outlook completed in 11.19ms with status 200
+2025-07-12 05:47:36,872 INFO → GET /health/local
+2025-07-12 05:47:36,872 INFO → Origin header: http://localhost:5173
+2025-07-12 05:47:36,873 INFO Health check: local OK
+2025-07-12 05:47:36,873 INFO ← GET /health/local completed in 0.92ms with status 200
+2025-07-12 05:47:36,875 INFO → GET /emails
+2025-07-12 05:47:36,875 INFO → Origin header: http://localhost:5173
+2025-07-12 05:47:43,690 INFO Fetched 16 emails.
+2025-07-12 05:47:43,690 INFO Returning 13 filtered emails
+2025-07-12 05:47:43,691 INFO ← GET /emails completed in 6815.37ms with status 200
+2025-07-12 05:48:36,864 INFO → GET /health/outlook
+2025-07-12 05:48:36,864 INFO → Origin header: http://localhost:5173
+2025-07-12 05:48:36,865 INFO → GET /health/local
+2025-07-12 05:48:36,866 INFO → Origin header: http://localhost:5173
+2025-07-12 05:48:36,867 INFO Health check: local OK
+2025-07-12 05:48:36,868 INFO ← GET /health/local completed in 2.00ms with status 200
+2025-07-12 05:48:36,875 INFO Health check: outlook OK
+2025-07-12 05:48:36,877 INFO ← GET /health/outlook completed in 12.62ms with status 200
+2025-07-12 05:49:37,163 INFO → GET /health/outlook
+2025-07-12 05:49:37,164 INFO → Origin header: http://localhost:5173
+2025-07-12 05:49:37,165 INFO → GET /health/local
+2025-07-12 05:49:37,166 INFO → Origin header: http://localhost:5173
+2025-07-12 05:49:37,168 INFO Health check: local OK
+2025-07-12 05:49:37,169 INFO ← GET /health/local completed in 2.56ms with status 200
+2025-07-12 05:49:37,175 INFO Health check: outlook OK
+2025-07-12 05:49:37,176 INFO ← GET /health/outlook completed in 11.64ms with status 200
+2025-07-12 05:50:36,856 INFO → GET /health/outlook
+2025-07-12 05:50:36,856 INFO → Origin header: http://localhost:5173
+2025-07-12 05:50:36,863 INFO Health check: outlook OK
+2025-07-12 05:50:36,865 INFO ← GET /health/outlook completed in 8.16ms with status 200
+2025-07-12 05:50:36,866 INFO → GET /health/local
+2025-07-12 05:50:36,866 INFO → Origin header: http://localhost:5173
+2025-07-12 05:50:36,867 INFO Health check: local OK
+2025-07-12 05:50:36,867 INFO ← GET /health/local completed in 0.71ms with status 200
+2025-07-12 05:51:36,857 INFO → GET /health/outlook
+2025-07-12 05:51:36,858 INFO → Origin header: http://localhost:5173
+2025-07-12 05:51:36,870 INFO Health check: outlook OK
+2025-07-12 05:51:36,872 INFO ← GET /health/outlook completed in 13.45ms with status 200
+2025-07-12 05:51:36,874 INFO → GET /health/local
+2025-07-12 05:51:36,874 INFO → Origin header: http://localhost:5173
+2025-07-12 05:51:36,874 INFO Health check: local OK
+2025-07-12 05:51:36,875 INFO ← GET /health/local completed in 0.79ms with status 200
+2025-07-12 05:51:57,982 INFO Fetched 16 emails.
+2025-07-12 05:52:36,856 INFO → GET /health/outlook
+2025-07-12 05:52:36,857 INFO → Origin header: http://localhost:5173
+2025-07-12 05:52:36,866 INFO Health check: outlook OK
+2025-07-12 05:52:36,870 INFO ← GET /health/outlook completed in 12.93ms with status 200
+2025-07-12 05:52:36,872 INFO → GET /health/local
+2025-07-12 05:52:36,872 INFO → Origin header: http://localhost:5173
+2025-07-12 05:52:36,872 INFO Health check: local OK
+2025-07-12 05:52:36,873 INFO ← GET /health/local completed in 0.75ms with status 200
+2025-07-12 05:52:36,875 INFO → GET /emails
+2025-07-12 05:52:36,875 INFO → Origin header: http://localhost:5173
+2025-07-12 05:52:43,548 INFO Fetched 16 emails.
+2025-07-12 05:52:43,548 INFO Returning 13 filtered emails
+2025-07-12 05:52:43,549 INFO ← GET /emails completed in 6674.07ms with status 200
+2025-07-12 05:53:36,862 INFO → GET /health/outlook
+2025-07-12 05:53:36,863 INFO → Origin header: http://localhost:5173
+2025-07-12 05:53:36,864 INFO → GET /health/local
+2025-07-12 05:53:36,865 INFO → Origin header: http://localhost:5173
+2025-07-12 05:53:36,866 INFO Health check: local OK
+2025-07-12 05:53:36,867 INFO ← GET /health/local completed in 2.19ms with status 200
+2025-07-12 05:53:36,874 INFO Health check: outlook OK
+2025-07-12 05:53:36,876 INFO ← GET /health/outlook completed in 13.14ms with status 200
+2025-07-12 05:54:37,172 INFO → GET /health/outlook
+2025-07-12 05:54:37,173 INFO → Origin header: http://localhost:5173
+2025-07-12 05:54:37,174 INFO → GET /health/local
+2025-07-12 05:54:37,175 INFO → Origin header: http://localhost:5173
+2025-07-12 05:54:37,177 INFO Health check: local OK
+2025-07-12 05:54:37,179 INFO ← GET /health/local completed in 3.08ms with status 200
+2025-07-12 05:54:37,187 INFO Health check: outlook OK
+2025-07-12 05:54:37,189 INFO ← GET /health/outlook completed in 15.02ms with status 200
+2025-07-12 05:55:36,868 INFO → GET /health/outlook
+2025-07-12 05:55:36,868 INFO → Origin header: http://localhost:5173
+2025-07-12 05:55:36,876 INFO Health check: outlook OK
+2025-07-12 05:55:36,877 INFO ← GET /health/outlook completed in 8.94ms with status 200
+2025-07-12 05:55:36,879 INFO → GET /health/local
+2025-07-12 05:55:36,880 INFO → Origin header: http://localhost:5173
+2025-07-12 05:55:36,880 INFO Health check: local OK
+2025-07-12 05:55:36,881 INFO ← GET /health/local completed in 0.79ms with status 200
+2025-07-12 05:56:36,855 INFO → GET /health/outlook
+2025-07-12 05:56:36,855 INFO → Origin header: http://localhost:5173
+2025-07-12 05:56:36,864 INFO Health check: outlook OK
+2025-07-12 05:56:36,866 INFO ← GET /health/outlook completed in 11.34ms with status 200
+2025-07-12 05:56:36,868 INFO → GET /health/local
+2025-07-12 05:56:36,869 INFO → Origin header: http://localhost:5173
+2025-07-12 05:56:36,869 INFO Health check: local OK
+2025-07-12 05:56:36,870 INFO ← GET /health/local completed in 0.94ms with status 200
+2025-07-12 05:56:58,166 INFO Fetched 16 emails.
+2025-07-12 05:57:36,864 INFO → GET /health/outlook
+2025-07-12 05:57:36,865 INFO → Origin header: http://localhost:5173
+2025-07-12 05:57:36,873 INFO Health check: outlook OK
+2025-07-12 05:57:36,875 INFO ← GET /health/outlook completed in 10.37ms with status 200
+2025-07-12 05:57:36,877 INFO → GET /health/local
+2025-07-12 05:57:36,877 INFO → Origin header: http://localhost:5173
+2025-07-12 05:57:36,878 INFO Health check: local OK
+2025-07-12 05:57:36,878 INFO ← GET /health/local completed in 0.85ms with status 200
+2025-07-12 05:57:36,880 INFO → GET /emails
+2025-07-12 05:57:36,880 INFO → Origin header: http://localhost:5173
+2025-07-12 05:57:43,449 INFO Fetched 16 emails.
+2025-07-12 05:57:43,449 INFO Returning 13 filtered emails
+2025-07-12 05:57:43,450 INFO ← GET /emails completed in 6569.86ms with status 200
+2025-07-12 05:58:36,858 INFO → GET /health/outlook
+2025-07-12 05:58:36,859 INFO → Origin header: http://localhost:5173
+2025-07-12 05:58:36,859 INFO → GET /health/local
+2025-07-12 05:58:36,859 INFO → Origin header: http://localhost:5173
+2025-07-12 05:58:36,860 INFO Health check: local OK
+2025-07-12 05:58:36,861 INFO ← GET /health/local completed in 1.39ms with status 200
+2025-07-12 05:58:36,867 INFO Health check: outlook OK
+2025-07-12 05:58:36,869 INFO ← GET /health/outlook completed in 9.91ms with status 200
+2025-07-12 05:59:37,161 INFO → GET /health/outlook
+2025-07-12 05:59:37,162 INFO → Origin header: http://localhost:5173
+2025-07-12 05:59:37,163 INFO → GET /health/local
+2025-07-12 05:59:37,164 INFO → Origin header: http://localhost:5173
+2025-07-12 05:59:37,167 INFO Health check: local OK
+2025-07-12 05:59:37,169 INFO ← GET /health/local completed in 4.83ms with status 200
+2025-07-12 05:59:37,178 INFO Health check: outlook OK
+2025-07-12 05:59:37,180 INFO ← GET /health/outlook completed in 17.63ms with status 200
+2025-07-12 06:00:36,866 INFO → GET /health/outlook
+2025-07-12 06:00:36,867 INFO → Origin header: http://localhost:5173
+2025-07-12 06:00:36,875 INFO Health check: outlook OK
+2025-07-12 06:00:36,877 INFO ← GET /health/outlook completed in 10.19ms with status 200
+2025-07-12 06:00:36,880 INFO → GET /health/local
+2025-07-12 06:00:36,880 INFO → Origin header: http://localhost:5173
+2025-07-12 06:00:36,881 INFO Health check: local OK
+2025-07-12 06:00:36,882 INFO ← GET /health/local completed in 0.88ms with status 200
+2025-07-12 06:01:36,866 INFO → GET /health/outlook
+2025-07-12 06:01:36,866 INFO → Origin header: http://localhost:5173
+2025-07-12 06:01:36,878 INFO Health check: outlook OK
+2025-07-12 06:01:36,880 INFO ← GET /health/outlook completed in 13.14ms with status 200
+2025-07-12 06:01:36,883 INFO → GET /health/local
+2025-07-12 06:01:36,883 INFO → Origin header: http://localhost:5173
+2025-07-12 06:01:36,883 INFO Health check: local OK
+2025-07-12 06:01:36,884 INFO ← GET /health/local completed in 0.94ms with status 200
+2025-07-12 06:01:57,926 INFO Fetched 16 emails.
+2025-07-12 06:02:36,859 INFO → GET /health/outlook
+2025-07-12 06:02:36,859 INFO → Origin header: http://localhost:5173
+2025-07-12 06:02:36,866 INFO Health check: outlook OK
+2025-07-12 06:02:36,867 INFO ← GET /health/outlook completed in 8.21ms with status 200
+2025-07-12 06:02:36,869 INFO → GET /health/local
+2025-07-12 06:02:36,869 INFO → Origin header: http://localhost:5173
+2025-07-12 06:02:36,870 INFO Health check: local OK
+2025-07-12 06:02:36,870 INFO ← GET /health/local completed in 0.80ms with status 200
+2025-07-12 06:02:36,872 INFO → GET /emails
+2025-07-12 06:02:36,873 INFO → Origin header: http://localhost:5173
+2025-07-12 06:02:43,537 INFO Fetched 16 emails.
+2025-07-12 06:02:43,537 INFO Returning 13 filtered emails
+2025-07-12 06:02:43,538 INFO ← GET /emails completed in 6665.15ms with status 200
+2025-07-12 06:03:36,856 INFO → GET /health/outlook
+2025-07-12 06:03:36,856 INFO → Origin header: http://localhost:5173
+2025-07-12 06:03:36,857 INFO → GET /health/local
+2025-07-12 06:03:36,857 INFO → Origin header: http://localhost:5173
+2025-07-12 06:03:36,858 INFO Health check: local OK
+2025-07-12 06:03:36,858 INFO ← GET /health/local completed in 1.22ms with status 200
+2025-07-12 06:03:36,864 INFO Health check: outlook OK
+2025-07-12 06:03:36,866 INFO ← GET /health/outlook completed in 9.63ms with status 200
+2025-07-12 06:04:37,164 INFO → GET /health/outlook
+2025-07-12 06:04:37,164 INFO → Origin header: http://localhost:5173
+2025-07-12 06:04:37,165 INFO → GET /health/local
+2025-07-12 06:04:37,166 INFO → Origin header: http://localhost:5173
+2025-07-12 06:04:37,168 INFO Health check: local OK
+2025-07-12 06:04:37,169 INFO ← GET /health/local completed in 3.01ms with status 200
+2025-07-12 06:04:37,179 INFO Health check: outlook OK
+2025-07-12 06:04:37,181 INFO ← GET /health/outlook completed in 16.53ms with status 200
+2025-07-12 06:05:36,861 INFO → GET /health/outlook
+2025-07-12 06:05:36,861 INFO → Origin header: http://localhost:5173
+2025-07-12 06:05:36,874 INFO Health check: outlook OK
+2025-07-12 06:05:36,876 INFO ← GET /health/outlook completed in 14.74ms with status 200
+2025-07-12 06:05:36,878 INFO → GET /health/local
+2025-07-12 06:05:36,878 INFO → Origin header: http://localhost:5173
+2025-07-12 06:05:36,879 INFO Health check: local OK
+2025-07-12 06:05:36,879 INFO ← GET /health/local completed in 0.81ms with status 200
+2025-07-12 06:06:36,858 INFO → GET /health/outlook
+2025-07-12 06:06:36,858 INFO → Origin header: http://localhost:5173
+2025-07-12 06:06:36,867 INFO Health check: outlook OK
+2025-07-12 06:06:36,870 INFO ← GET /health/outlook completed in 11.57ms with status 200
+2025-07-12 06:06:36,872 INFO → GET /health/local
+2025-07-12 06:06:36,872 INFO → Origin header: http://localhost:5173
+2025-07-12 06:06:36,873 INFO Health check: local OK
+2025-07-12 06:06:36,873 INFO ← GET /health/local completed in 0.84ms with status 200
+2025-07-12 06:06:57,982 INFO Fetched 16 emails.
+2025-07-12 06:07:36,868 INFO → GET /health/outlook
+2025-07-12 06:07:36,868 INFO → Origin header: http://localhost:5173
+2025-07-12 06:07:36,878 INFO Health check: outlook OK
+2025-07-12 06:07:36,881 INFO ← GET /health/outlook completed in 11.96ms with status 200
+2025-07-12 06:07:36,883 INFO → GET /health/local
+2025-07-12 06:07:36,883 INFO → Origin header: http://localhost:5173
+2025-07-12 06:07:36,883 INFO Health check: local OK
+2025-07-12 06:07:36,884 INFO ← GET /health/local completed in 0.86ms with status 200
+2025-07-12 06:07:36,885 INFO → GET /emails
+2025-07-12 06:07:36,886 INFO → Origin header: http://localhost:5173
+2025-07-12 06:07:43,651 INFO Fetched 16 emails.
+2025-07-12 06:07:43,652 INFO Returning 13 filtered emails
+2025-07-12 06:07:43,652 INFO ← GET /emails completed in 6766.69ms with status 200
+2025-07-12 06:08:37,163 INFO → GET /health/outlook
+2025-07-12 06:08:37,163 INFO → Origin header: http://localhost:5173
+2025-07-12 06:08:37,165 INFO → GET /health/local
+2025-07-12 06:08:37,165 INFO → Origin header: http://localhost:5173
+2025-07-12 06:08:37,168 INFO Health check: local OK
+2025-07-12 06:08:37,169 INFO ← GET /health/local completed in 3.09ms with status 200
+2025-07-12 06:08:37,177 INFO Health check: outlook OK
+2025-07-12 06:08:37,179 INFO ← GET /health/outlook completed in 15.44ms with status 200
+2025-07-12 06:09:36,863 INFO → GET /health/outlook
+2025-07-12 06:09:36,864 INFO → Origin header: http://localhost:5173
+2025-07-12 06:09:36,873 INFO Health check: outlook OK
+2025-07-12 06:09:36,876 INFO ← GET /health/outlook completed in 11.79ms with status 200
+2025-07-12 06:09:36,877 INFO → GET /health/local
+2025-07-12 06:09:36,877 INFO → Origin header: http://localhost:5173
+2025-07-12 06:09:36,878 INFO Health check: local OK
+2025-07-12 06:09:36,878 INFO ← GET /health/local completed in 0.62ms with status 200
+2025-07-12 06:10:36,867 INFO → GET /health/outlook
+2025-07-12 06:10:36,867 INFO → Origin header: http://localhost:5173
+2025-07-12 06:10:36,875 INFO Health check: outlook OK
+2025-07-12 06:10:36,877 INFO ← GET /health/outlook completed in 9.38ms with status 200
+2025-07-12 06:10:36,880 INFO → GET /health/local
+2025-07-12 06:10:36,881 INFO → Origin header: http://localhost:5173
+2025-07-12 06:10:36,881 INFO Health check: local OK
+2025-07-12 06:10:36,882 INFO ← GET /health/local completed in 1.01ms with status 200
+2025-07-12 06:11:36,873 INFO → GET /health/outlook
+2025-07-12 06:11:36,873 INFO → Origin header: http://localhost:5173
+2025-07-12 06:11:36,886 INFO Health check: outlook OK
+2025-07-12 06:11:36,888 INFO ← GET /health/outlook completed in 14.46ms with status 200
+2025-07-12 06:11:36,890 INFO → GET /health/local
+2025-07-12 06:11:36,890 INFO → Origin header: http://localhost:5173
+2025-07-12 06:11:36,891 INFO Health check: local OK
+2025-07-12 06:11:36,891 INFO ← GET /health/local completed in 0.72ms with status 200
+2025-07-12 06:11:57,990 INFO Fetched 16 emails.
+2025-07-12 06:12:36,874 INFO → GET /health/outlook
+2025-07-12 06:12:36,875 INFO → Origin header: http://localhost:5173
+2025-07-12 06:12:36,884 INFO Health check: outlook OK
+2025-07-12 06:12:36,886 INFO ← GET /health/outlook completed in 11.16ms with status 200
+2025-07-12 06:12:36,888 INFO → GET /health/local
+2025-07-12 06:12:36,888 INFO → Origin header: http://localhost:5173
+2025-07-12 06:12:36,889 INFO Health check: local OK
+2025-07-12 06:12:36,889 INFO ← GET /health/local completed in 0.85ms with status 200
+2025-07-12 06:12:36,891 INFO → GET /emails
+2025-07-12 06:12:36,891 INFO → Origin header: http://localhost:5173
+2025-07-12 06:12:43,562 INFO Fetched 16 emails.
+2025-07-12 06:12:43,562 INFO Returning 13 filtered emails
+2025-07-12 06:12:43,563 INFO ← GET /emails completed in 6671.65ms with status 200
+2025-07-12 06:13:36,866 INFO → GET /health/outlook
+2025-07-12 06:13:36,867 INFO → Origin header: http://localhost:5173
+2025-07-12 06:13:36,868 INFO → GET /health/local
+2025-07-12 06:13:36,868 INFO → Origin header: http://localhost:5173
+2025-07-12 06:13:36,870 INFO Health check: local OK
+2025-07-12 06:13:36,871 INFO ← GET /health/local completed in 2.08ms with status 200
+2025-07-12 06:13:36,877 INFO Health check: outlook OK
+2025-07-12 06:13:36,879 INFO ← GET /health/outlook completed in 12.21ms with status 200
+2025-07-12 06:14:37,170 INFO → GET /health/outlook
+2025-07-12 06:14:37,170 INFO → Origin header: http://localhost:5173
+2025-07-12 06:14:37,172 INFO → GET /health/local
+2025-07-12 06:14:37,172 INFO → Origin header: http://localhost:5173
+2025-07-12 06:14:37,174 INFO Health check: local OK
+2025-07-12 06:14:37,175 INFO ← GET /health/local completed in 2.78ms with status 200
+2025-07-12 06:14:37,183 INFO Health check: outlook OK
+2025-07-12 06:14:37,185 INFO ← GET /health/outlook completed in 14.28ms with status 200
+2025-07-12 06:15:36,877 INFO → GET /health/outlook
+2025-07-12 06:15:36,877 INFO → Origin header: http://localhost:5173
+2025-07-12 06:15:36,885 INFO Health check: outlook OK
+2025-07-12 06:15:36,887 INFO ← GET /health/outlook completed in 9.51ms with status 200
+2025-07-12 06:15:36,889 INFO → GET /health/local
+2025-07-12 06:15:36,889 INFO → Origin header: http://localhost:5173
+2025-07-12 06:15:36,889 INFO Health check: local OK
+2025-07-12 06:15:36,890 INFO ← GET /health/local completed in 0.87ms with status 200
+2025-07-12 06:16:36,870 INFO → GET /health/outlook
+2025-07-12 06:16:36,871 INFO → Origin header: http://localhost:5173
+2025-07-12 06:16:36,882 INFO Health check: outlook OK
+2025-07-12 06:16:36,884 INFO ← GET /health/outlook completed in 12.95ms with status 200
+2025-07-12 06:16:36,886 INFO → GET /health/local
+2025-07-12 06:16:36,886 INFO → Origin header: http://localhost:5173
+2025-07-12 06:16:36,886 INFO Health check: local OK
+2025-07-12 06:16:36,887 INFO ← GET /health/local completed in 0.70ms with status 200
+2025-07-12 06:16:57,810 INFO Fetched 16 emails.
+2025-07-12 06:17:36,873 INFO → GET /health/outlook
+2025-07-12 06:17:36,873 INFO → Origin header: http://localhost:5173
+2025-07-12 06:17:36,881 INFO Health check: outlook OK
+2025-07-12 06:17:36,884 INFO ← GET /health/outlook completed in 10.42ms with status 200
+2025-07-12 06:17:36,886 INFO → GET /health/local
+2025-07-12 06:17:36,886 INFO → Origin header: http://localhost:5173
+2025-07-12 06:17:36,887 INFO Health check: local OK
+2025-07-12 06:17:36,887 INFO ← GET /health/local completed in 0.75ms with status 200
+2025-07-12 06:17:36,889 INFO → GET /emails
+2025-07-12 06:17:36,889 INFO → Origin header: http://localhost:5173
+2025-07-12 06:17:43,523 INFO Fetched 16 emails.
+2025-07-12 06:17:43,523 INFO Returning 13 filtered emails
+2025-07-12 06:17:43,524 INFO ← GET /emails completed in 6635.17ms with status 200
+2025-07-12 06:18:36,865 INFO → GET /health/outlook
+2025-07-12 06:18:36,866 INFO → Origin header: http://localhost:5173
+2025-07-12 06:18:36,867 INFO → GET /health/local
+2025-07-12 06:18:36,868 INFO → Origin header: http://localhost:5173
+2025-07-12 06:18:36,869 INFO Health check: local OK
+2025-07-12 06:18:36,870 INFO ← GET /health/local completed in 2.11ms with status 200
+2025-07-12 06:18:36,876 INFO Health check: outlook OK
+2025-07-12 06:18:36,879 INFO ← GET /health/outlook completed in 12.46ms with status 200
+2025-07-12 06:19:37,172 INFO → GET /health/outlook
+2025-07-12 06:19:37,173 INFO → Origin header: http://localhost:5173
+2025-07-12 06:19:37,174 INFO → GET /health/local
+2025-07-12 06:19:37,175 INFO → Origin header: http://localhost:5173
+2025-07-12 06:19:37,177 INFO Health check: local OK
+2025-07-12 06:19:37,178 INFO ← GET /health/local completed in 3.17ms with status 200
+2025-07-12 06:19:37,185 INFO Health check: outlook OK
+2025-07-12 06:19:37,189 INFO ← GET /health/outlook completed in 15.25ms with status 200
+2025-07-12 06:20:36,862 INFO → GET /health/outlook
+2025-07-12 06:20:36,863 INFO → Origin header: http://localhost:5173
+2025-07-12 06:20:36,869 INFO Health check: outlook OK
+2025-07-12 06:20:36,872 INFO ← GET /health/outlook completed in 8.74ms with status 200
+2025-07-12 06:20:36,873 INFO → GET /health/local
+2025-07-12 06:20:36,874 INFO → Origin header: http://localhost:5173
+2025-07-12 06:20:36,874 INFO Health check: local OK
+2025-07-12 06:20:36,874 INFO ← GET /health/local completed in 0.70ms with status 200
+2025-07-12 06:21:36,859 INFO → GET /health/outlook
+2025-07-12 06:21:36,860 INFO → Origin header: http://localhost:5173
+2025-07-12 06:21:36,872 INFO Health check: outlook OK
+2025-07-12 06:21:36,875 INFO ← GET /health/outlook completed in 14.56ms with status 200
+2025-07-12 06:21:36,877 INFO → GET /health/local
+2025-07-12 06:21:36,877 INFO → Origin header: http://localhost:5173
+2025-07-12 06:21:36,877 INFO Health check: local OK
+2025-07-12 06:21:36,878 INFO ← GET /health/local completed in 0.69ms with status 200
+2025-07-12 06:21:57,943 INFO Fetched 16 emails.
+2025-07-12 06:22:36,867 INFO → GET /health/outlook
+2025-07-12 06:22:36,867 INFO → Origin header: http://localhost:5173
+2025-07-12 06:22:36,877 INFO Health check: outlook OK
+2025-07-12 06:22:36,880 INFO ← GET /health/outlook completed in 12.47ms with status 200
+2025-07-12 06:22:36,882 INFO → GET /health/local
+2025-07-12 06:22:36,882 INFO → Origin header: http://localhost:5173
+2025-07-12 06:22:36,882 INFO Health check: local OK
+2025-07-12 06:22:36,883 INFO ← GET /health/local completed in 0.83ms with status 200
+2025-07-12 06:22:36,884 INFO → GET /emails
+2025-07-12 06:22:36,884 INFO → Origin header: http://localhost:5173
+2025-07-12 06:22:43,671 INFO Fetched 16 emails.
+2025-07-12 06:22:43,671 INFO Returning 13 filtered emails
+2025-07-12 06:22:43,672 INFO ← GET /emails completed in 6787.56ms with status 200
+2025-07-12 06:23:36,865 INFO → GET /health/outlook
+2025-07-12 06:23:36,866 INFO → Origin header: http://localhost:5173
+2025-07-12 06:23:36,866 INFO → GET /health/local
+2025-07-12 06:23:36,866 INFO → Origin header: http://localhost:5173
+2025-07-12 06:23:36,867 INFO Health check: local OK
+2025-07-12 06:23:36,868 INFO ← GET /health/local completed in 1.48ms with status 200
+2025-07-12 06:23:36,873 INFO Health check: outlook OK
+2025-07-12 06:23:36,875 INFO ← GET /health/outlook completed in 9.24ms with status 200
+2025-07-12 06:24:37,175 INFO → GET /health/outlook
+2025-07-12 06:24:37,175 INFO → Origin header: http://localhost:5173
+2025-07-12 06:24:37,176 INFO → GET /health/local
+2025-07-12 06:24:37,176 INFO → Origin header: http://localhost:5173
+2025-07-12 06:24:37,177 INFO Health check: local OK
+2025-07-12 06:24:37,178 INFO ← GET /health/local completed in 1.68ms with status 200
+2025-07-12 06:24:37,184 INFO Health check: outlook OK
+2025-07-12 06:24:37,186 INFO ← GET /health/outlook completed in 10.35ms with status 200
+2025-07-12 06:25:36,866 INFO → GET /health/outlook
+2025-07-12 06:25:36,866 INFO → Origin header: http://localhost:5173
+2025-07-12 06:25:36,873 INFO Health check: outlook OK
+2025-07-12 06:25:36,875 INFO ← GET /health/outlook completed in 8.88ms with status 200
+2025-07-12 06:25:36,877 INFO → GET /health/local
+2025-07-12 06:25:36,877 INFO → Origin header: http://localhost:5173
+2025-07-12 06:25:36,877 INFO Health check: local OK
+2025-07-12 06:25:36,878 INFO ← GET /health/local completed in 0.64ms with status 200
+2025-07-12 06:26:36,863 INFO → GET /health/outlook
+2025-07-12 06:26:36,863 INFO → Origin header: http://localhost:5173
+2025-07-12 06:26:36,875 INFO Health check: outlook OK
+2025-07-12 06:26:36,877 INFO ← GET /health/outlook completed in 14.11ms with status 200
+2025-07-12 06:26:36,879 INFO → GET /health/local
+2025-07-12 06:26:36,879 INFO → Origin header: http://localhost:5173
+2025-07-12 06:26:36,880 INFO Health check: local OK
+2025-07-12 06:26:36,880 INFO ← GET /health/local completed in 1.00ms with status 200
+2025-07-12 06:26:58,088 INFO Fetched 16 emails.
+2025-07-12 06:27:36,873 INFO → GET /health/outlook
+2025-07-12 06:27:36,874 INFO → Origin header: http://localhost:5173
+2025-07-12 06:27:36,881 INFO Health check: outlook OK
+2025-07-12 06:27:36,884 INFO ← GET /health/outlook completed in 9.46ms with status 200
+2025-07-12 06:27:36,886 INFO → GET /health/local
+2025-07-12 06:27:36,886 INFO → Origin header: http://localhost:5173
+2025-07-12 06:27:36,887 INFO Health check: local OK
+2025-07-12 06:27:36,887 INFO ← GET /health/local completed in 0.81ms with status 200
+2025-07-12 06:27:36,889 INFO → GET /emails
+2025-07-12 06:27:36,889 INFO → Origin header: http://localhost:5173
+2025-07-12 06:27:43,625 INFO Fetched 16 emails.
+2025-07-12 06:27:43,625 INFO Returning 13 filtered emails
+2025-07-12 06:27:43,626 INFO ← GET /emails completed in 6736.60ms with status 200
+2025-07-12 06:28:36,868 INFO → GET /health/outlook
+2025-07-12 06:28:36,868 INFO → Origin header: http://localhost:5173
+2025-07-12 06:28:36,868 INFO → GET /health/local
+2025-07-12 06:28:36,869 INFO → Origin header: http://localhost:5173
+2025-07-12 06:28:36,870 INFO Health check: local OK
+2025-07-12 06:28:36,870 INFO ← GET /health/local completed in 1.53ms with status 200
+2025-07-12 06:28:36,876 INFO Health check: outlook OK
+2025-07-12 06:28:36,878 INFO ← GET /health/outlook completed in 10.43ms with status 200
+2025-07-12 06:29:37,179 INFO → GET /health/outlook
+2025-07-12 06:29:37,180 INFO → Origin header: http://localhost:5173
+2025-07-12 06:29:37,181 INFO → GET /health/local
+2025-07-12 06:29:37,182 INFO → Origin header: http://localhost:5173
+2025-07-12 06:29:37,183 INFO Health check: local OK
+2025-07-12 06:29:37,185 INFO ← GET /health/local completed in 2.32ms with status 200
+2025-07-12 06:29:37,191 INFO Health check: outlook OK
+2025-07-12 06:29:37,195 INFO ← GET /health/outlook completed in 14.29ms with status 200
+2025-07-12 06:30:36,875 INFO → GET /health/outlook
+2025-07-12 06:30:36,876 INFO → Origin header: http://localhost:5173
+2025-07-12 06:30:36,888 INFO Health check: outlook OK
+2025-07-12 06:30:36,890 INFO ← GET /health/outlook completed in 14.34ms with status 200
+2025-07-12 06:30:36,892 INFO → GET /health/local
+2025-07-12 06:30:36,892 INFO → Origin header: http://localhost:5173
+2025-07-12 06:30:36,893 INFO Health check: local OK
+2025-07-12 06:30:36,893 INFO ← GET /health/local completed in 0.69ms with status 200
+2025-07-12 06:31:36,869 INFO → GET /health/outlook
+2025-07-12 06:31:36,869 INFO → Origin header: http://localhost:5173
+2025-07-12 06:31:36,879 INFO Health check: outlook OK
+2025-07-12 06:31:36,883 INFO ← GET /health/outlook completed in 12.84ms with status 200
+2025-07-12 06:31:36,884 INFO → GET /health/local
+2025-07-12 06:31:36,885 INFO → Origin header: http://localhost:5173
+2025-07-12 06:31:36,885 INFO Health check: local OK
+2025-07-12 06:31:36,886 INFO ← GET /health/local completed in 0.79ms with status 200
+2025-07-12 06:31:58,026 INFO Fetched 16 emails.
+2025-07-12 06:32:36,876 INFO → GET /health/outlook
+2025-07-12 06:32:36,876 INFO → Origin header: http://localhost:5173
+2025-07-12 06:32:36,885 INFO Health check: outlook OK
+2025-07-12 06:32:36,887 INFO ← GET /health/outlook completed in 10.84ms with status 200
+2025-07-12 06:32:36,890 INFO → GET /health/local
+2025-07-12 06:32:36,890 INFO → Origin header: http://localhost:5173
+2025-07-12 06:32:36,891 INFO Health check: local OK
+2025-07-12 06:32:36,891 INFO ← GET /health/local completed in 0.90ms with status 200
+2025-07-12 06:32:36,893 INFO → GET /emails
+2025-07-12 06:32:36,894 INFO → Origin header: http://localhost:5173
+2025-07-12 06:32:43,651 INFO Fetched 16 emails.
+2025-07-12 06:32:43,651 INFO Returning 13 filtered emails
+2025-07-12 06:32:43,652 INFO ← GET /emails completed in 6758.20ms with status 200
+2025-07-12 06:33:36,868 INFO → GET /health/outlook
+2025-07-12 06:33:36,868 INFO → Origin header: http://localhost:5173
+2025-07-12 06:33:36,868 INFO → GET /health/local
+2025-07-12 06:33:36,869 INFO → Origin header: http://localhost:5173
+2025-07-12 06:33:36,870 INFO Health check: local OK
+2025-07-12 06:33:36,870 INFO ← GET /health/local completed in 1.43ms with status 200
+2025-07-12 06:33:36,875 INFO Health check: outlook OK
+2025-07-12 06:33:36,877 INFO ← GET /health/outlook completed in 9.21ms with status 200
+2025-07-12 06:34:37,171 INFO → GET /health/outlook
+2025-07-12 06:34:37,172 INFO → Origin header: http://localhost:5173
+2025-07-12 06:34:37,173 INFO → GET /health/local
+2025-07-12 06:34:37,173 INFO → Origin header: http://localhost:5173
+2025-07-12 06:34:37,176 INFO Health check: local OK
+2025-07-12 06:34:37,177 INFO ← GET /health/local completed in 2.98ms with status 200
+2025-07-12 06:34:37,185 INFO Health check: outlook OK
+2025-07-12 06:34:37,187 INFO ← GET /health/outlook completed in 15.09ms with status 200
+2025-07-12 06:35:36,874 INFO → GET /health/outlook
+2025-07-12 06:35:36,874 INFO → Origin header: http://localhost:5173
+2025-07-12 06:35:36,882 INFO Health check: outlook OK
+2025-07-12 06:35:36,885 INFO ← GET /health/outlook completed in 10.12ms with status 200
+2025-07-12 06:35:36,886 INFO → GET /health/local
+2025-07-12 06:35:36,887 INFO → Origin header: http://localhost:5173
+2025-07-12 06:35:36,887 INFO Health check: local OK
+2025-07-12 06:35:36,888 INFO ← GET /health/local completed in 0.78ms with status 200
+2025-07-12 06:36:36,875 INFO → GET /health/outlook
+2025-07-12 06:36:36,875 INFO → Origin header: http://localhost:5173
+2025-07-12 06:36:36,887 INFO Health check: outlook OK
+2025-07-12 06:36:36,890 INFO ← GET /health/outlook completed in 13.96ms with status 200
+2025-07-12 06:36:36,892 INFO → GET /health/local
+2025-07-12 06:36:36,892 INFO → Origin header: http://localhost:5173
+2025-07-12 06:36:36,893 INFO Health check: local OK
+2025-07-12 06:36:36,893 INFO ← GET /health/local completed in 0.70ms with status 200
+2025-07-12 06:36:57,734 INFO Fetched 16 emails.
+2025-07-12 06:37:36,865 INFO → GET /health/outlook
+2025-07-12 06:37:36,866 INFO → Origin header: http://localhost:5173
+2025-07-12 06:37:36,876 INFO Health check: outlook OK
+2025-07-12 06:37:36,879 INFO ← GET /health/outlook completed in 12.84ms with status 200
+2025-07-12 06:37:36,881 INFO → GET /health/local
+2025-07-12 06:37:36,881 INFO → Origin header: http://localhost:5173
+2025-07-12 06:37:36,882 INFO Health check: local OK
+2025-07-12 06:37:36,882 INFO ← GET /health/local completed in 0.98ms with status 200
+2025-07-12 06:37:36,884 INFO → GET /emails
+2025-07-12 06:37:36,884 INFO → Origin header: http://localhost:5173
+2025-07-12 06:37:43,802 INFO Fetched 16 emails.
+2025-07-12 06:37:43,802 INFO Returning 13 filtered emails
+2025-07-12 06:37:43,803 INFO ← GET /emails completed in 6918.85ms with status 200
+2025-07-12 06:38:37,176 INFO → GET /health/outlook
+2025-07-12 06:38:37,176 INFO → Origin header: http://localhost:5173
+2025-07-12 06:38:37,178 INFO → GET /health/local
+2025-07-12 06:38:37,178 INFO → Origin header: http://localhost:5173
+2025-07-12 06:38:37,180 INFO Health check: local OK
+2025-07-12 06:38:37,181 INFO ← GET /health/local completed in 2.16ms with status 200
+2025-07-12 06:38:37,188 INFO Health check: outlook OK
+2025-07-12 06:38:37,191 INFO ← GET /health/outlook completed in 13.63ms with status 200
+2025-07-12 06:39:36,863 INFO → GET /health/outlook
+2025-07-12 06:39:36,863 INFO → Origin header: http://localhost:5173
+2025-07-12 06:39:36,876 INFO Health check: outlook OK
+2025-07-12 06:39:36,878 INFO ← GET /health/outlook completed in 14.37ms with status 200
+2025-07-12 06:39:36,880 INFO → GET /health/local
+2025-07-12 06:39:36,880 INFO → Origin header: http://localhost:5173
+2025-07-12 06:39:36,881 INFO Health check: local OK
+2025-07-12 06:39:36,881 INFO ← GET /health/local completed in 0.76ms with status 200
+2025-07-12 06:40:36,873 INFO → GET /health/outlook
+2025-07-12 06:40:36,873 INFO → Origin header: http://localhost:5173
+2025-07-12 06:40:36,884 INFO Health check: outlook OK
+2025-07-12 06:40:36,886 INFO ← GET /health/outlook completed in 12.84ms with status 200
+2025-07-12 06:40:36,888 INFO → GET /health/local
+2025-07-12 06:40:36,888 INFO → Origin header: http://localhost:5173
+2025-07-12 06:40:36,889 INFO Health check: local OK
+2025-07-12 06:40:36,889 INFO ← GET /health/local completed in 0.74ms with status 200
+2025-07-12 06:41:36,879 INFO → GET /health/outlook
+2025-07-12 06:41:36,880 INFO → Origin header: http://localhost:5173
+2025-07-12 06:41:36,890 INFO Health check: outlook OK
+2025-07-12 06:41:36,892 INFO ← GET /health/outlook completed in 12.14ms with status 200
+2025-07-12 06:41:36,894 INFO → GET /health/local
+2025-07-12 06:41:36,894 INFO → Origin header: http://localhost:5173
+2025-07-12 06:41:36,895 INFO Health check: local OK
+2025-07-12 06:41:36,895 INFO ← GET /health/local completed in 0.87ms with status 200
+2025-07-12 06:41:58,049 INFO Fetched 16 emails.
+2025-07-12 06:42:36,877 INFO → GET /health/outlook
+2025-07-12 06:42:36,877 INFO → Origin header: http://localhost:5173
+2025-07-12 06:42:36,885 INFO Health check: outlook OK
+2025-07-12 06:42:36,888 INFO ← GET /health/outlook completed in 10.61ms with status 200
+2025-07-12 06:42:36,890 INFO → GET /health/local
+2025-07-12 06:42:36,890 INFO → Origin header: http://localhost:5173
+2025-07-12 06:42:36,890 INFO Health check: local OK
+2025-07-12 06:42:36,891 INFO ← GET /health/local completed in 1.09ms with status 200
+2025-07-12 06:42:36,893 INFO → GET /emails
+2025-07-12 06:42:36,893 INFO → Origin header: http://localhost:5173
+2025-07-12 06:42:43,908 INFO Fetched 16 emails.
+2025-07-12 06:42:43,909 INFO Returning 13 filtered emails
+2025-07-12 06:42:43,910 INFO ← GET /emails completed in 7016.30ms with status 200
+2025-07-12 06:43:36,872 INFO → GET /health/outlook
+2025-07-12 06:43:36,872 INFO → Origin header: http://localhost:5173
+2025-07-12 06:43:36,873 INFO → GET /health/local
+2025-07-12 06:43:36,873 INFO → Origin header: http://localhost:5173
+2025-07-12 06:43:36,874 INFO Health check: local OK
+2025-07-12 06:43:36,875 INFO ← GET /health/local completed in 1.41ms with status 200
+2025-07-12 06:43:36,880 INFO Health check: outlook OK
+2025-07-12 06:43:36,882 INFO ← GET /health/outlook completed in 9.90ms with status 200
+2025-07-12 06:44:37,170 INFO → GET /health/outlook
+2025-07-12 06:44:37,170 INFO → Origin header: http://localhost:5173
+2025-07-12 06:44:37,171 INFO → GET /health/local
+2025-07-12 06:44:37,171 INFO → Origin header: http://localhost:5173
+2025-07-12 06:44:37,172 INFO Health check: local OK
+2025-07-12 06:44:37,173 INFO ← GET /health/local completed in 1.37ms with status 200
+2025-07-12 06:44:37,179 INFO Health check: outlook OK
+2025-07-12 06:44:37,181 INFO ← GET /health/outlook completed in 10.20ms with status 200
+2025-07-12 06:45:36,884 INFO → GET /health/outlook
+2025-07-12 06:45:36,884 INFO → Origin header: http://localhost:5173
+2025-07-12 06:45:36,894 INFO Health check: outlook OK
+2025-07-12 06:45:36,896 INFO ← GET /health/outlook completed in 11.57ms with status 200
+2025-07-12 06:45:36,898 INFO → GET /health/local
+2025-07-12 06:45:36,898 INFO → Origin header: http://localhost:5173
+2025-07-12 06:45:36,898 INFO Health check: local OK
+2025-07-12 06:45:36,899 INFO ← GET /health/local completed in 0.85ms with status 200
+2025-07-12 06:46:36,880 INFO → GET /health/outlook
+2025-07-12 06:46:36,881 INFO → Origin header: http://localhost:5173
+2025-07-12 06:46:36,889 INFO Health check: outlook OK
+2025-07-12 06:46:36,892 INFO ← GET /health/outlook completed in 10.73ms with status 200
+2025-07-12 06:46:36,894 INFO → GET /health/local
+2025-07-12 06:46:36,894 INFO → Origin header: http://localhost:5173
+2025-07-12 06:46:36,895 INFO Health check: local OK
+2025-07-12 06:46:36,895 INFO ← GET /health/local completed in 1.01ms with status 200
+2025-07-12 06:46:58,199 INFO Fetched 16 emails.
+2025-07-12 06:47:36,874 INFO → GET /health/outlook
+2025-07-12 06:47:36,875 INFO → Origin header: http://localhost:5173
+2025-07-12 06:47:36,884 INFO Health check: outlook OK
+2025-07-12 06:47:36,886 INFO ← GET /health/outlook completed in 11.13ms with status 200
+2025-07-12 06:47:36,889 INFO → GET /health/local
+2025-07-12 06:47:36,889 INFO → Origin header: http://localhost:5173
+2025-07-12 06:47:36,889 INFO Health check: local OK
+2025-07-12 06:47:36,890 INFO ← GET /health/local completed in 0.96ms with status 200
+2025-07-12 06:47:36,892 INFO → GET /emails
+2025-07-12 06:47:36,892 INFO → Origin header: http://localhost:5173
+2025-07-12 06:47:43,524 INFO Fetched 16 emails.
+2025-07-12 06:47:43,524 INFO Returning 13 filtered emails
+2025-07-12 06:47:43,525 INFO ← GET /emails completed in 6633.42ms with status 200
+2025-07-12 06:48:36,872 INFO → GET /health/outlook
+2025-07-12 06:48:36,872 INFO → Origin header: http://localhost:5173
+2025-07-12 06:48:36,873 INFO → GET /health/local
+2025-07-12 06:48:36,873 INFO → Origin header: http://localhost:5173
+2025-07-12 06:48:36,874 INFO Health check: local OK
+2025-07-12 06:48:36,875 INFO ← GET /health/local completed in 1.44ms with status 200
+2025-07-12 06:48:36,881 INFO Health check: outlook OK
+2025-07-12 06:48:36,883 INFO ← GET /health/outlook completed in 10.40ms with status 200
+2025-07-12 06:49:37,179 INFO → GET /health/outlook
+2025-07-12 06:49:37,179 INFO → Origin header: http://localhost:5173
+2025-07-12 06:49:37,180 INFO → GET /health/local
+2025-07-12 06:49:37,180 INFO → Origin header: http://localhost:5173
+2025-07-12 06:49:37,182 INFO Health check: local OK
+2025-07-12 06:49:37,182 INFO ← GET /health/local completed in 1.97ms with status 200
+2025-07-12 06:49:37,189 INFO Health check: outlook OK
+2025-07-12 06:49:37,192 INFO ← GET /health/outlook completed in 12.62ms with status 200
+2025-07-12 06:50:36,874 INFO → GET /health/outlook
+2025-07-12 06:50:36,874 INFO → Origin header: http://localhost:5173
+2025-07-12 06:50:36,882 INFO Health check: outlook OK
+2025-07-12 06:50:36,885 INFO ← GET /health/outlook completed in 10.59ms with status 200
+2025-07-12 06:50:36,887 INFO → GET /health/local
+2025-07-12 06:50:36,887 INFO → Origin header: http://localhost:5173
+2025-07-12 06:50:36,888 INFO Health check: local OK
+2025-07-12 06:50:36,888 INFO ← GET /health/local completed in 0.78ms with status 200
+2025-07-12 06:51:36,876 INFO → GET /health/outlook
+2025-07-12 06:51:36,876 INFO → Origin header: http://localhost:5173
+2025-07-12 06:51:36,887 INFO Health check: outlook OK
+2025-07-12 06:51:36,889 INFO ← GET /health/outlook completed in 12.57ms with status 200
+2025-07-12 06:51:36,891 INFO → GET /health/local
+2025-07-12 06:51:36,891 INFO → Origin header: http://localhost:5173
+2025-07-12 06:51:36,891 INFO Health check: local OK
+2025-07-12 06:51:36,892 INFO ← GET /health/local completed in 0.71ms with status 200
+2025-07-12 06:51:57,887 INFO Fetched 16 emails.
+2025-07-12 06:52:36,869 INFO → GET /health/outlook
+2025-07-12 06:52:36,869 INFO → Origin header: http://localhost:5173
+2025-07-12 06:52:36,878 INFO Health check: outlook OK
+2025-07-12 06:52:36,880 INFO ← GET /health/outlook completed in 10.86ms with status 200
+2025-07-12 06:52:36,882 INFO → GET /health/local
+2025-07-12 06:52:36,883 INFO → Origin header: http://localhost:5173
+2025-07-12 06:52:36,883 INFO Health check: local OK
+2025-07-12 06:52:36,884 INFO ← GET /health/local completed in 0.84ms with status 200
+2025-07-12 06:52:36,886 INFO → GET /emails
+2025-07-12 06:52:36,886 INFO → Origin header: http://localhost:5173
+2025-07-12 06:52:44,090 INFO Fetched 16 emails.
+2025-07-12 06:52:44,090 INFO Returning 13 filtered emails
+2025-07-12 06:52:44,091 INFO ← GET /emails completed in 7204.83ms with status 200
+2025-07-12 06:53:36,870 INFO → GET /health/outlook
+2025-07-12 06:53:36,870 INFO → Origin header: http://localhost:5173
+2025-07-12 06:53:36,871 INFO → GET /health/local
+2025-07-12 06:53:36,871 INFO → Origin header: http://localhost:5173
+2025-07-12 06:53:36,872 INFO Health check: local OK
+2025-07-12 06:53:36,873 INFO ← GET /health/local completed in 1.83ms with status 200
+2025-07-12 06:53:36,880 INFO Health check: outlook OK
+2025-07-12 06:53:36,883 INFO ← GET /health/outlook completed in 12.57ms with status 200
+2025-07-12 06:54:37,171 INFO → GET /health/outlook
+2025-07-12 06:54:37,172 INFO → Origin header: http://localhost:5173
+2025-07-12 06:54:37,173 INFO → GET /health/local
+2025-07-12 06:54:37,174 INFO → Origin header: http://localhost:5173
+2025-07-12 06:54:37,176 INFO Health check: local OK
+2025-07-12 06:54:37,178 INFO ← GET /health/local completed in 3.21ms with status 200
+2025-07-12 06:54:37,185 INFO Health check: outlook OK
+2025-07-12 06:54:37,187 INFO ← GET /health/outlook completed in 14.77ms with status 200
+2025-07-12 06:55:36,874 INFO → GET /health/outlook
+2025-07-12 06:55:36,875 INFO → Origin header: http://localhost:5173
+2025-07-12 06:55:36,885 INFO Health check: outlook OK
+2025-07-12 06:55:36,887 INFO ← GET /health/outlook completed in 11.92ms with status 200
+2025-07-12 06:55:36,889 INFO → GET /health/local
+2025-07-12 06:55:36,889 INFO → Origin header: http://localhost:5173
+2025-07-12 06:55:36,890 INFO Health check: local OK
+2025-07-12 06:55:36,890 INFO ← GET /health/local completed in 0.74ms with status 200
+2025-07-12 06:56:36,881 INFO → GET /health/outlook
+2025-07-12 06:56:36,881 INFO → Origin header: http://localhost:5173
+2025-07-12 06:56:36,890 INFO Health check: outlook OK
+2025-07-12 06:56:36,892 INFO ← GET /health/outlook completed in 10.92ms with status 200
+2025-07-12 06:56:36,894 INFO → GET /health/local
+2025-07-12 06:56:36,894 INFO → Origin header: http://localhost:5173
+2025-07-12 06:56:36,894 INFO Health check: local OK
+2025-07-12 06:56:36,895 INFO ← GET /health/local completed in 0.68ms with status 200
+2025-07-12 06:56:57,937 INFO Fetched 16 emails.
+2025-07-12 06:57:36,877 INFO → GET /health/outlook
+2025-07-12 06:57:36,877 INFO → Origin header: http://localhost:5173
+2025-07-12 06:57:36,884 INFO Health check: outlook OK
+2025-07-12 06:57:36,887 INFO ← GET /health/outlook completed in 9.29ms with status 200
+2025-07-12 06:57:36,889 INFO → GET /health/local
+2025-07-12 06:57:36,889 INFO → Origin header: http://localhost:5173
+2025-07-12 06:57:36,890 INFO Health check: local OK
+2025-07-12 06:57:36,890 INFO ← GET /health/local completed in 0.76ms with status 200
+2025-07-12 06:57:36,891 INFO → GET /emails
+2025-07-12 06:57:36,892 INFO → Origin header: http://localhost:5173
+2025-07-12 06:57:43,529 INFO Fetched 16 emails.
+2025-07-12 06:57:43,529 INFO Returning 13 filtered emails
+2025-07-12 06:57:43,530 INFO ← GET /emails completed in 6638.17ms with status 200
+2025-07-12 06:58:36,871 INFO → GET /health/outlook
+2025-07-12 06:58:36,872 INFO → Origin header: http://localhost:5173
+2025-07-12 06:58:36,873 INFO → GET /health/local
+2025-07-12 06:58:36,873 INFO → Origin header: http://localhost:5173
+2025-07-12 06:58:36,874 INFO Health check: local OK
+2025-07-12 06:58:36,875 INFO ← GET /health/local completed in 1.53ms with status 200
+2025-07-12 06:58:36,880 INFO Health check: outlook OK
+2025-07-12 06:58:36,882 INFO ← GET /health/outlook completed in 9.81ms with status 200
+2025-07-12 06:59:37,180 INFO → GET /health/outlook
+2025-07-12 06:59:37,180 INFO → Origin header: http://localhost:5173
+2025-07-12 06:59:37,181 INFO → GET /health/local
+2025-07-12 06:59:37,182 INFO → Origin header: http://localhost:5173
+2025-07-12 06:59:37,184 INFO Health check: local OK
+2025-07-12 06:59:37,185 INFO ← GET /health/local completed in 3.02ms with status 200
+2025-07-12 06:59:37,193 INFO Health check: outlook OK
+2025-07-12 06:59:37,195 INFO ← GET /health/outlook completed in 14.54ms with status 200
+2025-07-12 07:00:36,874 INFO → GET /health/outlook
+2025-07-12 07:00:36,874 INFO → Origin header: http://localhost:5173
+2025-07-12 07:00:36,886 INFO Health check: outlook OK
+2025-07-12 07:00:36,888 INFO ← GET /health/outlook completed in 13.65ms with status 200
+2025-07-12 07:00:36,890 INFO → GET /health/local
+2025-07-12 07:00:36,890 INFO → Origin header: http://localhost:5173
+2025-07-12 07:00:36,891 INFO Health check: local OK
+2025-07-12 07:00:36,892 INFO ← GET /health/local completed in 0.89ms with status 200
+2025-07-12 07:01:36,878 INFO → GET /health/outlook
+2025-07-12 07:01:36,878 INFO → Origin header: http://localhost:5173
+2025-07-12 07:01:36,888 INFO Health check: outlook OK
+2025-07-12 07:01:36,890 INFO ← GET /health/outlook completed in 11.18ms with status 200
+2025-07-12 07:01:36,891 INFO → GET /health/local
+2025-07-12 07:01:36,892 INFO → Origin header: http://localhost:5173
+2025-07-12 07:01:36,892 INFO Health check: local OK
+2025-07-12 07:01:36,893 INFO ← GET /health/local completed in 0.95ms with status 200
+2025-07-12 07:01:57,258 INFO Fetched 15 emails.
+2025-07-12 07:02:36,875 INFO → GET /health/outlook
+2025-07-12 07:02:36,876 INFO → Origin header: http://localhost:5173
+2025-07-12 07:02:36,882 INFO Health check: outlook OK
+2025-07-12 07:02:36,884 INFO ← GET /health/outlook completed in 8.30ms with status 200
+2025-07-12 07:02:36,886 INFO → GET /health/local
+2025-07-12 07:02:36,886 INFO → Origin header: http://localhost:5173
+2025-07-12 07:02:36,887 INFO Health check: local OK
+2025-07-12 07:02:36,887 INFO ← GET /health/local completed in 0.74ms with status 200
+2025-07-12 07:02:36,889 INFO → GET /emails
+2025-07-12 07:02:36,889 INFO → Origin header: http://localhost:5173
+2025-07-12 07:02:42,730 INFO Fetched 15 emails.
+2025-07-12 07:02:42,730 INFO Returning 12 filtered emails
+2025-07-12 07:02:42,731 INFO ← GET /emails completed in 5841.60ms with status 200
+2025-07-12 07:03:36,870 INFO → GET /health/outlook
+2025-07-12 07:03:36,871 INFO → Origin header: http://localhost:5173
+2025-07-12 07:03:36,871 INFO → GET /health/local
+2025-07-12 07:03:36,871 INFO → Origin header: http://localhost:5173
+2025-07-12 07:03:36,872 INFO Health check: local OK
+2025-07-12 07:03:36,873 INFO ← GET /health/local completed in 1.46ms with status 200
+2025-07-12 07:03:36,878 INFO Health check: outlook OK
+2025-07-12 07:03:36,880 INFO ← GET /health/outlook completed in 9.71ms with status 200
+2025-07-12 07:04:37,180 INFO → GET /health/outlook
+2025-07-12 07:04:37,180 INFO → Origin header: http://localhost:5173
+2025-07-12 07:04:37,182 INFO → GET /health/local
+2025-07-12 07:04:37,182 INFO → Origin header: http://localhost:5173
+2025-07-12 07:04:37,184 INFO Health check: local OK
+2025-07-12 07:04:37,186 INFO ← GET /health/local completed in 2.84ms with status 200
+2025-07-12 07:04:37,192 INFO Health check: outlook OK
+2025-07-12 07:04:37,194 INFO ← GET /health/outlook completed in 13.22ms with status 200
+2025-07-12 07:05:36,892 INFO → GET /health/outlook
+2025-07-12 07:05:36,892 INFO → Origin header: http://localhost:5173
+2025-07-12 07:05:36,900 INFO Health check: outlook OK
+2025-07-12 07:05:36,902 INFO ← GET /health/outlook completed in 9.71ms with status 200
+2025-07-12 07:05:36,903 INFO → GET /health/local
+2025-07-12 07:05:36,903 INFO → Origin header: http://localhost:5173
+2025-07-12 07:05:36,904 INFO Health check: local OK
+2025-07-12 07:05:36,904 INFO ← GET /health/local completed in 0.72ms with status 200
+2025-07-12 07:06:36,881 INFO → GET /health/outlook
+2025-07-12 07:06:36,881 INFO → Origin header: http://localhost:5173
+2025-07-12 07:06:36,892 INFO Health check: outlook OK
+2025-07-12 07:06:36,894 INFO ← GET /health/outlook completed in 12.51ms with status 200
+2025-07-12 07:06:36,896 INFO → GET /health/local
+2025-07-12 07:06:36,896 INFO → Origin header: http://localhost:5173
+2025-07-12 07:06:36,897 INFO Health check: local OK
+2025-07-12 07:06:36,897 INFO ← GET /health/local completed in 0.67ms with status 200
+2025-07-12 07:06:56,982 INFO Fetched 15 emails.
+2025-07-12 07:07:36,886 INFO → GET /health/outlook
+2025-07-12 07:07:36,886 INFO → Origin header: http://localhost:5173
+2025-07-12 07:07:36,895 INFO Health check: outlook OK
+2025-07-12 07:07:36,898 INFO ← GET /health/outlook completed in 11.81ms with status 200
+2025-07-12 07:07:36,900 INFO → GET /health/local
+2025-07-12 07:07:36,900 INFO → Origin header: http://localhost:5173
+2025-07-12 07:07:36,901 INFO Health check: local OK
+2025-07-12 07:07:36,901 INFO ← GET /health/local completed in 0.70ms with status 200
+2025-07-12 07:07:36,903 INFO → GET /emails
+2025-07-12 07:07:36,903 INFO → Origin header: http://localhost:5173
+2025-07-12 07:07:42,763 INFO Fetched 15 emails.
+2025-07-12 07:07:42,764 INFO Returning 12 filtered emails
+2025-07-12 07:07:42,765 INFO ← GET /emails completed in 5861.43ms with status 200
+2025-07-12 07:08:37,185 INFO → GET /health/outlook
+2025-07-12 07:08:37,186 INFO → Origin header: http://localhost:5173
+2025-07-12 07:08:37,187 INFO → GET /health/local
+2025-07-12 07:08:37,187 INFO → Origin header: http://localhost:5173
+2025-07-12 07:08:37,189 INFO Health check: local OK
+2025-07-12 07:08:37,190 INFO ← GET /health/local completed in 2.37ms with status 200
+2025-07-12 07:08:37,197 INFO Health check: outlook OK
+2025-07-12 07:08:37,199 INFO ← GET /health/outlook completed in 12.81ms with status 200
+2025-07-12 07:09:36,870 INFO → GET /health/outlook
+2025-07-12 07:09:36,871 INFO → Origin header: http://localhost:5173
+2025-07-12 07:09:36,882 INFO Health check: outlook OK
+2025-07-12 07:09:36,884 INFO ← GET /health/outlook completed in 13.27ms with status 200
+2025-07-12 07:09:36,886 INFO → GET /health/local
+2025-07-12 07:09:36,887 INFO → Origin header: http://localhost:5173
+2025-07-12 07:09:36,887 INFO Health check: local OK
+2025-07-12 07:09:36,887 INFO ← GET /health/local completed in 0.74ms with status 200
+2025-07-12 07:10:36,884 INFO → GET /health/outlook
+2025-07-12 07:10:36,884 INFO → Origin header: http://localhost:5173
+2025-07-12 07:10:36,896 INFO Health check: outlook OK
+2025-07-12 07:10:36,898 INFO ← GET /health/outlook completed in 13.13ms with status 200
+2025-07-12 07:10:36,900 INFO → GET /health/local
+2025-07-12 07:10:36,900 INFO → Origin header: http://localhost:5173
+2025-07-12 07:10:36,901 INFO Health check: local OK
+2025-07-12 07:10:36,901 INFO ← GET /health/local completed in 0.71ms with status 200
+2025-07-12 07:11:36,870 INFO → GET /health/outlook
+2025-07-12 07:11:36,871 INFO → Origin header: http://localhost:5173
+2025-07-12 07:11:36,878 INFO Health check: outlook OK
+2025-07-12 07:11:36,880 INFO ← GET /health/outlook completed in 9.41ms with status 200
+2025-07-12 07:11:36,882 INFO → GET /health/local
+2025-07-12 07:11:36,882 INFO → Origin header: http://localhost:5173
+2025-07-12 07:11:36,883 INFO Health check: local OK
+2025-07-12 07:11:36,883 INFO ← GET /health/local completed in 0.82ms with status 200
+2025-07-12 07:11:57,236 INFO Fetched 15 emails.
+2025-07-12 07:12:36,881 INFO → GET /health/outlook
+2025-07-12 07:12:36,882 INFO → Origin header: http://localhost:5173
+2025-07-12 07:12:36,892 INFO Health check: outlook OK
+2025-07-12 07:12:36,894 INFO ← GET /health/outlook completed in 11.85ms with status 200
+2025-07-12 07:12:36,896 INFO → GET /health/local
+2025-07-12 07:12:36,896 INFO → Origin header: http://localhost:5173
+2025-07-12 07:12:36,896 INFO Health check: local OK
+2025-07-12 07:12:36,897 INFO ← GET /health/local completed in 0.92ms with status 200
+2025-07-12 07:12:36,899 INFO → GET /emails
+2025-07-12 07:12:36,899 INFO → Origin header: http://localhost:5173
+2025-07-12 07:12:43,193 INFO Fetched 15 emails.
+2025-07-12 07:12:43,194 INFO Returning 12 filtered emails
+2025-07-12 07:12:43,194 INFO ← GET /emails completed in 6295.29ms with status 200
+2025-07-12 07:13:36,886 INFO → GET /health/outlook
+2025-07-12 07:13:36,886 INFO → Origin header: http://localhost:5173
+2025-07-12 07:13:36,887 INFO → GET /health/local
+2025-07-12 07:13:36,888 INFO → Origin header: http://localhost:5173
+2025-07-12 07:13:36,890 INFO Health check: local OK
+2025-07-12 07:13:36,890 INFO ← GET /health/local completed in 2.41ms with status 200
+2025-07-12 07:13:36,895 INFO Health check: outlook OK
+2025-07-12 07:13:36,897 INFO ← GET /health/outlook completed in 10.50ms with status 200
+2025-07-12 07:14:37,183 INFO → GET /health/outlook
+2025-07-12 07:14:37,184 INFO → Origin header: http://localhost:5173
+2025-07-12 07:14:37,185 INFO → GET /health/local
+2025-07-12 07:14:37,186 INFO → Origin header: http://localhost:5173
+2025-07-12 07:14:37,188 INFO Health check: local OK
+2025-07-12 07:14:37,189 INFO ← GET /health/local completed in 2.98ms with status 200
+2025-07-12 07:14:37,197 INFO Health check: outlook OK
+2025-07-12 07:14:37,199 INFO ← GET /health/outlook completed in 14.56ms with status 200
+2025-07-12 07:15:36,887 INFO → GET /health/outlook
+2025-07-12 07:15:36,887 INFO → Origin header: http://localhost:5173
+2025-07-12 07:15:36,894 INFO Health check: outlook OK
+2025-07-12 07:15:36,896 INFO ← GET /health/outlook completed in 9.29ms with status 200
+2025-07-12 07:15:36,898 INFO → GET /health/local
+2025-07-12 07:15:36,899 INFO → Origin header: http://localhost:5173
+2025-07-12 07:15:36,899 INFO Health check: local OK
+2025-07-12 07:15:36,900 INFO ← GET /health/local completed in 0.69ms with status 200
+2025-07-12 07:16:36,881 INFO → GET /health/outlook
+2025-07-12 07:16:36,882 INFO → Origin header: http://localhost:5173
+2025-07-12 07:16:36,889 INFO Health check: outlook OK
+2025-07-12 07:16:36,891 INFO ← GET /health/outlook completed in 9.22ms with status 200
+2025-07-12 07:16:36,893 INFO → GET /health/local
+2025-07-12 07:16:36,894 INFO → Origin header: http://localhost:5173
+2025-07-12 07:16:36,894 INFO Health check: local OK
+2025-07-12 07:16:36,895 INFO ← GET /health/local completed in 0.77ms with status 200
+2025-07-12 07:16:57,724 INFO Fetched 15 emails.
+2025-07-12 07:17:36,878 INFO → GET /health/outlook
+2025-07-12 07:17:36,879 INFO → Origin header: http://localhost:5173
+2025-07-12 07:17:36,886 INFO Health check: outlook OK
+2025-07-12 07:17:36,888 INFO ← GET /health/outlook completed in 9.16ms with status 200
+2025-07-12 07:17:36,891 INFO → GET /health/local
+2025-07-12 07:17:36,891 INFO → Origin header: http://localhost:5173
+2025-07-12 07:17:36,892 INFO Health check: local OK
+2025-07-12 07:17:36,892 INFO ← GET /health/local completed in 0.90ms with status 200
+2025-07-12 07:17:36,894 INFO → GET /emails
+2025-07-12 07:17:36,894 INFO → Origin header: http://localhost:5173
+2025-07-12 07:17:43,486 INFO Fetched 14 emails.
+2025-07-12 07:17:43,487 INFO Returning 11 filtered emails
+2025-07-12 07:17:43,487 INFO ← GET /emails completed in 6593.12ms with status 200
+2025-07-12 07:18:36,876 INFO → GET /health/outlook
+2025-07-12 07:18:36,876 INFO → Origin header: http://localhost:5173
+2025-07-12 07:18:36,877 INFO → GET /health/local
+2025-07-12 07:18:36,877 INFO → Origin header: http://localhost:5173
+2025-07-12 07:18:36,878 INFO Health check: local OK
+2025-07-12 07:18:36,878 INFO ← GET /health/local completed in 1.26ms with status 200
+2025-07-12 07:18:36,884 INFO Health check: outlook OK
+2025-07-12 07:18:36,886 INFO ← GET /health/outlook completed in 10.28ms with status 200
+2025-07-12 07:19:37,186 INFO → GET /health/outlook
+2025-07-12 07:19:37,187 INFO → Origin header: http://localhost:5173
+2025-07-12 07:19:37,188 INFO → GET /health/local
+2025-07-12 07:19:37,189 INFO → Origin header: http://localhost:5173
+2025-07-12 07:19:37,191 INFO Health check: local OK
+2025-07-12 07:19:37,192 INFO ← GET /health/local completed in 3.33ms with status 200
+2025-07-12 07:19:37,200 INFO Health check: outlook OK
+2025-07-12 07:19:37,202 INFO ← GET /health/outlook completed in 14.92ms with status 200
+2025-07-12 07:20:36,887 INFO → GET /health/outlook
+2025-07-12 07:20:36,887 INFO → Origin header: http://localhost:5173
+2025-07-12 07:20:36,894 INFO Health check: outlook OK
+2025-07-12 07:20:36,897 INFO ← GET /health/outlook completed in 9.43ms with status 200
+2025-07-12 07:20:36,899 INFO → GET /health/local
+2025-07-12 07:20:36,900 INFO → Origin header: http://localhost:5173
+2025-07-12 07:20:36,900 INFO Health check: local OK
+2025-07-12 07:20:36,901 INFO ← GET /health/local completed in 0.69ms with status 200
+2025-07-12 07:21:36,875 INFO → GET /health/outlook
+2025-07-12 07:21:36,876 INFO → Origin header: http://localhost:5173
+2025-07-12 07:21:36,888 INFO Health check: outlook OK
+2025-07-12 07:21:36,890 INFO ← GET /health/outlook completed in 14.04ms with status 200
+2025-07-12 07:21:36,892 INFO → GET /health/local
+2025-07-12 07:21:36,892 INFO → Origin header: http://localhost:5173
+2025-07-12 07:21:36,893 INFO Health check: local OK
+2025-07-12 07:21:36,893 INFO ← GET /health/local completed in 0.77ms with status 200
+2025-07-12 07:21:55,195 INFO Fetched 13 emails.
+2025-07-12 07:22:36,878 INFO → GET /health/outlook
+2025-07-12 07:22:36,878 INFO → Origin header: http://localhost:5173
+2025-07-12 07:22:36,886 INFO Health check: outlook OK
+2025-07-12 07:22:36,889 INFO ← GET /health/outlook completed in 10.53ms with status 200
+2025-07-12 07:22:36,891 INFO → GET /health/local
+2025-07-12 07:22:36,891 INFO → Origin header: http://localhost:5173
+2025-07-12 07:22:36,891 INFO Health check: local OK
+2025-07-12 07:22:36,892 INFO ← GET /health/local completed in 0.65ms with status 200
+2025-07-12 07:22:36,893 INFO → GET /emails
+2025-07-12 07:22:36,893 INFO → Origin header: http://localhost:5173
+2025-07-12 07:22:41,517 INFO Fetched 13 emails.
+2025-07-12 07:22:41,517 INFO Returning 10 filtered emails
+2025-07-12 07:22:41,518 INFO ← GET /emails completed in 4624.97ms with status 200
+2025-07-12 07:23:36,879 INFO → GET /health/outlook
+2025-07-12 07:23:36,879 INFO → Origin header: http://localhost:5173
+2025-07-12 07:23:36,880 INFO → GET /health/local
+2025-07-12 07:23:36,880 INFO → Origin header: http://localhost:5173
+2025-07-12 07:23:36,881 INFO Health check: local OK
+2025-07-12 07:23:36,882 INFO ← GET /health/local completed in 1.39ms with status 200
+2025-07-12 07:23:36,887 INFO Health check: outlook OK
+2025-07-12 07:23:36,891 INFO ← GET /health/outlook completed in 10.96ms with status 200
+2025-07-12 07:24:37,194 INFO → GET /health/outlook
+2025-07-12 07:24:37,195 INFO → Origin header: http://localhost:5173
+2025-07-12 07:24:37,195 INFO → GET /health/local
+2025-07-12 07:24:37,195 INFO → Origin header: http://localhost:5173
+2025-07-12 07:24:37,196 INFO Health check: local OK
+2025-07-12 07:24:37,197 INFO ← GET /health/local completed in 1.55ms with status 200
+2025-07-12 07:24:37,203 INFO Health check: outlook OK
+2025-07-12 07:24:37,205 INFO ← GET /health/outlook completed in 9.91ms with status 200
+2025-07-12 07:25:36,877 INFO → GET /health/outlook
+2025-07-12 07:25:36,877 INFO → Origin header: http://localhost:5173
+2025-07-12 07:25:36,885 INFO Health check: outlook OK
+2025-07-12 07:25:36,887 INFO ← GET /health/outlook completed in 9.94ms with status 200
+2025-07-12 07:25:36,889 INFO → GET /health/local
+2025-07-12 07:25:36,890 INFO → Origin header: http://localhost:5173
+2025-07-12 07:25:36,890 INFO Health check: local OK
+2025-07-12 07:25:36,891 INFO ← GET /health/local completed in 0.92ms with status 200
+2025-07-12 07:26:36,885 INFO → GET /health/outlook
+2025-07-12 07:26:36,885 INFO → Origin header: http://localhost:5173
+2025-07-12 07:26:36,896 INFO Health check: outlook OK
+2025-07-12 07:26:36,898 INFO ← GET /health/outlook completed in 12.46ms with status 200
+2025-07-12 07:26:36,900 INFO → GET /health/local
+2025-07-12 07:26:36,900 INFO → Origin header: http://localhost:5173
+2025-07-12 07:26:36,901 INFO Health check: local OK
+2025-07-12 07:26:36,901 INFO ← GET /health/local completed in 0.84ms with status 200
+2025-07-12 07:26:55,121 INFO Fetched 12 emails.
+2025-07-12 07:27:36,882 INFO → GET /health/outlook
+2025-07-12 07:27:36,882 INFO → Origin header: http://localhost:5173
+2025-07-12 07:27:36,891 INFO Health check: outlook OK
+2025-07-12 07:27:36,893 INFO ← GET /health/outlook completed in 10.35ms with status 200
+2025-07-12 07:27:36,895 INFO → GET /health/local
+2025-07-12 07:27:36,895 INFO → Origin header: http://localhost:5173
+2025-07-12 07:27:36,896 INFO Health check: local OK
+2025-07-12 07:27:36,896 INFO ← GET /health/local completed in 0.91ms with status 200
+2025-07-12 07:27:36,898 INFO → GET /emails
+2025-07-12 07:27:36,898 INFO → Origin header: http://localhost:5173
+2025-07-12 07:27:40,012 INFO Fetched 12 emails.
+2025-07-12 07:27:40,012 INFO Returning 9 filtered emails
+2025-07-12 07:27:40,013 INFO ← GET /emails completed in 3114.71ms with status 200
+2025-07-12 07:28:36,883 INFO → GET /health/outlook
+2025-07-12 07:28:36,883 INFO → Origin header: http://localhost:5173
+2025-07-12 07:28:36,884 INFO → GET /health/local
+2025-07-12 07:28:36,884 INFO → Origin header: http://localhost:5173
+2025-07-12 07:28:36,885 INFO Health check: local OK
+2025-07-12 07:28:36,886 INFO ← GET /health/local completed in 1.50ms with status 200
+2025-07-12 07:28:36,892 INFO Health check: outlook OK
+2025-07-12 07:28:36,894 INFO ← GET /health/outlook completed in 10.64ms with status 200
+2025-07-12 07:29:37,187 INFO → GET /health/outlook
+2025-07-12 07:29:37,187 INFO → Origin header: http://localhost:5173
+2025-07-12 07:29:37,188 INFO → GET /health/local
+2025-07-12 07:29:37,188 INFO → Origin header: http://localhost:5173
+2025-07-12 07:29:37,189 INFO Health check: local OK
+2025-07-12 07:29:37,190 INFO ← GET /health/local completed in 2.15ms with status 200
+2025-07-12 07:29:37,196 INFO Health check: outlook OK
+2025-07-12 07:29:37,198 INFO ← GET /health/outlook completed in 10.86ms with status 200
+2025-07-12 07:30:36,877 INFO → GET /health/outlook
+2025-07-12 07:30:36,878 INFO → Origin header: http://localhost:5173
+2025-07-12 07:30:36,885 INFO Health check: outlook OK
+2025-07-12 07:30:36,887 INFO ← GET /health/outlook completed in 9.23ms with status 200
+2025-07-12 07:30:36,889 INFO → GET /health/local
+2025-07-12 07:30:36,889 INFO → Origin header: http://localhost:5173
+2025-07-12 07:30:36,890 INFO Health check: local OK
+2025-07-12 07:30:36,890 INFO ← GET /health/local completed in 0.72ms with status 200
+2025-07-12 07:31:36,887 INFO → GET /health/outlook
+2025-07-12 07:31:36,888 INFO → Origin header: http://localhost:5173
+2025-07-12 07:31:36,898 INFO Health check: outlook OK
+2025-07-12 07:31:36,900 INFO ← GET /health/outlook completed in 11.80ms with status 200
+2025-07-12 07:31:36,902 INFO → GET /health/local
+2025-07-12 07:31:36,902 INFO → Origin header: http://localhost:5173
+2025-07-12 07:31:36,903 INFO Health check: local OK
+2025-07-12 07:31:36,903 INFO ← GET /health/local completed in 0.76ms with status 200
+2025-07-12 07:31:53,641 INFO Fetched 11 emails.
+2025-07-12 07:32:36,888 INFO → GET /health/outlook
+2025-07-12 07:32:36,888 INFO → Origin header: http://localhost:5173
+2025-07-12 07:32:36,896 INFO Health check: outlook OK
+2025-07-12 07:32:36,898 INFO ← GET /health/outlook completed in 9.75ms with status 200
+2025-07-12 07:32:36,900 INFO → GET /health/local
+2025-07-12 07:32:36,900 INFO → Origin header: http://localhost:5173
+2025-07-12 07:32:36,901 INFO Health check: local OK
+2025-07-12 07:32:36,901 INFO ← GET /health/local completed in 0.93ms with status 200
+2025-07-12 07:32:36,903 INFO → GET /emails
+2025-07-12 07:32:36,903 INFO → Origin header: http://localhost:5173
+2025-07-12 07:32:39,293 INFO Fetched 11 emails.
+2025-07-12 07:32:39,293 INFO Returning 8 filtered emails
+2025-07-12 07:32:39,294 INFO ← GET /emails completed in 2389.90ms with status 200
+2025-07-12 07:33:36,884 INFO → GET /health/outlook
+2025-07-12 07:33:36,885 INFO → Origin header: http://localhost:5173
+2025-07-12 07:33:36,885 INFO → GET /health/local
+2025-07-12 07:33:36,886 INFO → Origin header: http://localhost:5173
+2025-07-12 07:33:36,887 INFO Health check: local OK
+2025-07-12 07:33:36,887 INFO ← GET /health/local completed in 1.56ms with status 200
+2025-07-12 07:33:36,892 INFO Health check: outlook OK
+2025-07-12 07:33:36,895 INFO ← GET /health/outlook completed in 9.61ms with status 200
+2025-07-12 07:34:37,200 INFO → GET /health/outlook
+2025-07-12 07:34:37,200 INFO → Origin header: http://localhost:5173
+2025-07-12 07:34:37,202 INFO → GET /health/local
+2025-07-12 07:34:37,202 INFO → Origin header: http://localhost:5173
+2025-07-12 07:34:37,204 INFO Health check: local OK
+2025-07-12 07:34:37,206 INFO ← GET /health/local completed in 2.65ms with status 200
+2025-07-12 07:34:37,214 INFO Health check: outlook OK
+2025-07-12 07:34:37,216 INFO ← GET /health/outlook completed in 15.20ms with status 200
+2025-07-12 07:35:36,886 INFO → GET /health/outlook
+2025-07-12 07:35:36,887 INFO → Origin header: http://localhost:5173
+2025-07-12 07:35:36,900 INFO Health check: outlook OK
+2025-07-12 07:35:36,902 INFO ← GET /health/outlook completed in 14.55ms with status 200
+2025-07-12 07:35:36,904 INFO → GET /health/local
+2025-07-12 07:35:36,904 INFO → Origin header: http://localhost:5173
+2025-07-12 07:35:36,904 INFO Health check: local OK
+2025-07-12 07:35:36,905 INFO ← GET /health/local completed in 0.75ms with status 200
+2025-07-12 07:36:36,901 INFO → GET /health/outlook
+2025-07-12 07:36:36,901 INFO → Origin header: http://localhost:5173
+2025-07-12 07:36:36,910 INFO Health check: outlook OK
+2025-07-12 07:36:36,912 INFO ← GET /health/outlook completed in 10.89ms with status 200
+2025-07-12 07:36:36,914 INFO → GET /health/local
+2025-07-12 07:36:36,915 INFO → Origin header: http://localhost:5173
+2025-07-12 07:36:36,915 INFO Health check: local OK
+2025-07-12 07:36:36,916 INFO ← GET /health/local completed in 1.03ms with status 200
+2025-07-12 07:36:53,309 INFO Fetched 11 emails.
+2025-07-12 07:37:36,884 INFO → GET /health/outlook
+2025-07-12 07:37:36,884 INFO → Origin header: http://localhost:5173
+2025-07-12 07:37:36,893 INFO Health check: outlook OK
+2025-07-12 07:37:36,897 INFO ← GET /health/outlook completed in 12.30ms with status 200
+2025-07-12 07:37:36,899 INFO → GET /health/local
+2025-07-12 07:37:36,899 INFO → Origin header: http://localhost:5173
+2025-07-12 07:37:36,899 INFO Health check: local OK
+2025-07-12 07:37:36,900 INFO ← GET /health/local completed in 0.63ms with status 200
+2025-07-12 07:37:36,901 INFO → GET /emails
+2025-07-12 07:37:36,902 INFO → Origin header: http://localhost:5173
+2025-07-12 07:37:39,369 INFO Fetched 11 emails.
+2025-07-12 07:37:39,370 INFO Returning 8 filtered emails
+2025-07-12 07:37:39,370 INFO ← GET /emails completed in 2468.64ms with status 200
+2025-07-12 07:38:37,194 INFO → GET /health/outlook
+2025-07-12 07:38:37,195 INFO → Origin header: http://localhost:5173
+2025-07-12 07:38:37,196 INFO → GET /health/local
+2025-07-12 07:38:37,197 INFO → Origin header: http://localhost:5173
+2025-07-12 07:38:37,199 INFO Health check: local OK
+2025-07-12 07:38:37,200 INFO ← GET /health/local completed in 2.56ms with status 200
+2025-07-12 07:38:37,207 INFO Health check: outlook OK
+2025-07-12 07:38:37,210 INFO ← GET /health/outlook completed in 14.24ms with status 200
+2025-07-12 07:39:36,886 INFO → GET /health/outlook
+2025-07-12 07:39:36,886 INFO → Origin header: http://localhost:5173
+2025-07-12 07:39:36,897 INFO Health check: outlook OK
+2025-07-12 07:39:36,899 INFO ← GET /health/outlook completed in 12.72ms with status 200
+2025-07-12 07:39:36,901 INFO → GET /health/local
+2025-07-12 07:39:36,901 INFO → Origin header: http://localhost:5173
+2025-07-12 07:39:36,902 INFO Health check: local OK
+2025-07-12 07:39:36,902 INFO ← GET /health/local completed in 0.76ms with status 200
+2025-07-12 07:40:36,888 INFO → GET /health/outlook
+2025-07-12 07:40:36,888 INFO → Origin header: http://localhost:5173
+2025-07-12 07:40:36,897 INFO Health check: outlook OK
+2025-07-12 07:40:36,899 INFO ← GET /health/outlook completed in 10.99ms with status 200
+2025-07-12 07:40:36,901 INFO → GET /health/local
+2025-07-12 07:40:36,901 INFO → Origin header: http://localhost:5173
+2025-07-12 07:40:36,902 INFO Health check: local OK
+2025-07-12 07:40:36,902 INFO ← GET /health/local completed in 0.71ms with status 200
+2025-07-12 07:41:36,884 INFO → GET /health/outlook
+2025-07-12 07:41:36,884 INFO → Origin header: http://localhost:5173
+2025-07-12 07:41:36,895 INFO Health check: outlook OK
+2025-07-12 07:41:36,898 INFO ← GET /health/outlook completed in 12.90ms with status 200
+2025-07-12 07:41:36,899 INFO → GET /health/local
+2025-07-12 07:41:36,900 INFO → Origin header: http://localhost:5173
+2025-07-12 07:41:36,900 INFO Health check: local OK
+2025-07-12 07:41:36,901 INFO ← GET /health/local completed in 0.77ms with status 200
+2025-07-12 07:41:52,364 INFO Fetched 9 emails.
+2025-07-12 07:42:36,879 INFO → GET /health/outlook
+2025-07-12 07:42:36,879 INFO → Origin header: http://localhost:5173
+2025-07-12 07:42:36,886 INFO Health check: outlook OK
+2025-07-12 07:42:36,887 INFO ← GET /health/outlook completed in 8.29ms with status 200
+2025-07-12 07:42:36,890 INFO → GET /health/local
+2025-07-12 07:42:36,890 INFO → Origin header: http://localhost:5173
+2025-07-12 07:42:36,890 INFO Health check: local OK
+2025-07-12 07:42:36,891 INFO ← GET /health/local completed in 0.80ms with status 200
+2025-07-12 07:42:36,892 INFO → GET /emails
+2025-07-12 07:42:36,893 INFO → Origin header: http://localhost:5173
+2025-07-12 07:42:37,913 INFO Fetched 9 emails.
+2025-07-12 07:42:37,913 INFO Returning 6 filtered emails
+2025-07-12 07:42:37,914 INFO ← GET /emails completed in 1020.81ms with status 200
+2025-07-12 07:43:36,881 INFO → GET /health/outlook
+2025-07-12 07:43:36,881 INFO → Origin header: http://localhost:5173
+2025-07-12 07:43:36,882 INFO → GET /health/local
+2025-07-12 07:43:36,882 INFO → Origin header: http://localhost:5173
+2025-07-12 07:43:36,883 INFO Health check: local OK
+2025-07-12 07:43:36,884 INFO ← GET /health/local completed in 1.66ms with status 200
+2025-07-12 07:43:36,890 INFO Health check: outlook OK
+2025-07-12 07:43:36,893 INFO ← GET /health/outlook completed in 11.45ms with status 200
+2025-07-12 07:44:37,188 INFO → GET /health/outlook
+2025-07-12 07:44:37,189 INFO → Origin header: http://localhost:5173
+2025-07-12 07:44:37,190 INFO → GET /health/local
+2025-07-12 07:44:37,191 INFO → Origin header: http://localhost:5173
+2025-07-12 07:44:37,194 INFO Health check: local OK
+2025-07-12 07:44:37,195 INFO ← GET /health/local completed in 3.33ms with status 200
+2025-07-12 07:44:37,204 INFO Health check: outlook OK
+2025-07-12 07:44:37,206 INFO ← GET /health/outlook completed in 16.54ms with status 200
+2025-07-12 07:45:36,894 INFO → GET /health/outlook
+2025-07-12 07:45:36,894 INFO → Origin header: http://localhost:5173
+2025-07-12 07:45:36,905 INFO Health check: outlook OK
+2025-07-12 07:45:36,907 INFO ← GET /health/outlook completed in 12.12ms with status 200
+2025-07-12 07:45:36,909 INFO → GET /health/local
+2025-07-12 07:45:36,909 INFO → Origin header: http://localhost:5173
+2025-07-12 07:45:36,910 INFO Health check: local OK
+2025-07-12 07:45:36,910 INFO ← GET /health/local completed in 0.86ms with status 200
+2025-07-12 07:46:36,885 INFO → GET /health/outlook
+2025-07-12 07:46:36,885 INFO → Origin header: http://localhost:5173
+2025-07-12 07:46:36,895 INFO Health check: outlook OK
+2025-07-12 07:46:36,897 INFO ← GET /health/outlook completed in 11.61ms with status 200
+2025-07-12 07:46:36,899 INFO → GET /health/local
+2025-07-12 07:46:36,899 INFO → Origin header: http://localhost:5173
+2025-07-12 07:46:36,900 INFO Health check: local OK
+2025-07-12 07:46:36,900 INFO ← GET /health/local completed in 0.58ms with status 200
+2025-07-12 07:46:52,273 INFO Fetched 9 emails.
+2025-07-12 07:47:36,900 INFO → GET /health/outlook
+2025-07-12 07:47:36,900 INFO → Origin header: http://localhost:5173
+2025-07-12 07:47:36,907 INFO Health check: outlook OK
+2025-07-12 07:47:36,909 INFO ← GET /health/outlook completed in 8.50ms with status 200
+2025-07-12 07:47:36,911 INFO → GET /health/local
+2025-07-12 07:47:36,911 INFO → Origin header: http://localhost:5173
+2025-07-12 07:47:36,911 INFO Health check: local OK
+2025-07-12 07:47:36,912 INFO ← GET /health/local completed in 0.79ms with status 200
+2025-07-12 07:47:36,913 INFO → GET /emails
+2025-07-12 07:47:36,914 INFO → Origin header: http://localhost:5173
+2025-07-12 07:47:37,953 INFO Fetched 9 emails.
+2025-07-12 07:47:37,953 INFO Returning 6 filtered emails
+2025-07-12 07:47:37,954 INFO ← GET /emails completed in 1040.07ms with status 200
+2025-07-12 07:48:36,889 INFO → GET /health/outlook
+2025-07-12 07:48:36,889 INFO → Origin header: http://localhost:5173
+2025-07-12 07:48:36,890 INFO → GET /health/local
+2025-07-12 07:48:36,890 INFO → Origin header: http://localhost:5173
+2025-07-12 07:48:36,891 INFO Health check: local OK
+2025-07-12 07:48:36,891 INFO ← GET /health/local completed in 1.33ms with status 200
+2025-07-12 07:48:36,898 INFO Health check: outlook OK
+2025-07-12 07:48:36,900 INFO ← GET /health/outlook completed in 10.82ms with status 200
+2025-07-12 07:49:37,203 INFO → GET /health/outlook
+2025-07-12 07:49:37,203 INFO → Origin header: http://localhost:5173
+2025-07-12 07:49:37,205 INFO → GET /health/local
+2025-07-12 07:49:37,205 INFO → Origin header: http://localhost:5173
+2025-07-12 07:49:37,209 INFO Health check: local OK
+2025-07-12 07:49:37,210 INFO ← GET /health/local completed in 4.03ms with status 200
+2025-07-12 07:49:37,217 INFO Health check: outlook OK
+2025-07-12 07:49:37,220 INFO ← GET /health/outlook completed in 15.93ms with status 200
+2025-07-12 07:50:36,887 INFO → GET /health/outlook
+2025-07-12 07:50:36,888 INFO → Origin header: http://localhost:5173
+2025-07-12 07:50:36,900 INFO Health check: outlook OK
+2025-07-12 07:50:36,902 INFO ← GET /health/outlook completed in 14.00ms with status 200
+2025-07-12 07:50:36,904 INFO → GET /health/local
+2025-07-12 07:50:36,904 INFO → Origin header: http://localhost:5173
+2025-07-12 07:50:36,905 INFO Health check: local OK
+2025-07-12 07:50:36,905 INFO ← GET /health/local completed in 0.81ms with status 200
+2025-07-12 07:51:36,888 INFO → GET /health/outlook
+2025-07-12 07:51:36,889 INFO → Origin header: http://localhost:5173
+2025-07-12 07:51:36,902 INFO Health check: outlook OK
+2025-07-12 07:51:36,904 INFO ← GET /health/outlook completed in 14.97ms with status 200
+2025-07-12 07:51:36,906 INFO → GET /health/local
+2025-07-12 07:51:36,906 INFO → Origin header: http://localhost:5173
+2025-07-12 07:51:36,907 INFO Health check: local OK
+2025-07-12 07:51:36,907 INFO ← GET /health/local completed in 0.83ms with status 200
+2025-07-12 07:51:51,062 INFO Fetched 8 emails.
+2025-07-12 07:52:36,889 INFO → GET /health/outlook
+2025-07-12 07:52:36,889 INFO → Origin header: http://localhost:5173
+2025-07-12 07:52:36,898 INFO Health check: outlook OK
+2025-07-12 07:52:36,902 INFO ← GET /health/outlook completed in 13.21ms with status 200
+2025-07-12 07:52:36,904 INFO → GET /health/local
+2025-07-12 07:52:36,904 INFO → Origin header: http://localhost:5173
+2025-07-12 07:52:36,904 INFO Health check: local OK
+2025-07-12 07:52:36,905 INFO ← GET /health/local completed in 0.61ms with status 200
+2025-07-12 07:52:36,906 INFO → GET /emails
+2025-07-12 07:52:36,906 INFO → Origin header: http://localhost:5173
+2025-07-12 07:52:37,192 INFO Fetched 7 emails.
+2025-07-12 07:52:37,193 INFO Returning 5 filtered emails
+2025-07-12 07:52:37,193 INFO ← GET /emails completed in 287.31ms with status 200
+2025-07-12 07:53:36,885 INFO → GET /health/outlook
+2025-07-12 07:53:36,885 INFO → Origin header: http://localhost:5173
+2025-07-12 07:53:36,886 INFO → GET /health/local
+2025-07-12 07:53:36,887 INFO → Origin header: http://localhost:5173
+2025-07-12 07:53:36,888 INFO Health check: local OK
+2025-07-12 07:53:36,889 INFO ← GET /health/local completed in 2.04ms with status 200
+2025-07-12 07:53:36,896 INFO Health check: outlook OK
+2025-07-12 07:53:36,898 INFO ← GET /health/outlook completed in 12.38ms with status 200
+2025-07-12 07:54:37,199 INFO → GET /health/outlook
+2025-07-12 07:54:37,200 INFO → Origin header: http://localhost:5173
+2025-07-12 07:54:37,201 INFO → GET /health/local
+2025-07-12 07:54:37,202 INFO → Origin header: http://localhost:5173
+2025-07-12 07:54:37,204 INFO Health check: local OK
+2025-07-12 07:54:37,205 INFO ← GET /health/local completed in 2.61ms with status 200
+2025-07-12 07:54:37,214 INFO Health check: outlook OK
+2025-07-12 07:54:37,216 INFO ← GET /health/outlook completed in 16.38ms with status 200
+2025-07-12 07:55:36,879 INFO → GET /health/outlook
+2025-07-12 07:55:36,879 INFO → Origin header: http://localhost:5173
+2025-07-12 07:55:36,886 INFO Health check: outlook OK
+2025-07-12 07:55:36,889 INFO ← GET /health/outlook completed in 9.19ms with status 200
+2025-07-12 07:55:36,890 INFO → GET /health/local
+2025-07-12 07:55:36,890 INFO → Origin header: http://localhost:5173
+2025-07-12 07:55:36,891 INFO Health check: local OK
+2025-07-12 07:55:36,891 INFO ← GET /health/local completed in 0.81ms with status 200
+2025-07-12 07:55:43,425 INFO → GET /health/outlook
+2025-07-12 07:55:43,459 INFO → Origin header: http://localhost:5173
+2025-07-12 07:55:43,730 INFO → GET /health/local
+2025-07-12 07:55:43,748 INFO → Origin header: http://localhost:5173
+2025-07-12 07:55:43,797 INFO Health check: local OK
+2025-07-12 07:55:43,811 INFO ← GET /health/local completed in 46.40ms with status 200
+2025-07-12 07:55:44,652 INFO → OPTIONS /user-config
+2025-07-12 07:55:44,663 INFO → Origin header: http://localhost:5173
+2025-07-12 07:55:44,665 INFO ← OPTIONS /user-config completed in 0.93ms with status 200
+2025-07-12 07:55:44,672 INFO → OPTIONS /user-config
+2025-07-12 07:55:44,676 INFO → Origin header: http://localhost:5173
+2025-07-12 07:55:44,680 INFO ← OPTIONS /user-config completed in 0.52ms with status 200
+2025-07-12 07:55:44,686 INFO → POST /user-config
+2025-07-12 07:55:44,686 INFO → Origin header: http://localhost:5173
+2025-07-12 07:55:44,687 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-12 07:55:44,688 INFO ← POST /user-config completed in 2.18ms with status 200
+2025-07-12 07:55:44,692 INFO → POST /user-config
+2025-07-12 07:55:44,693 INFO → Origin header: http://localhost:5173
+2025-07-12 07:55:44,697 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-12 07:55:44,699 INFO ← POST /user-config completed in 5.13ms with status 200
+2025-07-12 07:55:45,317 INFO Health check: outlook OK
+2025-07-12 07:55:45,380 INFO ← GET /health/outlook completed in 1751.92ms with status 200
+2025-07-12 07:55:47,252 INFO → POST /user-config
+2025-07-12 07:55:47,259 INFO → Origin header: http://localhost:5173
+2025-07-12 07:55:47,261 INFO → POST /user-config
+2025-07-12 07:55:47,263 INFO → Origin header: http://localhost:5173
+2025-07-12 07:55:47,264 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-12 07:55:47,265 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-12 07:55:47,266 INFO ← POST /user-config completed in 5.38ms with status 200
+2025-07-12 07:55:47,268 INFO ← POST /user-config completed in 4.96ms with status 200
+2025-07-12 07:56:40,895 INFO → GET /health/outlook
+2025-07-12 07:56:40,896 INFO → Origin header: http://localhost:5173
+2025-07-12 07:56:40,896 INFO → GET /health/local
+2025-07-12 07:56:40,897 INFO → Origin header: http://localhost:5173
+2025-07-12 07:56:40,898 INFO Health check: local OK
+2025-07-12 07:56:40,899 INFO ← GET /health/local completed in 2.13ms with status 200
+2025-07-12 07:56:40,909 INFO Health check: outlook OK
+2025-07-12 07:56:40,911 INFO ← GET /health/outlook completed in 15.21ms with status 200
+2025-07-12 07:56:51,053 INFO Fetched 7 emails.
+2025-07-12 07:57:37,186 INFO → GET /emails
+2025-07-12 07:57:37,187 INFO → Origin header: http://localhost:5173
+2025-07-12 07:57:37,486 INFO Fetched 7 emails.
+2025-07-12 07:57:37,486 INFO Returning 5 filtered emails
+2025-07-12 07:57:37,487 INFO ← GET /emails completed in 299.41ms with status 200
+2025-07-12 07:58:36,889 INFO → GET /health/outlook
+2025-07-12 07:58:36,889 INFO → Origin header: http://localhost:5173
+2025-07-12 07:58:36,902 INFO Health check: outlook OK
+2025-07-12 07:58:36,904 INFO ← GET /health/outlook completed in 14.66ms with status 200
+2025-07-12 07:58:36,906 INFO → GET /health/local
+2025-07-12 07:58:36,906 INFO → Origin header: http://localhost:5173
+2025-07-12 07:58:36,906 INFO Health check: local OK
+2025-07-12 07:58:36,907 INFO ← GET /health/local completed in 0.73ms with status 200
+2025-07-12 07:59:36,884 INFO → GET /health/outlook
+2025-07-12 07:59:36,885 INFO → Origin header: http://localhost:5173
+2025-07-12 07:59:36,906 INFO Health check: outlook OK
+2025-07-12 07:59:36,908 INFO ← GET /health/outlook completed in 22.52ms with status 200
+2025-07-12 07:59:36,910 INFO → GET /health/local
+2025-07-12 07:59:36,910 INFO → Origin header: http://localhost:5173
+2025-07-12 07:59:36,910 INFO Health check: local OK
+2025-07-12 07:59:36,911 INFO ← GET /health/local completed in 0.74ms with status 200
+2025-07-12 08:00:36,896 INFO → GET /health/outlook
+2025-07-12 08:00:36,897 INFO → Origin header: http://localhost:5173
+2025-07-12 08:00:36,905 INFO Health check: outlook OK
+2025-07-12 08:00:36,906 INFO ← GET /health/outlook completed in 9.65ms with status 200
+2025-07-12 08:00:36,908 INFO → GET /health/local
+2025-07-12 08:00:36,909 INFO → Origin header: http://localhost:5173
+2025-07-12 08:00:36,909 INFO Health check: local OK
+2025-07-12 08:00:36,910 INFO ← GET /health/local completed in 1.03ms with status 200
+2025-07-12 08:01:36,881 INFO → GET /health/outlook
+2025-07-12 08:01:36,881 INFO → Origin header: http://localhost:5173
+2025-07-12 08:01:36,891 INFO Health check: outlook OK
+2025-07-12 08:01:36,893 INFO ← GET /health/outlook completed in 11.13ms with status 200
+2025-07-12 08:01:36,895 INFO → GET /health/local
+2025-07-12 08:01:36,895 INFO → Origin header: http://localhost:5173
+2025-07-12 08:01:36,895 INFO Health check: local OK
+2025-07-12 08:01:36,896 INFO ← GET /health/local completed in 0.90ms with status 200
+2025-07-12 08:01:51,019 INFO Fetched 7 emails.
+2025-07-12 08:02:36,894 INFO → GET /health/outlook
+2025-07-12 08:02:36,895 INFO → Origin header: http://localhost:5173
+2025-07-12 08:02:36,903 INFO Health check: outlook OK
+2025-07-12 08:02:36,905 INFO ← GET /health/outlook completed in 9.80ms with status 200
+2025-07-12 08:02:36,907 INFO → GET /health/local
+2025-07-12 08:02:36,907 INFO → Origin header: http://localhost:5173
+2025-07-12 08:02:36,907 INFO Health check: local OK
+2025-07-12 08:02:36,908 INFO ← GET /health/local completed in 0.83ms with status 200
+2025-07-12 08:02:36,910 INFO → GET /emails
+2025-07-12 08:02:36,910 INFO → Origin header: http://localhost:5173
+2025-07-12 08:02:37,162 INFO Fetched 6 emails.
+2025-07-12 08:02:37,162 INFO Returning 4 filtered emails
+2025-07-12 08:02:37,163 INFO ← GET /emails completed in 252.81ms with status 200
+2025-07-12 08:03:36,883 INFO → GET /health/outlook
+2025-07-12 08:03:36,883 INFO → Origin header: http://localhost:5173
+2025-07-12 08:03:36,884 INFO → GET /health/local
+2025-07-12 08:03:36,884 INFO → Origin header: http://localhost:5173
+2025-07-12 08:03:36,884 INFO Health check: local OK
+2025-07-12 08:03:36,885 INFO ← GET /health/local completed in 1.11ms with status 200
+2025-07-12 08:03:36,890 INFO Health check: outlook OK
+2025-07-12 08:03:36,891 INFO ← GET /health/outlook completed in 7.97ms with status 200
+2025-07-12 08:04:37,199 INFO → GET /health/outlook
+2025-07-12 08:04:37,200 INFO → Origin header: http://localhost:5173
+2025-07-12 08:04:37,201 INFO → GET /health/local
+2025-07-12 08:04:37,201 INFO → Origin header: http://localhost:5173
+2025-07-12 08:04:37,203 INFO Health check: local OK
+2025-07-12 08:04:37,204 INFO ← GET /health/local completed in 2.65ms with status 200
+2025-07-12 08:04:37,216 INFO Health check: outlook OK
+2025-07-12 08:04:37,218 INFO ← GET /health/outlook completed in 17.57ms with status 200
+2025-07-12 08:04:48,330 INFO → GET /health/outlook
+2025-07-12 08:04:48,330 INFO → Origin header: http://localhost:5173
+2025-07-12 08:04:48,341 INFO Health check: outlook OK
+2025-07-12 08:04:48,343 INFO ← GET /health/outlook completed in 12.86ms with status 200
+2025-07-12 08:04:48,346 INFO → GET /health/local
+2025-07-12 08:04:48,346 INFO → Origin header: http://localhost:5173
+2025-07-12 08:04:48,347 INFO Health check: local OK
+2025-07-12 08:04:48,347 INFO ← GET /health/local completed in 0.98ms with status 200
+2025-07-12 08:04:49,291 INFO → POST /user-config
+2025-07-12 08:04:49,291 INFO → Origin header: http://localhost:5173
+2025-07-12 08:04:49,293 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-12 08:04:49,293 INFO ← POST /user-config completed in 1.72ms with status 200
+2025-07-12 08:04:49,299 INFO → POST /user-config
+2025-07-12 08:04:49,299 INFO → Origin header: http://localhost:5173
+2025-07-12 08:04:49,300 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-12 08:04:49,301 INFO ← POST /user-config completed in 1.27ms with status 200
+2025-07-12 08:06:50,930 INFO Fetched 4 emails.
+2025-07-12 08:11:50,890 INFO Fetched 3 emails.
+2025-07-12 08:16:50,871 INFO Fetched 3 emails.
+2025-07-12 08:21:50,894 INFO Fetched 3 emails.
+2025-07-12 08:26:50,884 INFO Fetched 3 emails.
+2025-07-12 08:31:50,884 INFO Fetched 3 emails.
+2025-07-12 08:36:50,846 INFO Fetched 2 emails.
+2025-07-12 08:41:50,821 INFO Fetched 1 emails.
+2025-07-12 08:46:50,808 INFO Fetched 1 emails.
+2025-07-12 08:51:50,826 INFO Fetched 1 emails.
+2025-07-12 08:56:50,838 INFO Fetched 2 emails.
+2025-07-12 09:01:50,928 INFO Fetched 6 emails.
+2025-07-12 09:06:50,914 INFO Fetched 6 emails.
+2025-07-12 09:11:50,925 INFO Fetched 6 emails.
+2025-07-12 09:16:50,926 INFO Fetched 6 emails.
+2025-07-12 09:21:50,908 INFO Fetched 6 emails.
+2025-07-12 09:26:50,915 INFO Fetched 6 emails.
+2025-07-12 09:31:50,918 INFO Fetched 6 emails.
+2025-07-12 09:36:50,928 INFO Fetched 6 emails.
+2025-07-12 09:41:50,933 INFO Fetched 6 emails.
+2025-07-12 09:46:50,934 INFO Fetched 6 emails.
+2025-07-12 09:51:50,922 INFO Fetched 6 emails.
+2025-07-12 09:56:50,928 INFO Fetched 6 emails.
+2025-07-12 10:01:50,935 INFO Fetched 6 emails.
+2025-07-12 10:06:50,913 INFO Fetched 6 emails.
+2025-07-12 10:11:50,929 INFO Fetched 6 emails.
+2025-07-12 10:16:50,927 INFO Fetched 6 emails.
+2025-07-12 10:21:50,927 INFO Fetched 6 emails.
+2025-07-12 10:26:50,916 INFO Fetched 6 emails.
+2025-07-12 10:31:50,904 INFO Fetched 6 emails.
+2025-07-12 10:36:50,916 INFO Fetched 6 emails.
+2025-07-12 10:41:50,926 INFO Fetched 6 emails.
+2025-07-12 10:46:50,945 INFO Fetched 6 emails.
+2025-07-12 10:51:50,909 INFO Fetched 6 emails.
+2025-07-12 10:56:50,926 INFO Fetched 6 emails.
+2025-07-12 11:01:50,907 INFO Fetched 6 emails.
+2025-07-12 11:06:50,923 INFO Fetched 6 emails.
+2025-07-12 11:11:50,917 INFO Fetched 6 emails.
+2025-07-12 11:16:50,916 INFO Fetched 6 emails.
+2025-07-12 11:21:50,908 INFO Fetched 6 emails.
+2025-07-12 11:26:50,914 INFO Fetched 6 emails.
+2025-07-12 11:31:50,892 INFO Fetched 5 emails.
+2025-07-12 11:36:50,890 INFO Fetched 5 emails.
+2025-07-12 11:41:50,892 INFO Fetched 5 emails.
+2025-07-12 11:46:50,880 INFO Fetched 5 emails.
+2025-07-12 11:51:50,879 INFO Fetched 5 emails.
+2025-07-12 11:56:50,878 INFO Fetched 5 emails.
+2025-07-12 12:01:50,885 INFO Fetched 5 emails.
+2025-07-12 12:06:52,085 INFO Fetched 7 emails.
+2025-07-12 12:11:51,946 INFO Fetched 7 emails.
+2025-07-12 12:16:51,841 INFO Fetched 7 emails.
+2025-07-12 12:21:52,091 INFO Fetched 7 emails.
+2025-07-12 12:26:51,946 INFO Fetched 7 emails.
+2025-07-12 12:31:52,325 INFO Fetched 7 emails.
+2025-07-12 12:36:52,504 INFO Fetched 7 emails.
+2025-07-12 12:41:51,981 INFO Fetched 7 emails.
+2025-07-12 12:46:52,337 INFO Fetched 7 emails.
+2025-07-12 12:51:54,759 INFO Fetched 7 emails.
+2025-07-12 12:56:51,935 INFO Fetched 7 emails.
+2025-07-12 13:01:52,286 INFO Fetched 7 emails.
+2025-07-12 13:06:52,500 INFO Fetched 7 emails.
+2025-07-12 13:11:52,231 INFO Fetched 7 emails.
+2025-07-12 13:16:52,152 INFO Fetched 7 emails.
+2025-07-12 13:21:52,229 INFO Fetched 7 emails.
+2025-07-12 13:26:52,191 INFO Fetched 7 emails.
+2025-07-12 13:31:52,250 INFO Fetched 7 emails.
+2025-07-12 13:36:52,220 INFO Fetched 7 emails.
+2025-07-12 13:41:52,220 INFO Fetched 7 emails.
+2025-07-12 13:46:52,210 INFO Fetched 7 emails.
+2025-07-12 13:51:52,193 INFO Fetched 7 emails.
+2025-07-12 13:56:52,192 INFO Fetched 7 emails.
+2025-07-12 14:01:52,103 INFO Fetched 7 emails.
+2025-07-12 14:06:52,003 INFO Fetched 7 emails.
+2025-07-12 14:11:52,260 INFO Fetched 7 emails.
+2025-07-12 14:16:52,204 INFO Fetched 7 emails.
+2025-07-12 14:21:52,101 INFO Fetched 7 emails.
+2025-07-12 14:26:52,369 INFO Fetched 7 emails.
+2025-07-12 14:31:52,265 INFO Fetched 7 emails.
+2025-07-12 14:36:52,279 INFO Fetched 7 emails.
+2025-07-12 14:41:52,386 INFO Fetched 8 emails.
+2025-07-12 14:46:52,347 INFO Fetched 8 emails.
+2025-07-12 14:51:52,053 INFO Fetched 8 emails.
+2025-07-12 14:56:52,443 INFO Fetched 8 emails.
+2025-07-12 15:01:52,341 INFO Fetched 8 emails.
+2025-07-12 15:06:52,366 INFO Fetched 7 emails.
+2025-07-12 15:11:52,394 INFO Fetched 7 emails.
+2025-07-12 15:16:52,366 INFO Fetched 7 emails.
+2025-07-12 15:21:52,036 INFO Fetched 7 emails.
+2025-07-12 15:26:52,357 INFO Fetched 7 emails.
+2025-07-12 15:31:52,330 INFO Fetched 7 emails.
+2025-07-12 15:36:52,258 INFO Fetched 7 emails.
+2025-07-12 15:41:52,204 INFO Fetched 7 emails.
+2025-07-12 15:46:52,310 INFO Fetched 7 emails.
+2025-07-12 15:51:52,483 INFO Fetched 7 emails.
+2025-07-12 15:56:52,295 INFO Fetched 7 emails.
+2025-07-12 16:01:52,245 INFO Fetched 7 emails.
+2025-07-12 16:06:52,218 INFO Fetched 7 emails.
+2025-07-12 16:11:53,022 INFO Fetched 8 emails.
+2025-07-12 16:16:52,975 INFO Fetched 8 emails.
+2025-07-12 16:21:53,027 INFO Fetched 8 emails.
+2025-07-12 16:26:53,064 INFO Fetched 9 emails.
+2025-07-12 16:31:53,060 INFO Fetched 9 emails.
+2025-07-12 16:36:53,098 INFO Fetched 9 emails.
+2025-07-12 16:41:53,186 INFO Fetched 9 emails.
+2025-07-12 16:46:53,145 INFO Fetched 9 emails.
+2025-07-12 16:51:52,859 INFO Fetched 9 emails.
+2025-07-12 16:56:53,123 INFO Fetched 9 emails.
+2025-07-12 17:01:53,154 INFO Fetched 9 emails.
+2025-07-12 17:06:53,035 INFO Fetched 9 emails.
+2025-07-12 17:11:53,176 INFO Fetched 9 emails.
+2025-07-12 17:16:53,072 INFO Fetched 9 emails.
+2025-07-12 17:21:53,053 INFO Fetched 9 emails.
+2025-07-12 17:26:53,225 INFO Fetched 9 emails.
+2025-07-12 17:31:53,235 INFO Fetched 10 emails.
+2025-07-12 17:36:52,913 INFO Fetched 10 emails.
+2025-07-12 17:41:53,202 INFO Fetched 10 emails.
+2025-07-12 17:46:53,194 INFO Fetched 10 emails.
+2025-07-12 17:51:53,047 INFO Fetched 10 emails.
+2025-07-12 17:56:53,144 INFO Fetched 10 emails.
+2025-07-12 18:01:52,800 INFO Fetched 10 emails.
+2025-07-12 18:06:53,092 INFO Fetched 10 emails.
+2025-07-12 18:11:53,117 INFO Fetched 10 emails.
+2025-07-12 18:16:53,029 INFO Fetched 10 emails.
+2025-07-12 18:21:53,085 INFO Fetched 10 emails.
+2025-07-12 18:26:53,143 INFO Fetched 10 emails.
+2025-07-12 18:31:53,218 INFO Fetched 10 emails.
+2025-07-12 18:36:53,112 INFO Fetched 10 emails.
+2025-07-12 18:42:01,394 INFO Fetched 10 emails.
+2025-07-12 18:46:53,124 INFO Fetched 10 emails.
+2025-07-12 18:51:53,019 INFO Fetched 10 emails.
+2025-07-12 18:56:53,154 INFO Fetched 10 emails.
+2025-07-12 19:01:53,054 INFO Fetched 10 emails.
+2025-07-12 19:06:52,562 INFO Fetched 10 emails.
+2025-07-12 19:11:52,997 INFO Fetched 10 emails.
+2025-07-12 19:16:52,949 INFO Fetched 10 emails.
+2025-07-12 19:21:55,508 INFO Fetched 10 emails.
+2025-07-12 19:26:52,994 INFO Fetched 10 emails.
+2025-07-12 19:31:52,968 INFO Fetched 10 emails.
+2025-07-12 19:36:52,982 INFO Fetched 10 emails.
+2025-07-12 19:41:53,028 INFO Fetched 10 emails.
+2025-07-12 19:46:52,967 INFO Fetched 10 emails.
+2025-07-12 19:51:52,916 INFO Fetched 9 emails.
+2025-07-12 19:56:52,985 INFO Fetched 9 emails.
+2025-07-12 20:01:53,242 INFO Fetched 9 emails.
+2025-07-12 20:06:53,159 INFO Fetched 9 emails.
+2025-07-12 20:11:53,245 INFO Fetched 9 emails.
+2025-07-12 20:16:53,379 INFO Fetched 9 emails.
+2025-07-12 20:21:53,180 INFO Fetched 9 emails.
+2025-07-12 20:26:53,132 INFO Fetched 9 emails.
+2025-07-12 20:31:52,816 INFO Fetched 9 emails.
+2025-07-12 20:36:53,109 INFO Fetched 9 emails.
+2025-07-12 20:41:53,207 INFO Fetched 9 emails.
+2025-07-12 20:46:53,204 INFO Fetched 9 emails.
+2025-07-12 20:51:53,091 INFO Fetched 9 emails.
+2025-07-12 20:56:53,145 INFO Fetched 9 emails.
+2025-07-12 21:01:53,193 INFO Fetched 9 emails.
+2025-07-12 21:06:53,072 INFO Fetched 5 emails.
+2025-07-12 21:11:53,014 INFO Fetched 5 emails.
+2025-07-12 21:16:52,773 INFO Fetched 5 emails.
+2025-07-12 21:21:55,507 INFO Fetched 5 emails.
+2025-07-12 21:26:53,084 INFO Fetched 5 emails.
+2025-07-12 21:31:53,077 INFO Fetched 5 emails.
+2025-07-12 21:36:53,119 INFO Fetched 5 emails.
+2025-07-12 21:41:53,182 INFO Fetched 5 emails.
+2025-07-12 21:46:53,073 INFO Fetched 5 emails.
+2025-07-12 21:51:53,052 INFO Fetched 5 emails.
+2025-07-12 21:56:53,223 INFO Fetched 5 emails.
+2025-07-12 22:01:53,115 INFO Fetched 5 emails.
+2025-07-12 22:06:53,096 INFO Fetched 5 emails.
+2025-07-12 22:11:53,486 INFO Fetched 5 emails.
+2025-07-12 22:16:53,013 INFO Fetched 5 emails.
+2025-07-12 22:21:52,599 INFO Fetched 5 emails.
+2025-07-12 22:26:53,124 INFO Fetched 5 emails.
+2025-07-12 22:31:56,627 INFO Fetched 5 emails.
+2025-07-12 22:36:53,036 INFO Fetched 5 emails.
+2025-07-12 22:41:53,102 INFO Fetched 5 emails.
+2025-07-12 22:46:53,058 INFO Fetched 5 emails.
+2025-07-12 22:51:52,647 INFO Fetched 5 emails.
+2025-07-12 22:56:53,122 INFO Fetched 5 emails.
+2025-07-12 23:01:53,036 INFO Fetched 5 emails.
+2025-07-12 23:06:53,055 INFO Fetched 5 emails.
+2025-07-12 23:11:53,127 INFO Fetched 5 emails.
+2025-07-12 23:16:53,084 INFO Fetched 5 emails.
+2025-07-12 23:21:52,907 INFO Fetched 5 emails.
+2025-07-12 23:26:53,711 INFO Fetched 5 emails.
+2025-07-12 23:31:53,006 INFO Fetched 5 emails.
+2025-07-12 23:36:55,565 INFO Fetched 5 emails.
+2025-07-12 23:41:55,346 INFO Fetched 5 emails.
+2025-07-12 23:46:53,193 INFO Fetched 6 emails.
+2025-07-12 23:51:53,208 INFO Fetched 6 emails.
+2025-07-12 23:56:53,263 INFO Fetched 7 emails.

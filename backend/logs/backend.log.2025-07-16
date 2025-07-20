@@ -1,0 +1,85 @@
+2025-07-16 20:15:40,154 INFO Scheduler started
+2025-07-16 20:15:40,160 INFO Starting backend service
+2025-07-16 20:15:40,161 INFO Outlook COM cache rebuilt successfully.
+2025-07-16 20:18:34,365 INFO → OPTIONS /user-config
+2025-07-16 20:18:34,366 INFO → Origin header: http://127.0.0.1:5173
+2025-07-16 20:18:34,366 INFO ← OPTIONS /user-config completed in 0.27ms with status 200
+2025-07-16 20:18:34,369 INFO → OPTIONS /user-config
+2025-07-16 20:18:34,369 INFO → Origin header: http://127.0.0.1:5173
+2025-07-16 20:18:34,370 INFO → GET /config
+2025-07-16 20:18:34,370 INFO → Origin header: http://127.0.0.1:5173
+2025-07-16 20:18:34,371 INFO → POST /user-config
+2025-07-16 20:18:34,371 INFO → Origin header: http://127.0.0.1:5173
+2025-07-16 20:18:34,372 INFO → GET /health/local
+2025-07-16 20:18:34,372 INFO → Origin header: http://127.0.0.1:5173
+2025-07-16 20:18:34,372 INFO → GET /health/outlook
+2025-07-16 20:18:34,372 INFO → Origin header: http://127.0.0.1:5173
+2025-07-16 20:18:34,372 INFO ← OPTIONS /user-config completed in 2.52ms with status 200
+2025-07-16 20:18:34,374 INFO Health check: local OK
+2025-07-16 20:18:34,375 INFO → POST /user-config
+2025-07-16 20:18:34,375 INFO → Origin header: http://127.0.0.1:5173
+2025-07-16 20:18:34,378 INFO ← GET /health/local completed in 5.57ms with status 200
+2025-07-16 20:18:34,378 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-16 20:18:34,379 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-16 20:18:34,379 INFO ← GET /config completed in 8.87ms with status 200
+2025-07-16 20:18:34,381 INFO ← POST /user-config completed in 9.12ms with status 200
+2025-07-16 20:18:34,381 INFO ← POST /user-config completed in 5.95ms with status 200
+2025-07-16 20:18:34,387 INFO → GET /emails
+2025-07-16 20:18:34,388 INFO → Origin header: http://127.0.0.1:5173
+2025-07-16 20:18:34,391 INFO Health check: outlook OK
+2025-07-16 20:18:34,394 INFO ← GET /health/outlook completed in 22.12ms with status 200
+2025-07-16 20:18:39,760 INFO Fetched 24 emails.
+2025-07-16 20:18:39,760 INFO Returning 9 filtered emails
+2025-07-16 20:18:39,761 INFO ← GET /emails completed in 5373.24ms with status 200
+2025-07-16 20:19:34,075 INFO → GET /health/outlook
+2025-07-16 20:19:34,075 INFO → Origin header: http://127.0.0.1:5173
+2025-07-16 20:19:34,083 INFO Health check: outlook OK
+2025-07-16 20:19:34,086 INFO ← GET /health/outlook completed in 10.95ms with status 200
+2025-07-16 20:19:34,088 INFO → GET /health/local
+2025-07-16 20:19:34,088 INFO → Origin header: http://127.0.0.1:5173
+2025-07-16 20:19:34,089 INFO Health check: local OK
+2025-07-16 20:19:34,089 INFO ← GET /health/local completed in 0.79ms with status 200
+2025-07-16 20:20:45,389 INFO Fetched 24 emails.
+2025-07-16 20:25:44,582 INFO Fetched 13 emails.
+2025-07-16 20:30:41,929 INFO Fetched 9 emails.
+2025-07-16 20:35:42,379 INFO Fetched 10 emails.
+2025-07-16 20:40:42,032 INFO Fetched 10 emails.
+2025-07-16 20:45:42,274 INFO Fetched 9 emails.
+2025-07-16 20:50:42,359 INFO Fetched 9 emails.
+2025-07-16 20:55:42,928 INFO Fetched 10 emails.
+2025-07-16 21:01:03,509 INFO Fetched 10 emails.
+2025-07-16 21:05:42,756 INFO Fetched 11 emails.
+2025-07-16 21:10:42,867 INFO Fetched 13 emails.
+2025-07-16 21:15:42,916 INFO Fetched 13 emails.
+2025-07-16 21:20:42,841 INFO Fetched 13 emails.
+2025-07-16 21:25:42,915 INFO Fetched 13 emails.
+2025-07-16 21:30:42,882 INFO Fetched 15 emails.
+2025-07-16 21:35:43,256 INFO Fetched 14 emails.
+2025-07-16 21:40:43,333 INFO Fetched 14 emails.
+2025-07-16 21:45:44,037 INFO Fetched 16 emails.
+2025-07-16 21:50:44,737 INFO Fetched 17 emails.
+2025-07-16 21:55:44,933 INFO Fetched 17 emails.
+2025-07-16 22:00:48,340 INFO Fetched 17 emails.
+2025-07-16 22:05:44,790 INFO Fetched 17 emails.
+2025-07-16 22:10:46,491 INFO Fetched 16 emails.
+2025-07-16 22:15:44,037 INFO Fetched 16 emails.
+2025-07-16 22:20:43,360 INFO Fetched 14 emails.
+2025-07-16 22:25:43,893 INFO Fetched 13 emails.
+2025-07-16 22:30:43,383 INFO Fetched 13 emails.
+2025-07-16 22:35:43,877 INFO Fetched 15 emails.
+2025-07-16 22:40:57,090 INFO Fetched 15 emails.
+2025-07-16 22:45:44,494 INFO Fetched 15 emails.
+2025-07-16 22:50:44,381 INFO Fetched 15 emails.
+2025-07-16 22:55:44,454 INFO Fetched 15 emails.
+2025-07-16 23:00:44,451 INFO Fetched 15 emails.
+2025-07-16 23:05:44,726 INFO Fetched 15 emails.
+2025-07-16 23:10:48,832 INFO Fetched 15 emails.
+2025-07-16 23:15:44,388 INFO Fetched 15 emails.
+2025-07-16 23:20:46,517 INFO Fetched 16 emails.
+2025-07-16 23:25:45,271 INFO Fetched 16 emails.
+2025-07-16 23:30:45,066 INFO Fetched 16 emails.
+2025-07-16 23:35:45,089 INFO Fetched 15 emails.
+2025-07-16 23:40:45,193 INFO Fetched 15 emails.
+2025-07-16 23:45:44,944 INFO Fetched 15 emails.
+2025-07-16 23:50:45,070 INFO Fetched 15 emails.
+2025-07-16 23:55:44,549 INFO Fetched 14 emails.

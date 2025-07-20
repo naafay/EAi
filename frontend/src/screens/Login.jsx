@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
-import { open } from '@tauri-apps/api/shell'; // Updated for Tauri v1
+import { open } from '@tauri-apps/plugin-shell'; // Updated for Tauri v1
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -9,11 +9,16 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      console.log('Attempting login with email:', email); // Debug log
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
+        console.error('Supabase login error:', error.message); // Debug log
         setError(error.message);
+      } else {
+        console.log('Login successful, data:', data); // Debug log
       }
     } catch (err) {
+      console.error('Unexpected login error:', err.message, err.stack); // Debug log
       setError('An unexpected error occurred. Please try again.');
     }
   };
