@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "OutPrio",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "identifier": "com.outprio.desktop",
   "build": {
     "frontendDist": "../dist",
@@ -38,6 +38,15 @@
     ],      
     "resources": [
       "bin/outprioAPI.exe"
-    ]
+    ],
+    "createUpdaterArtifacts": true
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IERFMUJBQkI1NzQ1MzY5NTkKUldSWmFWTjB0YXNiM285S3ZnMHFZZGdvdlJ0KzVUbkFINXpxTDRTUE9zclJ2S21ueVNLWGJMVisK",
+      "endpoints": [
+        "https://outprio.netlify.app/downloads/latest.json"
+      ]
+    }
   }
 }

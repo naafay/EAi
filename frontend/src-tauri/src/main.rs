@@ -14,6 +14,8 @@ fn kill_backend_processes() -> Result<(), std::io::Error> {
 
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_process::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
         // Add the opener plugin here
         .plugin(tauri_plugin_opener::init())

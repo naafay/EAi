@@ -1,6 +1,6 @@
 [package]
 name = "OutPrio"
-version = "0.1.0"
+version = "1.0.0"
 description = "Email Prioritization"
 authors = ["After Access"]
 license = ""
@@ -24,7 +24,11 @@ tauri-plugin-log = "2"
 sysinfo = "0.30"
 tauri-plugin-opener = "2.4.0"
 tauri-plugin-shell = "2"
+tauri-plugin-process = "2"
 
 [features]
 default = ["custom-protocol"]
 custom-protocol = ["tauri/custom-protocol"]
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"

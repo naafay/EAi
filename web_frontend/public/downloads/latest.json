@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "notes": "Initial release of OutPrio.\n- Prioritize emails intelligently.\n- View by priority, sender, and reason.\n- Syncs with Outlook.\n- Cloud health checks and local service status.",
+  "pub_date": "2025-07-21T05:37:00Z",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSWmFWTjB0YXNiM2xtN3R4MXZ1TWptN2pmM1krYnFUc1EwSWJya3BmWmx0SlV1SVB0SjFCOXlibmd5NThKa3h0dWhGVSs0UXFZMFRrQUdjdThZY3ZaQmE3VGxRT2tSS1E4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzUzMDYzNTk4CWZpbGU6T3V0UHJpb18xLjAuMF94NjQtc2V0dXAuZXhlCjdYWU1sN0M3YzRkb0lUY3RHTTNWMUp2dEZYZjk1WkN0dDl1Zm0wSHQwanR3R3lqNENCRko4eUNWSE1kbHNDTDFuSVVvWDduNU11UGIxRVZxbVZESENRPT0K",
+      "url": "https://outprio.netlify.app/downloads/OutPrio_1.0.0_x64-setup.exe"
+    }
+  }
+}

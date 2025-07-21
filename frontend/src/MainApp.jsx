@@ -18,6 +18,8 @@
   } from "lucide-react";
   import logo from './assets/outprio.png';
   import { open } from '@tauri-apps/plugin-shell';
+  import { check } from "@tauri-apps/plugin-updater";
+  import { relaunch } from "@tauri-apps/plugin-process";
 
   axios.defaults.baseURL = "http://127.0.0.1:8000";
 
@@ -362,7 +364,42 @@
 
   // --- MainApp Component ---
   export default function MainApp({ userSettings }) {
-    const [settings, setSettingsState] = useState(userSettings);
+  const [appVersion, setAppVersion] = useState("");
+  const [updateAvailable, setUpdateAvailable] = useState(false);
+
+
+   useEffect(() => {
+    async function init() {
+      try {
+        const version = await getVersion();
+        setAppVersion(version);
+
+        const update = await check();
+        if (update) {
+          setUpdateAvailable(true);
+        }
+      } catch (err) {
+        console.error("Failed to check version or updates:", err);
+      }
+    }
+    init();
+  }, []);
+
+  async function handleInstallUpdate() {
+    try {
+      const update = await check();
+      if (update) {
+        await update.downloadAndInstall();
+        await relaunch();
+      }
+    } catch (err) {
+      console.error("Update installation failed:", err);
+    }
+  }
+
+
+
+  const [settings, setSettingsState] = useState(userSettings);
     useEffect(() => {
       setSettingsState(userSettings);
     }, [userSettings]);
@@ -683,6 +720,36 @@
 
     return (
       <div className="min-h-screen bg-gradient-to-b from-[#0b0b1a] to-[#37123d]">
+       {/* Version Display */}
+      <div className="fixed bottom-2 right-1 mr-8 text-xs text-gray-300">
+        OutPrio v{appVersion}
+      </div>
+
+      {/* Update Available Modal */}
+      {updateAvailable && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+            <h2 className="text-xl font-semibold mb-4 text-blue-700">Update Available</h2>
+            <p className="mb-6 text-gray-700">
+              A new version of OutPrio is available. Would you like to install it now?
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setUpdateAvailable(false)}
+                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+              >
+                Later
+              </button>
+              <button
+                onClick={handleInstallUpdate}
+                className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded"
+              >
+                Install Now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
         {/* Top Ribbon Header */}
         <div className="flex items-center justify-between bg-transparent border-b p-3 shadow-sm">
           <div className="flex items-center">
