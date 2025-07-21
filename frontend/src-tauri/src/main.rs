@@ -17,17 +17,14 @@ fn main() {
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
-        // Add the opener plugin here
         .plugin(tauri_plugin_opener::init())
         .setup(|app| {
-            // Kill any existing backend processes before starting
             if let Err(e) = kill_backend_processes() {
                 eprintln!("[OutPrio] Failed to kill existing backend processes: {}", e);
             } else {
                 println!("[OutPrio] Existing backend processes terminated.");
             }
 
-            // Launch the backend process
             match Command::new("bin/outprioAPI.exe")
                 .stdout(Stdio::null())
                 .stderr(Stdio::null())
@@ -37,9 +34,7 @@ fn main() {
                 Err(e) => eprintln!("[OutPrio] Failed to launch backend: {}", e),
             }
 
-            // Get the main window after it has been created by the builder
             if let Some(window) = app.get_webview_window("main") {
-                // Ensure the window is not minimized and is in focus.
                 let _ = window.unminimize();
                 let _ = window.show();
                 let _ = window.set_focus();
@@ -49,11 +44,10 @@ fn main() {
         })
         .on_window_event(|_app, event| {
             if let WindowEvent::CloseRequested { .. } = event {
-                // Kill all backend processes on window close
                 if let Err(e) = kill_backend_processes() {
                     eprintln!("[OutPrio] Failed to kill backend processes: {}", e);
                 } else {
-                    println!("[OutPrio] Backend processes terminated.");
+                    println!("[OutPrio] Backend processes terminated on window close.");
                 }
             }
         })
