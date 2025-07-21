@@ -1,0 +1,247 @@
+2025-07-17 00:00:44,507 INFO Fetched 13 emails.
+2025-07-17 00:05:46,286 INFO Fetched 12 emails.
+2025-07-17 00:10:44,472 INFO Fetched 11 emails.
+2025-07-17 00:15:44,032 INFO Fetched 9 emails.
+2025-07-17 00:20:44,058 INFO Fetched 9 emails.
+2025-07-17 00:25:44,187 INFO Fetched 9 emails.
+2025-07-17 00:30:44,434 INFO Fetched 7 emails.
+2025-07-17 00:35:44,439 INFO Fetched 8 emails.
+2025-07-17 00:40:44,510 INFO Fetched 8 emails.
+2025-07-17 00:45:44,107 INFO Fetched 7 emails.
+2025-07-17 00:50:43,872 INFO Fetched 7 emails.
+2025-07-17 00:55:43,724 INFO Fetched 6 emails.
+2025-07-17 01:00:43,474 INFO Fetched 6 emails.
+2025-07-17 01:05:43,612 INFO Fetched 6 emails.
+2025-07-17 01:10:43,629 INFO Fetched 6 emails.
+2025-07-17 01:15:43,578 INFO Fetched 6 emails.
+2025-07-17 01:20:43,611 INFO Fetched 6 emails.
+2025-07-17 01:25:43,910 INFO Fetched 6 emails.
+2025-07-17 01:30:45,419 INFO Fetched 6 emails.
+2025-07-17 01:35:42,740 INFO Fetched 5 emails.
+2025-07-17 01:40:42,027 INFO Fetched 4 emails.
+2025-07-17 01:45:43,164 INFO Fetched 4 emails.
+2025-07-17 01:50:42,080 INFO Fetched 4 emails.
+2025-07-17 01:55:42,148 INFO Fetched 4 emails.
+2025-07-17 02:00:43,512 INFO Fetched 4 emails.
+2025-07-17 02:05:42,144 INFO Fetched 4 emails.
+2025-07-17 02:10:42,088 INFO Fetched 4 emails.
+2025-07-17 02:15:42,379 INFO Fetched 4 emails.
+2025-07-17 02:20:41,525 INFO Fetched 3 emails.
+2025-07-17 02:25:41,395 INFO Fetched 3 emails.
+2025-07-17 02:30:47,812 INFO Fetched 3 emails.
+2025-07-17 02:35:41,077 INFO Fetched 3 emails.
+2025-07-17 02:40:43,391 INFO Fetched 3 emails.
+2025-07-17 02:45:41,434 INFO Fetched 3 emails.
+2025-07-17 02:50:41,388 INFO Fetched 3 emails.
+2025-07-17 02:55:41,355 INFO Fetched 3 emails.
+2025-07-17 03:00:41,464 INFO Fetched 3 emails.
+2025-07-17 03:05:41,446 INFO Fetched 3 emails.
+2025-07-17 03:10:41,488 INFO Fetched 3 emails.
+2025-07-17 03:15:41,492 INFO Fetched 3 emails.
+2025-07-17 03:20:52,427 INFO Fetched 3 emails.
+2025-07-17 03:25:41,411 INFO Fetched 3 emails.
+2025-07-17 03:30:41,433 INFO Fetched 3 emails.
+2025-07-17 03:35:41,382 INFO Fetched 2 emails.
+2025-07-17 03:40:41,261 INFO Fetched 2 emails.
+2025-07-17 03:45:40,288 INFO Fetched 1 emails.
+2025-07-17 03:50:40,217 INFO Fetched 0 emails.
+2025-07-17 03:55:40,221 INFO Fetched 0 emails.
+2025-07-17 04:00:40,227 INFO Fetched 0 emails.
+2025-07-17 04:05:40,219 INFO Fetched 0 emails.
+2025-07-17 04:10:40,220 INFO Fetched 0 emails.
+2025-07-17 04:15:40,215 INFO Fetched 0 emails.
+2025-07-17 04:20:40,217 INFO Fetched 0 emails.
+2025-07-17 04:25:40,226 INFO Fetched 0 emails.
+2025-07-17 04:30:40,221 INFO Fetched 0 emails.
+2025-07-17 04:35:40,219 INFO Fetched 0 emails.
+2025-07-17 04:40:40,217 INFO Fetched 0 emails.
+2025-07-17 04:45:40,226 INFO Fetched 0 emails.
+2025-07-17 04:50:40,219 INFO Fetched 0 emails.
+2025-07-17 04:55:40,216 INFO Fetched 0 emails.
+2025-07-17 05:00:40,227 INFO Fetched 0 emails.
+2025-07-17 05:05:40,209 INFO Fetched 0 emails.
+2025-07-17 05:10:40,219 INFO Fetched 0 emails.
+2025-07-17 05:15:40,208 INFO Fetched 0 emails.
+2025-07-17 05:20:40,209 INFO Fetched 0 emails.
+2025-07-17 05:25:40,223 INFO Fetched 0 emails.
+2025-07-17 05:30:40,224 INFO Fetched 0 emails.
+2025-07-17 05:35:40,231 INFO Fetched 0 emails.
+2025-07-17 05:40:40,216 INFO Fetched 0 emails.
+2025-07-17 05:45:40,336 INFO Fetched 1 emails.
+2025-07-17 05:50:40,300 INFO Fetched 1 emails.
+2025-07-17 05:55:40,309 INFO Fetched 1 emails.
+2025-07-17 06:00:40,413 INFO Fetched 2 emails.
+2025-07-17 06:33:51,565 INFO Scheduler started
+2025-07-17 06:33:51,570 INFO Starting backend service
+2025-07-17 06:33:51,571 INFO Outlook COM cache rebuilt successfully.
+2025-07-17 06:42:51,092 INFO Shutting down backend service
+2025-07-17 06:42:54,379 INFO Scheduler started
+2025-07-17 06:42:54,384 INFO Starting backend service
+2025-07-17 06:42:54,384 INFO Outlook COM cache rebuilt successfully.
+2025-07-17 06:47:50,290 INFO → OPTIONS /user-config
+2025-07-17 06:47:50,291 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:47:50,291 INFO → OPTIONS /user-config
+2025-07-17 06:47:50,292 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:47:50,292 INFO → GET /health/outlook
+2025-07-17 06:47:50,292 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:47:50,293 INFO → GET /config
+2025-07-17 06:47:50,293 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:47:50,293 INFO → GET /health/local
+2025-07-17 06:47:50,293 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:47:50,293 INFO ← OPTIONS /user-config completed in 2.64ms with status 200
+2025-07-17 06:47:50,295 INFO ← OPTIONS /user-config completed in 3.00ms with status 200
+2025-07-17 06:47:50,296 INFO Health check: local OK
+2025-07-17 06:47:50,297 INFO → POST /user-config
+2025-07-17 06:47:50,297 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:47:50,298 INFO → POST /user-config
+2025-07-17 06:47:50,298 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:47:50,299 INFO ← GET /health/local completed in 5.63ms with status 200
+2025-07-17 06:47:50,302 INFO ← GET /config completed in 9.33ms with status 200
+2025-07-17 06:47:50,303 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-17 06:47:50,304 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-17 06:47:50,305 INFO ← POST /user-config completed in 7.01ms with status 200
+2025-07-17 06:47:50,306 INFO ← POST /user-config completed in 7.49ms with status 200
+2025-07-17 06:47:50,315 INFO → GET /emails
+2025-07-17 06:47:50,315 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:47:50,318 INFO Health check: outlook OK
+2025-07-17 06:47:50,320 INFO ← GET /health/outlook completed in 27.41ms with status 200
+2025-07-17 06:47:50,512 INFO Fetched 2 emails.
+2025-07-17 06:47:50,512 INFO Returning 0 filtered emails
+2025-07-17 06:47:50,513 INFO ← GET /emails completed in 197.30ms with status 200
+2025-07-17 06:47:54,568 INFO Fetched 2 emails.
+2025-07-17 06:47:57,257 INFO → OPTIONS /config
+2025-07-17 06:47:57,257 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:47:57,258 INFO ← OPTIONS /config completed in 0.27ms with status 200
+2025-07-17 06:47:57,260 INFO → POST /config
+2025-07-17 06:47:57,261 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:47:57,263 INFO Rescheduled fetch every 5 minutes
+2025-07-17 06:47:57,263 INFO ← POST /config completed in 2.62ms with status 200
+2025-07-17 06:47:57,269 INFO → GET /emails
+2025-07-17 06:47:57,270 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:47:57,505 INFO Fetched 3 emails.
+2025-07-17 06:47:57,506 INFO Returning 0 filtered emails
+2025-07-17 06:47:57,506 INFO ← GET /emails completed in 236.56ms with status 200
+2025-07-17 06:48:00,934 INFO → POST /config
+2025-07-17 06:48:00,935 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:48:00,936 INFO Rescheduled fetch every 5 minutes
+2025-07-17 06:48:00,937 INFO ← POST /config completed in 2.13ms with status 200
+2025-07-17 06:48:00,945 INFO → GET /emails
+2025-07-17 06:48:00,945 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:48:09,222 INFO Fetched 23 emails.
+2025-07-17 06:48:09,223 INFO Returning 5 filtered emails
+2025-07-17 06:48:09,227 INFO ← GET /emails completed in 8281.32ms with status 200
+2025-07-17 06:53:11,864 INFO Fetched 23 emails.
+2025-07-17 06:54:56,459 INFO → OPTIONS /user-config
+2025-07-17 06:54:56,459 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,460 INFO → OPTIONS /user-config
+2025-07-17 06:54:56,460 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,460 INFO → GET /config
+2025-07-17 06:54:56,460 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,461 INFO → GET /health/outlook
+2025-07-17 06:54:56,461 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,461 INFO → GET /health/local
+2025-07-17 06:54:56,461 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,462 INFO ← OPTIONS /user-config completed in 2.30ms with status 200
+2025-07-17 06:54:56,463 INFO ← OPTIONS /user-config completed in 3.03ms with status 200
+2025-07-17 06:54:56,465 INFO → OPTIONS /user-config
+2025-07-17 06:54:56,465 INFO Health check: local OK
+2025-07-17 06:54:56,465 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,466 INFO → OPTIONS /user-config
+2025-07-17 06:54:56,466 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,466 INFO ← OPTIONS /user-config completed in 0.88ms with status 200
+2025-07-17 06:54:56,467 INFO ← GET /health/local completed in 5.15ms with status 200
+2025-07-17 06:54:56,467 INFO ← OPTIONS /user-config completed in 1.27ms with status 200
+2025-07-17 06:54:56,468 INFO ← GET /config completed in 8.01ms with status 200
+2025-07-17 06:54:56,469 INFO → OPTIONS /user-config
+2025-07-17 06:54:56,469 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,469 INFO → OPTIONS /user-config
+2025-07-17 06:54:56,469 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,470 INFO → POST /user-config
+2025-07-17 06:54:56,470 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,470 INFO ← OPTIONS /user-config completed in 1.03ms with status 200
+2025-07-17 06:54:56,471 INFO → POST /user-config
+2025-07-17 06:54:56,471 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,471 INFO ← OPTIONS /user-config completed in 1.60ms with status 200
+2025-07-17 06:54:56,472 INFO → POST /user-config
+2025-07-17 06:54:56,472 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,473 INFO → POST /user-config
+2025-07-17 06:54:56,473 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,473 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-17 06:54:56,474 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-17 06:54:56,474 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-17 06:54:56,475 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-17 06:54:56,475 INFO ← POST /user-config completed in 5.14ms with status 200
+2025-07-17 06:54:56,475 INFO Health check: outlook OK
+2025-07-17 06:54:56,476 INFO ← POST /user-config completed in 4.82ms with status 200
+2025-07-17 06:54:56,476 INFO ← POST /user-config completed in 4.10ms with status 200
+2025-07-17 06:54:56,477 INFO → POST /user-config
+2025-07-17 06:54:56,477 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,479 INFO → POST /user-config
+2025-07-17 06:54:56,479 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:54:56,479 INFO ← POST /user-config completed in 6.17ms with status 200
+2025-07-17 06:54:56,480 INFO ← GET /health/outlook completed in 19.07ms with status 200
+2025-07-17 06:54:56,481 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-17 06:54:56,481 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-17 06:54:56,482 INFO ← POST /user-config completed in 4.03ms with status 200
+2025-07-17 06:54:56,482 INFO ← POST /user-config completed in 3.10ms with status 200
+2025-07-17 06:54:57,832 INFO → GET /emails
+2025-07-17 06:54:57,833 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 06:55:05,752 INFO Fetched 23 emails.
+2025-07-17 06:55:05,752 INFO Returning 5 filtered emails
+2025-07-17 06:55:05,753 INFO ← GET /emails completed in 7920.17ms with status 200
+2025-07-17 06:58:09,156 INFO Fetched 23 emails.
+2025-07-17 07:03:08,705 INFO Fetched 23 emails.
+2025-07-17 07:05:48,484 INFO Shutting down backend service
+2025-07-17 07:05:57,096 INFO Scheduler started
+2025-07-17 07:05:57,101 INFO Starting backend service
+2025-07-17 07:05:57,103 INFO Outlook COM cache rebuilt successfully.
+2025-07-17 07:10:15,552 INFO → GET /
+2025-07-17 07:10:15,552 INFO → Origin header: None
+2025-07-17 07:10:15,554 INFO ← GET / completed in 1.21ms with status 404
+2025-07-17 07:10:15,594 INFO → GET /favicon.ico
+2025-07-17 07:10:15,594 INFO → Origin header: None
+2025-07-17 07:10:15,595 INFO ← GET /favicon.ico completed in 0.40ms with status 404
+2025-07-17 07:21:40,464 INFO → OPTIONS /user-config
+2025-07-17 07:21:40,465 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 07:21:40,465 INFO ← OPTIONS /user-config completed in 0.28ms with status 200
+2025-07-17 07:21:40,467 INFO → POST /user-config
+2025-07-17 07:21:40,467 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 07:21:40,470 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-17 07:21:40,472 INFO ← POST /user-config completed in 3.97ms with status 200
+2025-07-17 07:21:40,495 INFO → POST /user-config
+2025-07-17 07:21:40,495 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 07:21:40,497 INFO → GET /health/outlook
+2025-07-17 07:21:40,497 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 07:21:40,498 INFO → GET /config
+2025-07-17 07:21:40,498 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 07:21:40,499 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-17 07:21:40,499 INFO → GET /health/local
+2025-07-17 07:21:40,500 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 07:21:40,500 INFO Health check: local OK
+2025-07-17 07:21:40,501 INFO ← POST /user-config completed in 5.85ms with status 200
+2025-07-17 07:21:40,502 INFO ← GET /health/local completed in 2.04ms with status 200
+2025-07-17 07:21:40,502 INFO ← GET /config completed in 4.23ms with status 200
+2025-07-17 07:21:40,511 INFO → GET /emails
+2025-07-17 07:21:40,511 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 07:21:40,515 INFO Health check: outlook OK
+2025-07-17 07:21:40,518 INFO ← GET /health/outlook completed in 20.14ms with status 200
+2025-07-17 07:21:40,622 INFO → POST /user-config
+2025-07-17 07:21:40,622 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 07:21:40,624 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-17 07:21:40,625 INFO ← POST /user-config completed in 2.95ms with status 200
+2025-07-17 07:21:40,627 INFO → POST /user-config
+2025-07-17 07:21:40,627 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 07:21:40,628 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-17 07:21:40,629 INFO ← POST /user-config completed in 1.15ms with status 200
+2025-07-17 07:21:40,736 INFO Fetched 2 emails.
+2025-07-17 07:21:40,737 INFO Returning 0 filtered emails
+2025-07-17 07:21:40,738 INFO ← GET /emails completed in 226.00ms with status 200
+2025-07-17 07:21:40,779 INFO → POST /user-config
+2025-07-17 07:21:40,779 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 07:21:40,780 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-17 07:21:40,781 INFO ← POST /user-config completed in 2.05ms with status 200
+2025-07-17 07:21:40,783 INFO → POST /user-config
+2025-07-17 07:21:40,783 INFO → Origin header: http://127.0.0.1:5173
+2025-07-17 07:21:40,784 INFO User config set: abdul.nafay@aviatnet.com, VIP group ELT
+2025-07-17 07:21:40,785 INFO ← POST /user-config completed in 1.45ms with status 200
+2025-07-17 07:24:28,062 INFO Shutting down backend service

@@ -725,7 +725,7 @@
     }, []);
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0b0b1a] to-[#37123d]">
+      <div className="min-h-screen bg-gradient-to-b from-[#0b0b1a] to-[#37123d] relative">
 
 
       {/* Update Available Modal */}
@@ -1045,14 +1045,11 @@
                 {[50, 100, 200].map(n => (
                   <option key={n} value={n}>{n}</option>
                 ))}
-              </select>
+              </select>           
             </div>
           </div>
         </div>
-        {/* Version Display */}
-        <div className="fixed bottom-2 right-2 mr-8 text-xs text-gray-300 z-50">
-        OutPrio v{appVersion}
-        </div>
+
         {/* Pre-config / Custom Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
@@ -1141,6 +1138,15 @@
       </div>
     </div>
   )}
+
+        {/* Version Display */}
+        <div className="absolute bottom-2 right-10 text-xs text-gray-300 opacity-70">
+        OutPrio v{appVersion}
+        </div>
+        
       </div>
+      
+      
     );
+
   }
