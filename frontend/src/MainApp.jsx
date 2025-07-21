@@ -19,6 +19,7 @@
   import logo from './assets/outprio.png';
   import { open } from '@tauri-apps/plugin-shell';
   import { check } from "@tauri-apps/plugin-updater";
+  import { getVersion } from "@tauri-apps/api/app";
   import { relaunch } from "@tauri-apps/plugin-process";
 
   axios.defaults.baseURL = "http://127.0.0.1:8000";
@@ -368,11 +369,16 @@
   const [updateAvailable, setUpdateAvailable] = useState(false);
 
 
-   useEffect(() => {
+  useEffect(() => {
     async function init() {
       try {
-        const version = await getVersion();
-        setAppVersion(version);
+        if (typeof getVersion === 'function') {
+          const version = await getVersion();
+          console.log("App Version:", version); // Log version to console
+          setAppVersion(version);
+        } else {
+          console.error("getVersion is not defined. Check your imports.");
+        }
 
         const update = await check();
         if (update) {
