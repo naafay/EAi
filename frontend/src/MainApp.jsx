@@ -726,10 +726,7 @@
 
     return (
       <div className="min-h-screen bg-gradient-to-b from-[#0b0b1a] to-[#37123d]">
-       {/* Version Display */}
-      <div className="fixed bottom-2 right-1 mr-8 text-xs text-gray-300">
-        OutPrio v{appVersion}
-      </div>
+
 
       {/* Update Available Modal */}
       {updateAvailable && (
@@ -1052,7 +1049,10 @@
             </div>
           </div>
         </div>
-
+        {/* Version Display */}
+        <div className="fixed bottom-2 right-2 mr-8 text-xs text-gray-300 z-50">
+        OutPrio v{appVersion}
+        </div>
         {/* Pre-config / Custom Modal */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
