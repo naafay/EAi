@@ -1,5 +1,3 @@
-// src/pages/Dashboard.jsx
-
 import { useEffect, useState, useRef } from 'react';
 import { supabase } from '../supabaseClient';
 import logo from '../assets/outprio.png';
@@ -28,19 +26,21 @@ export default function Dashboard() {
     }));
 
     (async () => {
+      setLoading(true);
       const {
         data: { user },
         error: userErr,
       } = await supabase.auth.getUser();
       if (userErr || !user) {
         window.location.href = '/';
+        setLoading(false);
         return;
       }
       setUser(user);
 
       const { data, error: pfErr } = await supabase
         .from('profiles')
-        .select('*')
+        .select('*, cancel_at_period_end')
         .eq('id', user.id)
         .single();
 
@@ -57,6 +57,7 @@ export default function Dashboard() {
             );
             if (res.ok) {
               const info = await res.json();
+              console.log('Subscription info from Stripe:', info); // Debug log
               setSubscriptionInfo(info);
             } else {
               console.error('Failed to fetch subscription info:', res.status);
@@ -65,12 +66,16 @@ export default function Dashboard() {
             console.error('Error fetching subscription info:', err);
           }
         }
+      } else {
+        console.error('Profile fetch error:', pfErr);
       }
+      setLoading(false);
     })();
   }, []);
 
   const saveProfile = async () => {
     setMessage('');
+    setLoading(true);
     const { error } = await supabase
       .from('profiles')
       .update({ first_name: firstName, last_name: lastName })
@@ -80,85 +85,143 @@ export default function Dashboard() {
       setMessage('✅ Profile updated.');
       setEditing(false);
     }
+    setLoading(false);
   };
 
   const handleLogout = async () => {
+    setLoading(true);
     await supabase.auth.signOut();
     window.location.href = '/';
+    setLoading(false);
   };
 
   const handleStartTrial = async () => {
+    setLoading(true);
     const now = new Date();
     const expires = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
-    await supabase
+    const { error } = await supabase
       .from('profiles')
       .update({
-        trial_start: now.toISOString().split('T')[0],
+        trial_start: now.toISOstring().split('T')[0],
         trial_expires: expires.toISOString().split('T')[0],
       })
       .eq('id', user.id);
-    window.location.reload();
+    if (error) {
+      alert(`Error starting trial: ${error.message}`);
+    } else {
+      window.location.reload();
+    }
+    setLoading(false);
   };
 
   const handleSubscription = async (priceId) => {
     setLoading(true);
-    const res = await fetch(`${BACKEND}/create-checkout-session`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ price_id: priceId, customer_email: email }),
-    });
-    const data = await res.json();
-    if (data.url) window.location.href = data.url;
-    else alert('Checkout error');
-    setLoading(false);
+    try {
+      const res = await fetch(`${BACKEND}/create-checkout-session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ price_id: priceId, customer_email: email }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+      else alert('Checkout error');
+    } catch (err) {
+      alert(`Checkout error: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleResume = async () => {
-  if (!profile.subscription_id) return;
+    if (!profile.subscription_id) {
+      alert('No subscription to resume.');
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `${BACKEND}/resume-subscription/${profile.subscription_id}`,
+        { method: 'POST' }
+      );
+      const data = await res.json();
+      if (data.status === 'success') {
+        alert('Subscription resumed.');
+        window.location.reload();
+      } else {
+        alert(`Failed to resume subscription: ${data.message || 'Unknown error'}`);
+      }
+    } catch (err) {
+      alert(`Error resuming subscription: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const res = await fetch(
-    `${BACKEND}/resume-subscription/${profile.subscription_id}`,
-    { method: 'POST' }
-  );
-  const data = await res.json();
-  if (data.status === 'success') {
-    alert('Subscription resumed.');
-    window.location.reload();
-  } else {
-    alert('Resume error');
-  }
-};
+  const handleCancel = async () => {
+    if (!profile.subscription_id) {
+      alert('No subscription to cancel.');
+      return;
+    }
+    const confirmed = window.confirm(
+      'Are you sure you want to cancel your subscription? You will retain access until the end of the billing cycle.'
+    );
+    if (!confirmed) return;
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `${BACKEND}/cancel-subscription/${profile.subscription_id}`,
+        { method: 'POST' }
+      );
+      const data = await res.json();
+      if (data.status === 'success') {
+        alert('Subscription cancellation scheduled. You will retain access until the end of the billing cycle.');
+        window.location.reload();
+      } else {
+        alert(`Failed to cancel subscription: ${data.message || 'Unknown error'}`);
+      }
+    } catch (err) {
+      alert(`Error canceling subscription: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-const handleCancel = async () => {
-  if (!profile.subscription_id) return;
-
-  const confirmed = window.confirm("Are you sure you want to cancel your subscription? You will retain access until the end of the billing cycle.");
-  if (!confirmed) return;
-
-  const res = await fetch(
-    `${BACKEND}/cancel-subscription/${profile.subscription_id}`,
-    { method: 'POST' }
-  );
-  const data = await res.json();
-  if (data.status === 'success') {
-    alert('Subscription cancellation scheduled. You will retain access until the end of the billing cycle.');
-    window.location.reload(); // Refresh state
-  } else {
-    alert('Cancel error');
-  }
-};
+  const handleManageBilling = async () => {
+    if (!subscriptionInfo || !subscriptionInfo.customer) {
+      alert('No customer information available.');
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch(`${BACKEND}/create-portal-session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customer_id: subscriptionInfo.customer }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+      else alert('Failed to open billing portal');
+    } catch (err) {
+      alert(`Error: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleResetPassword = async () => {
     setMessage('');
+    setLoading(true);
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: window.location.origin + '/reset-password',
     });
     if (error) setMessage(error.message);
-    else
-      setMessage('✅ Password reset email sent. Check your inbox.');
+    else setMessage('✅ Password reset email sent. Check your inbox.');
+    setLoading(false);
   };
 
-  if (!user || !profile) return null;
+  if (!user || !profile) {
+    return <div className="text-center text-white">Loading...</div>;
+  }
 
   // License details
   const today = new Date();
@@ -181,8 +244,18 @@ const handleCancel = async () => {
   let startDate = null;
   let endDate = null;
 
-  if (profile.is_paid) {
-    status = '✅ Paid';
+  if (subscriptionInfo && subscriptionInfo.status === 'active') {
+    status = subscriptionInfo.cancel_at_period_end ? '❌ Scheduled to Cancel' : '✅ Paid';
+    licenseType = subscriptionInfo.plan.interval || 'Premium';
+    startDate = subscriptionInfo.start_date ? new Date(subscriptionInfo.start_date * 1000) : null;
+    endDate = subscriptionInfo.current_period_end ? new Date(subscriptionInfo.current_period_end * 1000) : null;
+  } else if (subscriptionInfo && ['past_due', 'unpaid'].includes(subscriptionInfo.status)) {
+    status = '⚠️ Payment Issue';
+    licenseType = subscriptionInfo.plan.interval || 'Premium';
+    startDate = subscriptionInfo.start_date ? new Date(subscriptionInfo.start_date * 1000) : null;
+    endDate = subscriptionInfo.current_period_end ? new Date(subscriptionInfo.current_period_end * 1000) : null;
+  } else if (profile.is_paid) {
+    status = profile.cancel_at_period_end ? '❌ Scheduled to Cancel' : '✅ Paid';
     licenseType = profile.subscription_type || 'Premium';
     startDate = subscriptionStart;
     endDate = subscriptionEnd;
@@ -221,6 +294,7 @@ const handleCancel = async () => {
         <button
           onClick={handleLogout}
           className="text-2xl text-gray-300 hover:text-white transition-colors duration-300"
+          disabled={loading}
         >
           ⏻
         </button>
@@ -236,6 +310,9 @@ const handleCancel = async () => {
               {message}
             </p>
           )}
+          {loading && (
+            <p className="text-center text-white mb-6">Loading...</p>
+          )}
 
           <div className="space-y-6">
             {/* Personal Information */}
@@ -248,6 +325,7 @@ const handleCancel = async () => {
                   <button
                     onClick={() => setEditing(true)}
                     className="text-2xl text-indigo-300 hover:text-indigo-400 transition-colors duration-300"
+                    disabled={loading}
                   >
                     ✎
                   </button>
@@ -256,6 +334,7 @@ const handleCancel = async () => {
                     <button
                       onClick={saveProfile}
                       className="text-xl text-teal-900 hover:text-teal-400 transition-colors duration-300"
+                      disabled={loading}
                     >
                       ✔
                     </button>
@@ -265,7 +344,8 @@ const handleCancel = async () => {
                         setFirstName(profile.first_name || '');
                         setLastName(profile.last_name || '');
                       }}
-                      className="text-l text-gray-700 hover:text-gray-500 transition-colors duration-300"
+                      className="text-xl text-gray-700 hover:text-gray-500 transition-colors duration-300"
+                      disabled={loading}
                     >
                       ❌
                     </button>
@@ -291,7 +371,7 @@ const handleCancel = async () => {
                     className="w-full mt-2 p-3 rounded-xl bg-white/30 backdrop-blur-md text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    disabled={!editing}
+                    disabled={!editing || loading}
                   />
                 </div>
                 <div>
@@ -302,7 +382,7 @@ const handleCancel = async () => {
                     className="w-full mt-2 p-3 rounded-xl bg-white/30 backdrop-blur-md text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    disabled={!editing}
+                    disabled={!editing || loading}
                   />
                 </div>
                 <a
@@ -319,130 +399,96 @@ const handleCancel = async () => {
             </div>
 
             {/* License Information */}
-            <div className="pt-6 border-t border-white/20 space-y-4">
-              <h2 className="text-lg font-semibold uppercase text-gray-200">
-                License Information
-              </h2>
-              <div className="bg-white/20 p-4 rounded-xl backdrop-blur-md space-y-3">
-                <div className="flex justify-between text-gray-300">
-                  <span>Status</span>
-                  <span className="font-medium">{status}</span>
-                </div>
-                {(trialStart || subscriptionStart) && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-lg font-semibold uppercase text-gray-200">License Information</h2>
+                <div className="bg-white/20 p-4 rounded-xl backdrop-blur-md space-y-3">
                   <div className="flex justify-between text-gray-300">
-                    <span>Plan</span>
-                    <span className="font-medium capitalize">OutPrio {licenseType}</span>
+                    <span>Status</span>
+                    <span className="font-medium">{status}</span>
                   </div>
-                )}
-                {startDate && (
-                  <div className="flex justify-between text-gray-300">
-                    <span>Start Date</span>
-                    <span className="font-medium">
-                      {startDate.toLocaleDateString()}
-                    </span>
-                  </div>
-                )}
-                {endDate && (
-                  <div className="flex justify-between text-gray-300">
-                    <span>End Date</span>
-                    <span className="font-medium">
-                      {endDate.toLocaleDateString()}
-                    </span>
-                  </div>
-                )}
-
-                {profile.is_paid && subscriptionInfo && (
-                  <>
+                  {licenseType && (
                     <div className="flex justify-between text-gray-300">
-                      <span>License Type</span>
-                      <span className="font-medium">
-                        {subscriptionInfo.plan.interval === 'month'
-                          ? 'Monthly'
-                          : 'Annual'}{' '}
-                        —{' '}
-                        {subscriptionInfo.plan.interval === 'month'
-                          ? '$3.99 USD / month'
-                          : '$39.9 USD / year'}
-                      </span>
+                      <span>Plan</span>
+                      <span className="font-medium capitalize">{licenseType}</span>
                     </div>
-                  <div className="flex justify-between text-gray-300">
-                    <span>
-                      {subscriptionInfo.cancel_at_period_end ? 'Access Ends On' : 'Next Billing'}
-                    </span>
-                    <span className="font-medium">
-                      {new Date(
-                        subscriptionInfo.current_period_end * 1000
-                      ).toLocaleDateString()}
-                    </span>
-                  </div>
-                  </>
-                )}
-
-              {profile.is_paid && subscriptionInfo ? (
-                <div className="flex flex-col space-y-2">
-                  {subscriptionInfo.cancel_at_period_end ? (
-                    <button
-                      onClick={handleResume}
-                      className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105"
-                    >
-                      Resume Subscription
-                    </button>
-                  ) : (
-                    <>
-                      {subscriptionInfo.plan.interval === 'month' && (
+                  )}
+                  {endDate && (
+                    <div className="flex justify-between text-gray-300">
+                      <span>{subscriptionInfo && subscriptionInfo.cancel_at_period_end ? 'Access Ends' : 'Next Billing'}</span>
+                      <span className="font-medium">{endDate.toLocaleDateString()}</span>
+                    </div>
+                  )}
+                  {subscriptionInfo && subscriptionInfo.status === 'active' ? (
+                    <div className="flex flex-col space-y-2">
+                      {subscriptionInfo.cancel_at_period_end ? (
                         <button
-                          onClick={() =>
-                            handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')
-                          }
+                          onClick={handleResume}
+                          className="w-full px-4 py-2 bg-green-600 text-white rounded-lg"
                           disabled={loading}
-                          className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105"
                         >
-                          Buy Annual ($39.9/yr)
+                          Resume Subscription
+                        </button>
+                      ) : (
+                        <>
+                          {subscriptionInfo.plan.interval === 'month' && (
+                            <button
+                              onClick={() => handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')}
+                              className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg"
+                              disabled={loading}
+                            >
+                              {loading ? 'Loading...' : 'Buy Annual ($39.9/yr)'}
+                            </button>
+                          )}
+                          <button
+                            onClick={handleCancel}
+                            className="w-full px-4 py-2 bg-rose-700 text-white rounded-lg"
+                            disabled={loading}
+                          >
+                            Cancel Subscription
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex flex-col space-y-2">
+                      {subscriptionInfo && ['past_due', 'unpaid'].includes(subscriptionInfo.status) && (
+                        <button
+                          onClick={handleManageBilling}
+                          className="w-full px-4 py-2 bg-yellow-600 text-white rounded-lg"
+                          disabled={loading}
+                        >
+                          Update Payment Method
                         </button>
                       )}
-                      <button
-                        onClick={handleCancel}
-                        className="w-full px-4 py-2 bg-rose-700 text-white rounded-lg hover:bg-rose-800 transition-all duration-300 transform hover:scale-105"
-                      >
-                        Cancel Subscription
-                      </button>
-                    </>
+                      {!trialStart && (
+                        <button
+                          onClick={handleStartTrial}
+                          className="w-full px-6 py-2 bg-teal-600 rounded-xl text-white font-semibold"
+                          disabled={loading}
+                        >
+                          Start Free 3-Day Trial
+                        </button>
+                      )}
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleSubscription('price_1RfIVDFVd7b5c6lTQrG7zUtJ')}
+                          className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-xl"
+                          disabled={loading}
+                        >
+                          {loading ? 'Loading...' : 'Monthly ($3.99/mo)'}
+                        </button>
+                        <button
+                          onClick={() => handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')}
+                          className="flex-1 px-3 py-2 bg-purple-600 text-white rounded-xl"
+                          disabled={loading}
+                        >
+                          {loading ? 'Loading...' : 'Annual ($39.9/yr)'}
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </div>
-              ) : trialStart && days > 0 ? (
-                <div></div>
-              ) : null}
-                {!profile.is_paid && !trialStart && (
-                  <button
-                    onClick={handleStartTrial}
-                    className="w-full px-6 py-2 bg-teal-600 rounded-xl text-white font-semibold hover:bg-teal-700 focus:ring-2 focus:ring-teal-400 transition-all duration-300 transform hover:scale-105"
-                  >
-                    Start Free 3-Day Trial
-                  </button>
-                )}
-
-                {!profile.is_paid && (
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() =>
-                        handleSubscription('price_1RfIVDFVd7b5c6lTQrG7zUtJ')
-                      }
-                      disabled={loading}
-                      className="flex-1 px-3 py-2 bg-blue-600 rounded-xl text-white font-semibold hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 transition-all duration-300 transform hover:scale-105"
-                    >
-                      {loading ? 'Redirecting...' : 'Monthly ($3.99/mo)'}
-                    </button>
-                    <button
-                      onClick={() =>
-                        handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')
-                      }
-                      disabled={loading}
-                      className="flex-1 px-3 py-2 bg-purple-600 rounded-xl text-white font-semibold hover:bg-purple-700 focus:ring-2 focus:ring-purple-400 transition-all duration-300 transform hover:scale-105"
-                    >
-                      {loading ? 'Redirecting...' : 'Annual ($39.99/yr)'}
-                    </button>
-                  </div>
-                )}
               </div>
             </div>
           </div>

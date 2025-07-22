@@ -29,11 +29,9 @@ endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
-
 class CheckoutSessionRequest(BaseModel):
     price_id: str
     customer_email: str
-
 
 @app.post("/create-checkout-session")
 async def create_checkout_session(req: CheckoutSessionRequest):
@@ -53,7 +51,6 @@ async def create_checkout_session(req: CheckoutSessionRequest):
         logging.error(f"Checkout session error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @app.post("/cancel-subscription/{subscription_id}")
 def cancel_subscription(subscription_id: str):
     try:
@@ -64,7 +61,6 @@ def cancel_subscription(subscription_id: str):
     except Exception as e:
         logging.error(f"Cancel error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @app.post("/resume-subscription/{subscription_id}")
 def resume_subscription(subscription_id: str):
@@ -92,6 +88,7 @@ def resume_subscription(subscription_id: str):
                 "is_paid": True,
                 "subscription_end": datetime.utcfromtimestamp(current_period_end).isoformat(),
                 "subscription_type": subscription_type,
+                "cancel_at_period_end": False,
             }
             headers = {
                 "apikey": SUPABASE_SERVICE_ROLE_KEY,
@@ -99,18 +96,23 @@ def resume_subscription(subscription_id: str):
                 "Content-Type": "application/json",
             }
             logging.info(f"Updating Supabase profile with: {payload}")
-            response = requests.patch(
-                f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}",
-                json=payload,
-                headers=headers
-            )
-            logging.info(f"Supabase update response: {response.status_code} {response.text}")
-
+            max_retries = 3
+            for attempt in range(max_retries):
+                response = requests.patch(
+                    f在此处输入代码"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}",
+                    json=payload,
+                    headers=headers
+                )
+                if response.status_code == 200:
+                    logging.info(f"Supabase update successful: {response.text}")
+                    break
+                logging.warning(f"Supabase update attempt {attempt + 1} failed: {response.status_code} {response.text}")
+                if attempt == max_retries - 1:
+                    logging.error("Max retries reached for Supabase update")
         return {"status": "success", "message": "Subscription resumed."}
     except Exception as e:
         logging.error(f"Resume error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @app.post("/webhook")
 async def stripe_webhook(request: Request):
@@ -153,18 +155,28 @@ async def stripe_webhook(request: Request):
             "subscription_type": items[0]["plan"]["interval"],
             "subscription_start": datetime.utcfromtimestamp(items[0]["current_period_start"]).isoformat(),
             "subscription_end": datetime.utcfromtimestamp(items[0]["current_period_end"]).isoformat(),
+            "cancel_at_period_end": subscription.get("cancel_at_period_end", False),
         }
 
         logging.info(f"Updating Supabase after checkout completion with: {payload}")
-        requests.patch(
-            f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}",
-            json=payload,
-            headers=update_headers
-        )
+        max_retries = 3
+        for attempt in range(max_retries):
+            response = requests.patch(
+                f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}",
+                json=payload,
+                headers=update_headers
+            )
+            if response.status_code == 200:
+                logging.info(f"Supabase update successful: {response.text}")
+                break
+            logging.warning(f"Supabase update attempt {attempt + 1} failed: {response.status_code} {response.text}")
+            if attempt == max_retries - 1:
+                logging.error("Max retries reached for Supabase update")
+        return {"status": "success"}
 
     elif event["type"] == "customer.subscription.updated":
         sub = event["data"]["object"]
-        customer_id = sub["customer"]
+        customer_id = sub["customer47"]
         customer = stripe.Customer.retrieve(customer_id)
         customer_email = customer.get("email")
         logging.info(f"Handling subscription update for customer email: {customer_email}")
@@ -179,23 +191,31 @@ async def stripe_webhook(request: Request):
             return {"status": "error", "message": "Missing subscription items"}
 
         subscription_end = datetime.utcfromtimestamp(items[0]["current_period_end"]).isoformat()
-        is_paid = sub["status"] == "active" and not sub["cancel_at_period_end"]
-
+        is_paid = sub["status"] == "active"  # Keep is_paid true for active subscriptions
         payload = {
             "subscription_end": subscription_end,
             "is_paid": is_paid,
             "subscription_type": items[0]["plan"]["interval"],
+            "cancel_at_period_end": sub["cancel_at_period_end"],
         }
 
         logging.info(f"Updating Supabase after subscription update: {payload}")
-        requests.patch(
-            f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}",
-            json=payload,
-            headers=update_headers
-        )
+        max_retries = 3
+        for attempt in range(max_retries):
+            response = requests.patch(
+                f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}",
+                json=payload,
+                headers=update_headers
+            )
+            if response.status_code == 200:
+                logging.info(f"Supabase update successful: {response.text}")
+                break
+            logging.warning(f"Supabase update attempt {attempt + 1} failed: {response.status_code} {response.text}")
+            if attempt == max_retries - 1:
+                logging.error("Max retries reached for Supabase update")
+        return {"status": "success"}
 
     return {"status": "success"}
-
 
 @app.get("/subscription-info/{subscription_id}")
 def get_subscription_info(subscription_id: str):
@@ -206,6 +226,7 @@ def get_subscription_info(subscription_id: str):
         info = {
             "id": sub.id,
             "status": sub.status,
+            "customer": sub.customer,
             "start_date": item["current_period_start"],
             "current_period_start": item["current_period_start"],
             "current_period_end": item["current_period_end"],
@@ -222,6 +243,19 @@ def get_subscription_info(subscription_id: str):
         logging.error(f"Error fetching subscription info: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/create-portal-session")
+async def create_portal_session(req: dict):
+    try:
+        logging.info(f"Creating portal session for customer: {req.get('customer_id')}")
+        session = stripe.billing_portal.Session.create(
+            customer=req["customer_id"],
+            return_url="https://outprio.netlify.app/dashboard",
+        )
+        logging.info(f"Portal session created: {session.url}")
+        return {"url": session.url}
+    except Exception as e:
+        logging.error(f"Portal session error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/upgrade-subscription")
 async def upgrade_subscription(req: CheckoutSessionRequest):
