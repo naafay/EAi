@@ -48,6 +48,52 @@ async def create_checkout_session(req: CheckoutSessionRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.post("/cancel-subscription/{subscription_id}")
+def cancel_subscription(subscription_id: str):
+    try:
+        stripe.Subscription.modify(subscription_id, cancel_at_period_end=True)
+        return {"status": "success", "message": "Subscription set to cancel at period end."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/resume-subscription/{subscription_id}")
+def resume_subscription(subscription_id: str):
+    try:
+        sub = stripe.Subscription.retrieve(subscription_id)
+
+        if not sub.cancel_at_period_end:
+            return {"status": "noop", "message": "Subscription is already active."}
+
+        updated = stripe.Subscription.modify(subscription_id, cancel_at_period_end=False)
+
+        customer = stripe.Customer.retrieve(updated.customer)
+        customer_email = customer.get("email")
+
+        if customer_email:
+            payload = {
+                "is_paid": True,
+                "subscription_end": datetime.utcfromtimestamp(updated["current_period_end"]).isoformat(),
+                "subscription_type": updated["items"]["data"][0]["plan"]["interval"],
+            }
+            headers = {
+                "apikey": SUPABASE_SERVICE_ROLE_KEY,
+                "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
+                "Content-Type": "application/json",
+            }
+            requests.patch(
+                f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}",
+                json=payload,
+                headers=headers
+            )
+
+        return {"status": "success", "message": "Subscription resumed."}
+
+    except Exception as e:
+        logging.error(f"Resume error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.post("/webhook")
 async def stripe_webhook(request: Request):
     payload = await request.body()
@@ -86,11 +132,6 @@ async def stripe_webhook(request: Request):
         subscription_end = datetime.utcfromtimestamp(items[0]["current_period_end"]).isoformat()
         subscription_type = items[0]["plan"]["interval"]
 
-        customer_email = session.get("customer_email")
-        if not customer_email:
-            return {"status": "error", "message": "Missing email"}
-
-        supabase_url = f"{SUPABASE_URL}/rest/v1/profiles"
         payload = {
             "is_paid": True,
             "subscription_id": subscription_id,
@@ -100,7 +141,7 @@ async def stripe_webhook(request: Request):
         }
 
         requests.patch(
-            f"{supabase_url}?email=eq.{customer_email}",
+            f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}",
             json=payload,
             headers=update_headers
         )
@@ -150,24 +191,6 @@ def get_subscription_info(subscription_id: str):
                 "currency": item["plan"]["currency"]
             }
         }
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.post("/cancel-subscription/{subscription_id}")
-def cancel_subscription(subscription_id: str):
-    try:
-        stripe.Subscription.modify(subscription_id, cancel_at_period_end=True)
-        return {"status": "success", "message": "Subscription set to cancel at period end."}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.post("/resume-subscription/{subscription_id}")
-def resume_subscription(subscription_id: str):
-    try:
-        stripe.Subscription.modify(subscription_id, cancel_at_period_end=False)
-        return {"status": "success", "message": "Subscription resumed."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

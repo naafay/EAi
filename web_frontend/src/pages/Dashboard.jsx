@@ -113,6 +113,22 @@ export default function Dashboard() {
     setLoading(false);
   };
 
+  const handleResume = async () => {
+  if (!profile.subscription_id) return;
+
+  const res = await fetch(
+    `${BACKEND}/resume-subscription/${profile.subscription_id}`,
+    { method: 'POST' }
+  );
+  const data = await res.json();
+  if (data.status === 'success') {
+    alert('Subscription resumed.');
+    window.location.reload();
+  } else {
+    alert('Resume error');
+  }
+};
+
 const handleCancel = async () => {
   if (!profile.subscription_id) return;
 
@@ -360,38 +376,40 @@ const handleCancel = async () => {
                   </>
                 )}
 
-                {profile.is_paid && subscriptionInfo?.plan.interval === 'month' ? (
-                  <div className="flex justify-end space-x-2">
+              {profile.is_paid && subscriptionInfo ? (
+                <div className="flex flex-col space-y-2">
+                  {subscriptionInfo.cancel_at_period_end ? (
                     <button
-                      onClick={() =>
-                        handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')
-                      }
-                      disabled={loading}
-                      className="px-4 py-2 bg-purple-600 rounded-xl text-white font-semibold hover:bg-purple-700 focus:ring-2 focus:ring-purple-400 transition-all duration-300 transform hover:scale-105"
+                      onClick={handleResume}
+                      className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105"
                     >
-                      Buy Annual ($39.9/yr)
+                      Resume Subscription
                     </button>
-                    <button
-                      onClick={handleCancel}
-                      className="px-4 py-2 bg-rose-700 rounded-lg text-white font-semibold hover:bg-rose-700 focus:ring-2 focus:ring-rose-400 shadow-md transition-all duration-300 transform hover:scale-105"
-                    >
-                      Cancel Subscription
-                    </button>
-                  </div>
-                ) : profile.is_paid &&
-                  subscriptionInfo?.plan.interval === 'year' ? (
-                  <div className="flex justify-end space-x-2">
-                    <button
-                      onClick={handleCancel}
-                      className="px-4 py-2 bg-rose-700 rounded-lg text-white font-semibold hover:bg-rose-700 focus:ring-2 focus:ring-rose-400 shadow-md transition-all duration-300 transform hover:scale-105"
-                    >
-                      Cancel Subscription
-                    </button>
-                  </div>
-                ) : trialStart && days > 0 ? (
-                  <div></div>
-                ) : null}
-
+                  ) : (
+                    <>
+                      {subscriptionInfo.plan.interval === 'month' && (
+                        <button
+                          onClick={() =>
+                            handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')
+                          }
+                          disabled={loading}
+                          className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105"
+                        >
+                          Buy Annual ($39.9/yr)
+                        </button>
+                      )}
+                      <button
+                        onClick={handleCancel}
+                        className="w-full px-4 py-2 bg-rose-700 text-white rounded-lg hover:bg-rose-800 transition-all duration-300 transform hover:scale-105"
+                      >
+                        Cancel Subscription
+                      </button>
+                    </>
+                  )}
+                </div>
+              ) : trialStart && days > 0 ? (
+                <div></div>
+              ) : null}
                 {!profile.is_paid && !trialStart && (
                   <button
                     onClick={handleStartTrial}
