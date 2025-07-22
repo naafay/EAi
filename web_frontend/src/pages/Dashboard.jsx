@@ -12,6 +12,9 @@ export default function Dashboard() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [subscriptionInfo, setSubscriptionInfo] = useState(null);
+  const [showModal, setShowModal] = useState(false); // Modal visibility
+  const [modalMessage, setModalMessage] = useState(''); // Modal content
+  const [confirmAction, setConfirmAction] = useState(null); // For confirmation actions
   const BACKEND = 'https://eai-uuwt.onrender.com';
 
   // Use ref to store star positions, calculated once on mount
@@ -48,26 +51,26 @@ export default function Dashboard() {
         setProfile(data);
         setFirstName(data.first_name || '');
         setLastName(data.last_name || '');
-        setEmail(data.email || '');
-
-        if (data.subscription_id) {
-          try {
-            const res = await fetch(
-              `${BACKEND}/subscription-info/${data.subscription_id}`
-            );
-            if (res.ok) {
-              const info = await res.json();
-              console.log('Subscription info from Stripe:', info); // Debug log
-              setSubscriptionInfo(info);
-            } else {
-              console.error('Failed to fetch subscription info:', res.status);
-            }
-          } catch (err) {
-            console.error('Error fetching subscription info:', err);
-          }
-        }
+        setEmail(data.email || user.email || '');
       } else {
         console.error('Profile fetch error:', pfErr);
+      }
+
+      if (data.subscription_id) {
+        try {
+          const res = await fetch(
+            `${BACKEND}/subscription-info/${data.subscription_id}`
+          );
+          if (res.ok) {
+            const info = await res.json();
+            console.log('Subscription info from Stripe:', info); // Debug log
+            setSubscriptionInfo(info);
+          } else {
+            console.error('Failed to fetch subscription info:', res.status);
+          }
+        } catch (err) {
+          console.error('Error fetching subscription info:', err);
+        }
       }
       setLoading(false);
     })();
@@ -80,9 +83,12 @@ export default function Dashboard() {
       .from('profiles')
       .update({ first_name: firstName, last_name: lastName })
       .eq('id', user.id);
-    if (error) setMessage(error.message);
-    else {
-      setMessage('✅ Profile updated.');
+    if (error) {
+      setModalMessage(error.message);
+      setShowModal(true);
+    } else {
+      setModalMessage('✅ Profile updated.');
+      setShowModal(true);
       setEditing(false);
     }
     setLoading(false);
@@ -96,22 +102,43 @@ export default function Dashboard() {
   };
 
   const handleStartTrial = async () => {
-    setLoading(true);
-    const now = new Date();
-    const expires = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
-    const { error } = await supabase
-      .from('profiles')
-      .update({
-        trial_start: now.toISOstring().split('T')[0],
-        trial_expires: expires.toISOString().split('T')[0],
-      })
-      .eq('id', user.id);
-    if (error) {
-      alert(`Error starting trial: ${error.message}`);
-    } else {
-      window.location.reload();
+    if (profile.trial_start) {
+      setModalMessage('You have already started a trial.');
+      setShowModal(true);
+      return;
     }
-    setLoading(false);
+    setLoading(true);
+    try {
+      const now = new Date();
+      const expires = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          trial_start: now.toISOString().split('T')[0],
+          trial_expires: expires.toISOString().split('T')[0],
+        })
+        .eq('id', user.id)
+        .select();
+      if (error) {
+        console.error('Supabase trial update error:', {
+          message: error.message,
+          code: error.code,
+          details: error.details,
+          hint: error.hint,
+        });
+        setModalMessage(`Error starting trial: ${error.message} (Code: ${error.code})`);
+        setShowModal(true);
+        setLoading(false);
+        return;
+      }
+      console.log('Trial started successfully');
+      window.location.reload();
+    } catch (err) {
+      console.error('Unexpected error starting trial:', err);
+      setModalMessage(`Unexpected error starting trial: ${err.message}`);
+      setShowModal(true);
+      setLoading(false);
+    }
   };
 
   const handleSubscription = async (priceId) => {
@@ -124,9 +151,13 @@ export default function Dashboard() {
       });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
-      else alert('Checkout error');
+      else {
+        setModalMessage('Checkout error');
+        setShowModal(true);
+      }
     } catch (err) {
-      alert(`Checkout error: ${err.message}`);
+      setModalMessage(`Checkout error: ${err.message}`);
+      setShowModal(true);
     } finally {
       setLoading(false);
     }
@@ -134,7 +165,8 @@ export default function Dashboard() {
 
   const handleResume = async () => {
     if (!profile.subscription_id) {
-      alert('No subscription to resume.');
+      setModalMessage('No subscription to resume.');
+      setShowModal(true);
       return;
     }
     setLoading(true);
@@ -145,13 +177,16 @@ export default function Dashboard() {
       );
       const data = await res.json();
       if (data.status === 'success') {
-        alert('Subscription resumed.');
+        setModalMessage('Subscription resumed.');
+        setShowModal(true);
         window.location.reload();
       } else {
-        alert(`Failed to resume subscription: ${data.message || 'Unknown error'}`);
+        setModalMessage(`Failed to resume subscription: ${data.message || 'Unknown error'}`);
+        setShowModal(true);
       }
     } catch (err) {
-      alert(`Error resuming subscription: ${err.message}`);
+      setModalMessage(`Error resuming subscription: ${err.message}`);
+      setShowModal(true);
     } finally {
       setLoading(false);
     }
@@ -159,36 +194,42 @@ export default function Dashboard() {
 
   const handleCancel = async () => {
     if (!profile.subscription_id) {
-      alert('No subscription to cancel.');
+      setModalMessage('No subscription to cancel.');
+      setShowModal(true);
       return;
     }
-    const confirmed = window.confirm(
-      'Are you sure you want to cancel your subscription? You will retain access until the end of the billing cycle.'
-    );
-    if (!confirmed) return;
-    setLoading(true);
-    try {
-      const res = await fetch(
-        `${BACKEND}/cancel-subscription/${profile.subscription_id}`,
-        { method: 'POST' }
-      );
-      const data = await res.json();
-      if (data.status === 'success') {
-        alert('Subscription cancellation scheduled. You will retain access until the end of the billing cycle.');
-        window.location.reload();
-      } else {
-        alert(`Failed to cancel subscription: ${data.message || 'Unknown error'}`);
+    setModalMessage('Are you sure you want to cancel your subscription? You will retain access until the end of the billing cycle.');
+    setConfirmAction(() => async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `${BACKEND}/cancel-subscription/${profile.subscription_id}`,
+          { method: 'POST' }
+        );
+        const data = await res.json();
+        if (data.status === 'success') {
+          setModalMessage('Subscription cancellation scheduled. You will retain access until the end of the billing cycle.');
+          setShowModal(true);
+          window.location.reload();
+        } else {
+          setModalMessage(`Failed to cancel subscription: ${data.message || 'Unknown error'}`);
+          setShowModal(true);
+        }
+      } catch (err) {
+        setModalMessage(`Error canceling subscription: ${err.message}`);
+        setShowModal(true);
+      } finally {
+        setLoading(false);
+        setConfirmAction(null);
       }
-    } catch (err) {
-      alert(`Error canceling subscription: ${err.message}`);
-    } finally {
-      setLoading(false);
-    }
+    });
+    setShowModal(true);
   };
 
   const handleManageBilling = async () => {
     if (!subscriptionInfo || !subscriptionInfo.customer) {
-      alert('No customer information available.');
+      setModalMessage('No customer information available.');
+      setShowModal(true);
       return;
     }
     setLoading(true);
@@ -200,9 +241,13 @@ export default function Dashboard() {
       });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
-      else alert('Failed to open billing portal');
+      else {
+        setModalMessage('Failed to open billing portal');
+        setShowModal(true);
+      }
     } catch (err) {
-      alert(`Error: ${err.message}`);
+      setModalMessage(`Error: ${err.message}`);
+      setShowModal(true);
     } finally {
       setLoading(false);
     }
@@ -211,16 +256,58 @@ export default function Dashboard() {
   const handleResetPassword = async () => {
     setMessage('');
     setLoading(true);
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    const resetEmail = user.email || profile.email;
+    if (!resetEmail) {
+      setModalMessage('Error: No valid email found for this user.');
+      setShowModal(true);
+      setLoading(false);
+      return;
+    }
+    console.log('Attempting password reset for email:', resetEmail, 'User ID:', user.id);
+    const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
       redirectTo: window.location.origin + '/reset-password',
     });
-    if (error) setMessage(error.message);
-    else setMessage('✅ Password reset email sent. Check your inbox.');
+    if (error) {
+      console.error('Password reset error:', {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+      });
+      setModalMessage(
+        error.message === 'Email not found'
+          ? 'Error: Email not registered. Please contact support.'
+          : error.message.includes('unconfirmed')
+            ? 'Error: Email not confirmed. Please verify your email first.'
+            : `Error: ${error.message}`
+      );
+      setShowModal(true);
+    } else {
+      setModalMessage('✅ Password reset email sent. Check your inbox.');
+      setShowModal(true);
+    }
     setLoading(false);
   };
 
+  const handleModalConfirm = () => {
+    if (confirmAction) {
+      confirmAction();
+    } else {
+      setShowModal(false);
+    }
+  };
+
+  const handleModalCancel = () => {
+    setShowModal(false);
+    setConfirmAction(null);
+  };
+
   if (!user || !profile) {
-    return <div className="text-center text-white">Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-[#0b0b1a] to-[#37123d] flex items-center justify-center">
+        <div className="h-6 w-6 animate-spin rounded-full border-4 border-t-[#db69ab] border-[#0b0b1a] drop-shadow" />
+      </div>
+    );
   }
 
   // License details
@@ -246,17 +333,20 @@ export default function Dashboard() {
 
   if (subscriptionInfo && subscriptionInfo.status === 'active') {
     status = subscriptionInfo.cancel_at_period_end ? '❌ Scheduled to Cancel' : '✅ Paid';
-    licenseType = subscriptionInfo.plan.interval || 'Premium';
+    licenseType = subscriptionInfo.plan.interval === 'month' ? 'OutPrio Monthly' :
+                  subscriptionInfo.plan.interval === 'year' ? 'OutPrio Annual' : 'Premium';
     startDate = subscriptionInfo.start_date ? new Date(subscriptionInfo.start_date * 1000) : null;
     endDate = subscriptionInfo.current_period_end ? new Date(subscriptionInfo.current_period_end * 1000) : null;
   } else if (subscriptionInfo && ['past_due', 'unpaid'].includes(subscriptionInfo.status)) {
     status = '⚠️ Payment Issue';
-    licenseType = subscriptionInfo.plan.interval || 'Premium';
+    licenseType = subscriptionInfo.plan.interval === 'month' ? 'OutPrio Monthly' :
+                  subscriptionInfo.plan.interval === 'year' ? 'OutPrio Annual' : 'Premium';
     startDate = subscriptionInfo.start_date ? new Date(subscriptionInfo.start_date * 1000) : null;
     endDate = subscriptionInfo.current_period_end ? new Date(subscriptionInfo.current_period_end * 1000) : null;
   } else if (profile.is_paid) {
     status = profile.cancel_at_period_end ? '❌ Scheduled to Cancel' : '✅ Paid';
-    licenseType = profile.subscription_type || 'Premium';
+    licenseType = profile.subscription_type === 'month' ? 'OutPrio Monthly' :
+                  profile.subscription_type === 'year' ? 'OutPrio Annual' : 'Premium';
     startDate = subscriptionStart;
     endDate = subscriptionEnd;
   } else if (trialStart && trialExpires) {
@@ -269,6 +359,13 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0b0b1a] to-[#37123d] relative overflow-hidden">
+      {/* Loading Spinner Overlay */}
+      {loading && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="h-6 w-6 animate-spin rounded-full border-4 border-t-[#db69ab] border-[#0b0b1a] drop-shadow" />
+        </div>
+      )}
+
       {/* Starry Background Overlay */}
       {starPositions.current.map((pos, i) => (
         <span
@@ -281,6 +378,38 @@ export default function Dashboard() {
           }}
         />
       ))}
+
+      {/* Modal for Messages or Confirmation */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+          <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 max-w-md w-full border border-white/30 shadow-2xl glow-effect">
+            <p className="text-gray-200 mb-4">{modalMessage}</p>
+            {confirmAction ? (
+              <div className="flex justify-between">
+                <button
+                  onClick={handleModalConfirm}
+                  className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-500 transition-colors duration-300"
+                >
+                  Confirm
+                </button>
+                <button
+                  onClick={handleModalCancel}
+                  className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors duration-300"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowModal(false)}
+                className="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-colors duration-300"
+              >
+                Close
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       <nav className="flex items-center justify-between p-6">
         <a
@@ -310,9 +439,6 @@ export default function Dashboard() {
               {message}
             </p>
           )}
-          {loading && (
-            <p className="text-center text-white mb-6">Loading...</p>
-          )}
 
           <div className="space-y-6">
             {/* Personal Information */}
@@ -324,7 +450,7 @@ export default function Dashboard() {
                 {!editing ? (
                   <button
                     onClick={() => setEditing(true)}
-                    className="text-2xl text-indigo-300 hover:text-indigo-400 transition-colors duration-300"
+                    className="text-xl text-indigo-300 hover:text-indigo-400 transition-colors duration-300"
                     disabled={loading}
                   >
                     ✎
@@ -344,7 +470,7 @@ export default function Dashboard() {
                         setFirstName(profile.first_name || '');
                         setLastName(profile.last_name || '');
                       }}
-                      className="text-xl text-gray-700 hover:text-gray-500 transition-colors duration-300"
+                      className="text-sm text-gray-700 hover:text-gray-500 transition-colors duration-300"
                       disabled={loading}
                     >
                       ❌
@@ -402,7 +528,7 @@ export default function Dashboard() {
             <div className="space-y-6">
               <div>
                 <h2 className="text-lg font-semibold uppercase text-gray-200">License Information</h2>
-                <div className="bg-white/20 p-4 rounded-xl backdrop-blur-md space-y-3">
+                <div className="bg-white/20 p-4 rounded-xl backdrop-blur-md space-y-3 mt-3">
                   <div className="flex justify-between text-gray-300">
                     <span>Status</span>
                     <span className="font-medium">{status}</span>
@@ -415,7 +541,10 @@ export default function Dashboard() {
                   )}
                   {endDate && (
                     <div className="flex justify-between text-gray-300">
-                      <span>{subscriptionInfo && subscriptionInfo.cancel_at_period_end ? 'Access Ends' : 'Next Billing'}</span>
+                      <span>
+                        {status === '🧪 Trial Active' ? 'Trial Expiry' :
+                         subscriptionInfo && subscriptionInfo.cancel_at_period_end ? 'Access Ends' : 'Next Billing'}
+                      </span>
                       <span className="font-medium">{endDate.toLocaleDateString()}</span>
                     </div>
                   )}
@@ -480,7 +609,7 @@ export default function Dashboard() {
                         </button>
                         <button
                           onClick={() => handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')}
-                          className="flex-1 px-3 py-2 bg-purple-600 text-white rounded-xl"
+                          className="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg rounded-xl"
                           disabled={loading}
                         >
                           {loading ? 'Loading...' : 'Annual ($39.9/yr)'}
