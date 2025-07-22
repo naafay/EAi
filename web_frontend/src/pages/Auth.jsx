@@ -1,5 +1,3 @@
-// src/pages/Auth.jsx
-
 import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +14,6 @@ export default function AuthPage() {
   const [loadingReset, setLoadingReset] = useState(false);
   const navigate = useNavigate();
 
-  // Use ref to store star positions, calculated once on mount
   const starPositions = useRef([]);
 
   useEffect(() => {
@@ -65,7 +62,7 @@ export default function AuthPage() {
     }
     setLoadingReset(true);
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/reset-password',
+      redirectTo: 'https://outprio.netlify.app/reset-password',
     });
     setLoadingReset(false);
     if (error) {

@@ -11,7 +11,6 @@ export default function ResetPassword() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // Use ref to store star positions, calculated once on mount
   const starPositions = useRef([]);
 
   useEffect(() => {
@@ -21,6 +20,19 @@ export default function ResetPassword() {
       animationDelay: `${Math.random() * 5}s`,
     }));
   }, []);
+
+  useEffect(() => {
+    const accessToken = searchParams.get('access_token');
+    const refreshToken = searchParams.get('refresh_token');
+    const type = searchParams.get('type');
+
+    if (type === 'recovery' && accessToken && refreshToken) {
+      supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      });
+    }
+  }, [searchParams]);
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
@@ -33,19 +45,12 @@ export default function ResetPassword() {
       return;
     }
 
-    const token = searchParams.get('token');
-    if (!token) {
-      setMessage('Invalid or missing reset token.');
-      setLoading(false);
-      return;
-    }
-
     const { error } = await supabase.auth.updateUser({ password });
     if (error) {
       setMessage(error.message);
     } else {
       setMessage('✅ Password updated successfully. Redirecting to login...');
-      setTimeout(() => navigate('/auth'), 2000); // Redirect to login after 2 seconds
+      setTimeout(() => navigate('/auth'), 2000);
     }
     setLoading(false);
   };
