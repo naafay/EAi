@@ -113,16 +113,24 @@ export default function Dashboard() {
     setLoading(false);
   };
 
-  const handleCancel = async () => {
-    if (!profile.subscription_id) return;
-    const res = await fetch(
-      `${BACKEND}/cancel-subscription/${profile.subscription_id}`,
-      { method: 'POST' }
-    );
-    const data = await res.json();
-    if (data.status === 'success') alert('Cancelled');
-    else alert('Cancel error');
-  };
+const handleCancel = async () => {
+  if (!profile.subscription_id) return;
+
+  const confirmed = window.confirm("Are you sure you want to cancel your subscription? You will retain access until the end of the billing cycle.");
+  if (!confirmed) return;
+
+  const res = await fetch(
+    `${BACKEND}/cancel-subscription/${profile.subscription_id}`,
+    { method: 'POST' }
+  );
+  const data = await res.json();
+  if (data.status === 'success') {
+    alert('Subscription cancellation scheduled. You will retain access until the end of the billing cycle.');
+    window.location.reload(); // Refresh state
+  } else {
+    alert('Cancel error');
+  }
+};
 
   const handleResetPassword = async () => {
     setMessage('');

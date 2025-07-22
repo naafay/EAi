@@ -12,7 +12,6 @@ load_dotenv()
 
 app = FastAPI()
 
-# Enable CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,11 +20,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Stripe setup
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 
-# Supabase config
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
@@ -61,56 +58,39 @@ async def stripe_webhook(request: Request):
     except stripe.error.SignatureVerificationError:
         raise HTTPException(status_code=400, detail="Invalid signature")
 
+    update_headers = {
+        "apikey": SUPABASE_SERVICE_ROLE_KEY,
+        "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
+        "Content-Type": "application/json",
+        "Prefer": "return=representation"
+    }
+
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
         customer_email = session.get("customer_email")
         subscription_id = session.get("subscription")
 
         if not (customer_email and subscription_id):
-            logging.error("❌ Missing customer_email or subscription_id in session")
             return {"status": "error", "message": "Missing data"}
 
         try:
             subscription = stripe.Subscription.retrieve(subscription_id)
         except Exception as e:
-            logging.error(f"❌ Stripe subscription fetch error: {e}")
             return {"status": "error", "message": "Failed to fetch subscription"}
 
         items = subscription.get("items", {}).get("data", [])
-        if not items or not items[0].get("current_period_start") or not items[0].get("current_period_end"):
-            logging.error("❌ Missing timestamps in subscription.items")
-            return {"status": "error", "message": "Missing timestamps"}
+        if not items:
+            return {"status": "error", "message": "Missing items"}
 
         subscription_start = datetime.utcfromtimestamp(items[0]["current_period_start"]).isoformat()
         subscription_end = datetime.utcfromtimestamp(items[0]["current_period_end"]).isoformat()
         subscription_type = items[0]["plan"]["interval"]
 
-        # Step 1: Get existing user from Supabase to compare old subscription
-        supabase_query_url = f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}"
-        headers = {
-            "apikey": SUPABASE_SERVICE_ROLE_KEY,
-            "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}"
-        }
-        user_response = requests.get(supabase_query_url, headers=headers)
-        user_data = user_response.json()[0] if user_response.ok and user_response.json() else {}
-        old_sub_id = user_data.get("subscription_id")
+        customer_email = session.get("customer_email")
+        if not customer_email:
+            return {"status": "error", "message": "Missing email"}
 
-        # Step 2: Cancel old subscription if it's different
-        if old_sub_id and old_sub_id != subscription_id:
-            try:
-                stripe.Subscription.modify(old_sub_id, cancel_at_period_end=True)
-                logging.info(f"🔄 Canceled old subscription: {old_sub_id}")
-            except Exception as e:
-                logging.error(f"⚠️ Failed to cancel old subscription: {e}")
-
-        # Step 3: Update Supabase
-        supabase_update_url = f"{SUPABASE_URL}/rest/v1/profiles"
-        update_headers = {
-            "apikey": SUPABASE_SERVICE_ROLE_KEY,
-            "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
-            "Content-Type": "application/json",
-            "Prefer": "return=representation"
-        }
+        supabase_url = f"{SUPABASE_URL}/rest/v1/profiles"
         payload = {
             "is_paid": True,
             "subscription_id": subscription_id,
@@ -119,16 +99,35 @@ async def stripe_webhook(request: Request):
             "subscription_end": subscription_end
         }
 
-        response = requests.patch(
-            f"{supabase_update_url}?email=eq.{customer_email}",
+        requests.patch(
+            f"{supabase_url}?email=eq.{customer_email}",
             json=payload,
             headers=update_headers
         )
 
-        if response.status_code >= 300:
-            logging.error(f"❌ Supabase update failed: {response.text}")
-        else:
-            logging.info("✅ Supabase updated successfully")
+    elif event["type"] == "customer.subscription.updated":
+        sub = event["data"]["object"]
+        customer_id = sub["customer"]
+
+        customer = stripe.Customer.retrieve(customer_id)
+        customer_email = customer.get("email")
+        if not customer_email:
+            return {"status": "ignored"}
+
+        subscription_end = datetime.utcfromtimestamp(sub["current_period_end"]).isoformat()
+        is_paid = sub["status"] == "active" and not sub["cancel_at_period_end"]
+
+        payload = {
+            "subscription_end": subscription_end,
+            "is_paid": is_paid,
+            "subscription_type": sub["items"]["data"][0]["plan"]["interval"],
+        }
+
+        requests.patch(
+            f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}",
+            json=payload,
+            headers=update_headers
+        )
 
     return {"status": "success"}
 
@@ -176,7 +175,6 @@ def resume_subscription(subscription_id: str):
 @app.post("/upgrade-subscription")
 async def upgrade_subscription(req: CheckoutSessionRequest):
     try:
-        # Step 1: Get user's existing subscription
         user_email = req.customer_email
         supabase_url = f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{user_email}"
         headers = {
@@ -190,7 +188,6 @@ async def upgrade_subscription(req: CheckoutSessionRequest):
         if not current_sub_id:
             raise Exception("No existing subscription to upgrade.")
 
-        # Step 2: Create new checkout session for annual plan
         session = stripe.checkout.Session.create(
             success_url="https://outprio.netlify.app/dashboard",
             cancel_url="https://outprio.netlify.app/dashboard",
