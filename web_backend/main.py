@@ -7,9 +7,10 @@ import stripe
 import os
 import logging
 import requests
-import traceback
 
 load_dotenv()
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 app = FastAPI()
 
@@ -26,9 +27,6 @@ endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-
-# Set logging format
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 class CheckoutSessionRequest(BaseModel):
@@ -49,45 +47,34 @@ async def create_checkout_session(req: CheckoutSessionRequest):
         )
         return {"url": checkout_session.url}
     except Exception as e:
-        logging.error(f"Create checkout session error: {e}")
-        logging.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/cancel-subscription/{subscription_id}")
 def cancel_subscription(subscription_id: str):
-    logging.info(f"Attempting to cancel subscription: {subscription_id}")
     try:
-        sub = stripe.Subscription.retrieve(subscription_id)
-        logging.info(f"Current subscription state before cancel: {sub}")
-
+        logging.info(f"Attempting to cancel subscription: {subscription_id}")
         stripe.Subscription.modify(subscription_id, cancel_at_period_end=True)
         logging.info(f"Subscription {subscription_id} marked to cancel at period end.")
-
         return {"status": "success", "message": "Subscription set to cancel at period end."}
     except Exception as e:
-        logging.error(f"Cancel subscription error: {e}")
-        logging.error(traceback.format_exc())
+        logging.error(f"Cancel error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/resume-subscription/{subscription_id}")
 def resume_subscription(subscription_id: str):
-    logging.info(f"Attempting to resume subscription: {subscription_id}")
     try:
+        logging.info(f"Attempting to resume subscription: {subscription_id}")
         sub = stripe.Subscription.retrieve(subscription_id)
-        logging.info(f"Fetched subscription state: {sub}")
 
         if not sub.cancel_at_period_end:
-            logging.info(f"Subscription {subscription_id} is already active, skipping resume.")
             return {"status": "noop", "message": "Subscription is already active."}
 
         updated = stripe.Subscription.modify(subscription_id, cancel_at_period_end=False)
-        logging.info(f"Subscription {subscription_id} resumed: {updated}")
 
         customer = stripe.Customer.retrieve(updated.customer)
         customer_email = customer.get("email")
-        logging.info(f"Resumed subscription linked to customer: {customer_email}")
 
         if customer_email:
             payload = {
@@ -100,18 +87,17 @@ def resume_subscription(subscription_id: str):
                 "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
                 "Content-Type": "application/json",
             }
-            response = requests.patch(
+            requests.patch(
                 f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}",
                 json=payload,
                 headers=headers
             )
-            logging.info(f"Supabase update response: {response.status_code} - {response.text}")
 
+        logging.info(f"Subscription {subscription_id} resumed successfully.")
         return {"status": "success", "message": "Subscription resumed."}
 
     except Exception as e:
-        logging.error(f"Resume subscription error: {e}")
-        logging.error(traceback.format_exc())
+        logging.error(f"Resume error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -176,13 +162,17 @@ async def stripe_webhook(request: Request):
         if not customer_email:
             return {"status": "ignored"}
 
-        subscription_end = datetime.utcfromtimestamp(sub["current_period_end"]).isoformat()
+        items = sub.get("items", {}).get("data", [])
+        if not items:
+            return {"status": "error", "message": "Missing subscription items"}
+
+        subscription_end = datetime.utcfromtimestamp(items[0]["current_period_end"]).isoformat()
         is_paid = sub["status"] == "active" and not sub["cancel_at_period_end"]
 
         payload = {
             "subscription_end": subscription_end,
             "is_paid": is_paid,
-            "subscription_type": sub["items"]["data"][0]["plan"]["interval"],
+            "subscription_type": items[0]["plan"]["interval"],
         }
 
         requests.patch(
@@ -213,8 +203,6 @@ def get_subscription_info(subscription_id: str):
             }
         }
     except Exception as e:
-        logging.error(f"Get subscription info error: {e}")
-        logging.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -247,6 +235,5 @@ async def upgrade_subscription(req: CheckoutSessionRequest):
         )
         return {"url": session.url}
     except Exception as e:
-        logging.error(f"Upgrade subscription error: {e}")
-        logging.error(traceback.format_exc())
+        logging.error(f"❌ Upgrade error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
