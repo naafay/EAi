@@ -50,7 +50,7 @@ export default function ResetPassword() {
       setMessage(error.message);
     } else {
       setMessage('✅ Password updated successfully. Redirecting to login...');
-      setTimeout(() => navigate('/auth'), 2000);
+      setTimeout(() => navigate('/'), 2000);
     }
     setLoading(false);
   };
