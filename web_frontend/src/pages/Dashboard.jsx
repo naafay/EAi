@@ -365,14 +365,16 @@ const handleCancel = async () => {
                           : '$39.9 USD / year'}
                       </span>
                     </div>
-                    <div className="flex justify-between text-gray-300">
-                      <span>Next Billing</span>
-                      <span className="font-medium">
-                        {new Date(
-                          subscriptionInfo.current_period_end * 1000
-                        ).toLocaleDateString()}
-                      </span>
-                    </div>
+                  <div className="flex justify-between text-gray-300">
+                    <span>
+                      {subscriptionInfo.cancel_at_period_end ? 'Access Ends On' : 'Next Billing'}
+                    </span>
+                    <span className="font-medium">
+                      {new Date(
+                        subscriptionInfo.current_period_end * 1000
+                      ).toLocaleDateString()}
+                    </span>
+                  </div>
                   </>
                 )}
 
