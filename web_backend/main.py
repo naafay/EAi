@@ -99,7 +99,7 @@ def resume_subscription(subscription_id: str):
             max_retries = 3
             for attempt in range(max_retries):
                 response = requests.patch(
-                    f在此处输入代码"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}",
+                    f"{SUPABASE_URL}/rest/v1/profiles?email=eq.{customer_email}",
                     json=payload,
                     headers=headers
                 )
@@ -176,7 +176,7 @@ async def stripe_webhook(request: Request):
 
     elif event["type"] == "customer.subscription.updated":
         sub = event["data"]["object"]
-        customer_id = sub["customer47"]
+        customer_id = sub["customer"]
         customer = stripe.Customer.retrieve(customer_id)
         customer_email = customer.get("email")
         logging.info(f"Handling subscription update for customer email: {customer_email}")
