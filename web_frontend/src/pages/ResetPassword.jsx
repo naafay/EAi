@@ -102,14 +102,6 @@ export default function ResetPassword() {
             {loading ? 'Updating...' : 'Update Password'}
           </button>
         </form>
-        <div className="mt-4 text-center text-sm text-gray-300">
-          <button
-            onClick={() => navigate('/auth')}
-            className="underline text-indigo-200 hover:text-indigo-100 transition-colors duration-300"
-          >
-            ⟵ Back to Login
-          </button>
-        </div>
       </div>
     </div>
   );
