@@ -2,12 +2,13 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime, timedelta
 import stripe
 import os
 import logging
 import requests
 import json
+import supabase
 
 load_dotenv()
 
@@ -29,9 +30,15 @@ endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
+# Initialize Supabase client with service role key
+supabase_client = supabase.create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
+
 class CheckoutSessionRequest(BaseModel):
     price_id: str
     customer_email: str
+
+class SendOtpRequest(BaseModel):
+    email: str
 
 @app.post("/create-checkout-session")
 async def create_checkout_session(req: CheckoutSessionRequest):
@@ -286,4 +293,40 @@ async def upgrade_subscription(req: CheckoutSessionRequest):
         return {"url": session.url}
     except Exception as e:
         logging.error(f"❌ Upgrade error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/send-otp")
+async def send_otp(req: SendOtpRequest):
+    try:
+        logging.info(f"Generating OTP for email: {req.email}")
+        # Generate a 6-digit OTP
+        otp = str(random.randint(100000, 999999))
+        expires_at = datetime.utcnow() + timedelta(minutes=10)
+
+        # Insert OTP into Supabase using service role key
+        response = supabase_client.from_('otp_codes').insert({
+            'email': req.email,
+            'otp': otp,
+            'expires_at': expires_at.isoformat(),
+            'used': False
+        }).execute()
+
+        if response.error:
+            logging.error(f"Supabase insert error: {response.error.message}")
+            raise HTTPException(status_code=500, detail=f"Error generating OTP: {response.error.message}")
+
+        # Send OTP via Supabase email
+        invite_response = supabase_client.auth.admin.invite_user_by_email(
+            email=req.email,
+            data={'otp': otp},
+            redirect_to=None
+        )
+        if invite_response.error:
+            logging.error(f"Supabase invite error: {invite_response.error.message}")
+            raise HTTPException(status_code=500, detail=f"Error sending OTP: {invite_response.error.message}")
+
+        logging.info(f"OTP sent successfully to {req.email}")
+        return {"message": "OTP sent successfully. Check your email."}
+    except Exception as e:
+        logging.error(f"Unexpected error in send_otp: {e}")
         raise HTTPException(status_code=500, detail=str(e))

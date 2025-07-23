@@ -265,31 +265,19 @@ const handleResetPassword = async () => {
   }
   console.log('Attempting password reset for email:', resetEmail, 'User ID:', user.id);
 
-  // Generate a 6-digit OTP
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString(); // 10-minute expiration
-
-  // Store OTP in Supabase
-  const { error: insertError } = await supabase
-    .from('otp_codes')
-    .insert({ email: resetEmail, otp, expires_at: expiresAt, used: false });
-
-  if (insertError) {
-    setModalMessage(`Error generating OTP: ${insertError.message}`);
-    setShowModal(true);
-  } else {
-    // Send OTP via Supabase email using the inviteUser template
-    const { error: emailError } = await supabase.auth.admin.inviteUserByEmail(resetEmail, {
-      redirectTo: null,
-      data: { otp }, // OTP will be inserted into the email template
+  try {
+    const response = await fetch(`${BACKEND}/send-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: resetEmail }),
     });
-    if (emailError) {
-      setModalMessage(`Error sending OTP: ${emailError.message}`);
-      setShowModal(true);
-    } else {
-      setModalMessage('✅ OTP sent to your email. Enter it on the reset page.');
-      setShowModal(true);
-    }
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.detail || 'Failed to send OTP');
+    setModalMessage('✅ OTP sent to your email. Enter it on the reset page.');
+    setShowModal(true);
+  } catch (error) {
+    setModalMessage(`Error sending OTP: ${error.message}`);
+    setShowModal(true);
   }
   setLoading(false);
 };

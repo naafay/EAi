@@ -62,29 +62,18 @@ const handleResetPassword = async () => {
   }
   setLoadingReset(true);
 
-  // Generate a 6-digit OTP
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString(); // 10-minute expiration
-
-  // Store OTP in Supabase
-  const { error: insertError } = await supabase
-    .from('otp_codes')
-    .insert({ email, otp, expires_at: expiresAt, used: false });
-
-  if (insertError) {
-    setMessage(`Error generating OTP: ${insertError.message}`);
-  } else {
-    // Send OTP via Supabase email using the inviteUser template
-    const { error: emailError } = await supabase.auth.admin.inviteUserByEmail(email, {
-      redirectTo: null,
-      data: { otp }, // OTP will be inserted into the email template
+  try {
+    const response = await fetch(`${BACKEND}/send-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
     });
-    if (emailError) {
-      setMessage(`Error sending OTP: ${emailError.message}`);
-    } else {
-      setMessage('✅ OTP sent to your email. Enter it on the reset page.');
-      setIsResetMode(false); // Return to login view
-    }
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.detail || 'Failed to send OTP');
+    setMessage('✅ OTP sent to your email. Enter it on the reset page.');
+    setIsResetMode(false); // Return to login view
+  } catch (error) {
+    setMessage(`Error sending OTP: ${error.message}`);
   }
   setLoadingReset(false);
 };
