@@ -14,6 +14,9 @@ export default function AuthPage() {
   const [loadingReset, setLoadingReset] = useState(false);
   const navigate = useNavigate();
 
+  // Define the backend URL
+  const BACKEND = 'https://eai-uuwt.onrender.com';
+
   const starPositions = useRef([]);
 
   useEffect(() => {
@@ -54,6 +57,7 @@ export default function AuthPage() {
     }
   };
 
+// In AuthPage.jsx, replace the handleResetPassword function
 const handleResetPassword = async () => {
   setMessage('');
   if (!email) {
@@ -70,8 +74,8 @@ const handleResetPassword = async () => {
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.detail || 'Failed to send OTP');
-    setMessage('✅ OTP sent to your email. Enter it on the reset page.');
-    setIsResetMode(false); // Return to login view
+    setMessage('✅ OTP sent to your email. Redirecting to reset page...');
+    setTimeout(() => navigate('/reset-password'), 1000); // Redirect after a brief delay
   } catch (error) {
     setMessage(`Error sending OTP: ${error.message}`);
   }

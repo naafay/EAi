@@ -1,4 +1,3 @@
-// Replace the entire ResetPassword.jsx content
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
@@ -16,11 +15,19 @@ export default function ResetPassword() {
   const starPositions = useRef([]);
 
   useEffect(() => {
+    // Generate star positions for background animation
     starPositions.current = Array.from({ length: 50 }).map(() => ({
       top: `${Math.random() * 100}%`,
       left: `${Math.random() * 100}%`,
       animationDelay: `${Math.random() * 5}s`,
     }));
+
+    // Pre-fill email if user is authenticated
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) setEmail(user.email || '');
+    };
+    checkAuth();
   }, []);
 
   const handleResetPassword = async (e) => {
@@ -34,33 +41,58 @@ export default function ResetPassword() {
       return;
     }
 
-    const { data, error: fetchError } = await supabase
-      .from('otp_codes')
-      .select('*')
-      .eq('email', email)
-      .eq('otp', otp)
-      .eq('used', false)
-      .gt('expires_at', new Date().toISOString())
-      .single();
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const BACKEND = 'https://eai-uuwt.onrender.com';
 
-    if (fetchError || !data) {
-      setMessage('Invalid or expired OTP.');
-      setLoading(false);
-      return;
-    }
+      if (user) {
+        // Authenticated user changing password
+        let otpValidation = true;
+        if (otp) {
+          // Optional OTP verification for added security
+          const { data, error: fetchError } = await supabase
+            .from('otp_codes')
+            .select('*')
+            .eq('email', email)
+            .eq('otp', otp)
+            .eq('used', false)
+            .gt('expires_at', new Date().toISOString())
+            .single();
+          if (fetchError || !data) {
+            setMessage('Invalid or expired OTP.');
+            setLoading(false);
+            return;
+          }
+          await supabase.from('otp_codes').update({ used: true }).eq('id', data.id);
+          otpValidation = true; // OTP validated
+        }
 
-    const { error: updateError } = await supabase.auth.updateUser({ password });
-    if (updateError) {
-      setMessage(updateError.message);
-    } else {
-      // Mark OTP as used
-      await supabase
-        .from('otp_codes')
-        .update({ used: true })
-        .eq('id', data.id);
+        const { error: updateError } = await supabase.auth.updateUser({ password });
+        if (updateError) throw new Error(updateError.message);
+        setMessage('✅ Password updated successfully. Redirecting to dashboard...');
+        setTimeout(() => navigate('/dashboard'), 2000);
+      } else {
+        // Unauthenticated user resetting forgotten password
+        if (!otp) {
+          setMessage('OTP is required for forgotten password reset.');
+          setLoading(false);
+          return;
+        }
 
-      setMessage('✅ Password updated successfully. Redirecting to login...');
-      setTimeout(() => navigate('/'), 2000);
+        const response = await fetch(`${BACKEND}/reset-password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, otp, new_password: password }),
+        });
+
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.detail || 'Failed to reset password');
+
+        setMessage('✅ Password updated successfully. Redirecting to login...');
+        setTimeout(() => navigate('/'), 2000);
+      }
+    } catch (error) {
+      setMessage(`Error resetting password: ${error.message}`);
     }
     setLoading(false);
   };
@@ -103,11 +135,10 @@ export default function ResetPassword() {
           />
           <input
             type="text"
-            placeholder="Enter OTP"
+            placeholder="Enter OTP (optional for signed-in users)"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
             className="w-full px-5 py-3 rounded-xl bg-white/30 backdrop-blur-md text-white placeholder-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
-            required
           />
           <input
             type="password"
@@ -135,10 +166,10 @@ export default function ResetPassword() {
         </form>
         <div className="mt-4 text-center text-sm text-gray-300">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate(user ? '/dashboard' : '/')}
             className="underline text-indigo-200 hover:text-indigo-100 transition-colors duration-300"
           >
-            ⟵ Back to Login
+            ⟵ {user ? 'Back to Dashboard' : 'Back to Login'}
           </button>
         </div>
       </div>

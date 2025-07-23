@@ -9,6 +9,7 @@ import logging
 import requests
 import json
 import supabase
+import random
 
 load_dotenv()
 
@@ -329,4 +330,46 @@ async def send_otp(req: SendOtpRequest):
         return {"message": "OTP sent successfully. Check your email."}
     except Exception as e:
         logging.error(f"Unexpected error in send_otp: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/reset-password")
+async def reset_password(req: dict):
+    try:
+        email = req.get("email")
+        otp = req.get("otp")
+        new_password = req.get("new_password")
+
+        if not all([email, otp, new_password]):
+            raise HTTPException(status_code=400, detail="Missing required fields")
+
+        # Verify OTP
+        response = supabase_client.from_('otp_codes').select('*').eq('email', email).eq('otp', otp).eq('used', false).gt('expires_at', datetime.utcnow().isoformat()).execute()
+        if response.error or not response.data:
+            raise HTTPException(status_code=400, detail="Invalid or expired OTP")
+        otp_data = response.data[0]
+
+        # Update password using admin API
+        user_response = supabase_client.auth.admin.list_users(email=email)
+        if user_response.error or not user_response.data.users:
+            raise HTTPException(status_code=404, detail="User not found")
+        user_id = user_response.data.users[0].id
+
+        reset_response = supabase_client.auth.admin.update_user_by_id(
+            user_id,
+            {"password": new_password}
+        )
+        if reset_response.error:
+            raise HTTPException(status_code=500, detail=f"Failed to update password: {reset_response.error.message}")
+
+        # Mark OTP as used
+        update_response = supabase_client.from_('otp_codes').update({'used': True}).eq('id', otp_data['id']).execute()
+        if update_response.error:
+            logging.warning(f"Failed to mark OTP as used: {update_response.error.message}")  # Non-critical
+
+        logging.info(f"Password reset successfully for email: {email}")
+        return {"detail": "Password reset successfully"}
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        logging.error(f"Unexpected error in reset_password: {e}")
         raise HTTPException(status_code=500, detail=str(e))

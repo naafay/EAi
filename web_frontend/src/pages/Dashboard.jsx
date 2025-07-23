@@ -253,6 +253,7 @@ export default function Dashboard() {
     }
   };
 
+// In Dashboard.jsx, replace or adjust handleResetPassword
 const handleResetPassword = async () => {
   setMessage('');
   setLoading(true);
@@ -273,8 +274,9 @@ const handleResetPassword = async () => {
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.detail || 'Failed to send OTP');
-    setModalMessage('✅ OTP sent to your email. Enter it on the reset page.');
+    setModalMessage('✅ OTP sent to your email. Redirecting to reset page...');
     setShowModal(true);
+    setTimeout(() => navigate('/reset-password'), 1000); // Redirect after a brief delay
   } catch (error) {
     setModalMessage(`Error sending OTP: ${error.message}`);
     setShowModal(true);
