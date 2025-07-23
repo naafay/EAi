@@ -3,4 +3,4 @@ uvicorn
 python-dotenv
 stripe
 httpx
-supabase
+supabase==2.0.0

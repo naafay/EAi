@@ -296,42 +296,6 @@ async def upgrade_subscription(req: CheckoutSessionRequest):
         logging.error(f"❌ Upgrade error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/send-otp")
-async def send_otp(req: SendOtpRequest):
-    try:
-        logging.info(f"Generating OTP for email: {req.email}")
-        # Generate a 6-digit OTP
-        otp = str(random.randint(100000, 999999))
-        expires_at = datetime.utcnow() + timedelta(minutes=10)
-
-        # Insert OTP into Supabase using service role key
-        response = supabase_client.from_('otp_codes').insert({
-            'email': req.email,
-            'otp': otp,
-            'expires_at': expires_at.isoformat(),
-            'used': False
-        }).execute()
-
-        if response.error:
-            logging.error(f"Supabase insert error: {response.error.message}")
-            raise HTTPException(status_code=500, detail=f"Error generating OTP: {response.error.message}")
-
-        # Send OTP via Supabase email
-        invite_response = supabase_client.auth.admin.invite_user_by_email(
-            email=req.email,
-            data={'otp': otp},
-            redirect_to=None
-        )
-        if invite_response.error:
-            logging.error(f"Supabase invite error: {invite_response.error.message}")
-            raise HTTPException(status_code=500, detail=f"Error sending OTP: {invite_response.error.message}")
-
-        logging.info(f"OTP sent successfully to {req.email}")
-        return {"message": "OTP sent successfully. Check your email."}
-    except Exception as e:
-        logging.error(f"Unexpected error in send_otp: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
 @app.post("/reset-password")
 async def reset_password(req: dict):
     try:
@@ -343,7 +307,7 @@ async def reset_password(req: dict):
             raise HTTPException(status_code=400, detail="Missing required fields")
 
         # Verify OTP
-        response = supabase_client.from_('otp_codes').select('*').eq('email', email).eq('otp', otp).eq('used', false).gt('expires_at', datetime.utcnow().isoformat()).execute()
+        response = supabase_client.from_('otp_codes').select('*').eq('email', email).eq('otp', otp).eq('used', False).gt('expires_at', datetime.utcnow().isoformat()).execute()
         if response.error or not response.data:
             raise HTTPException(status_code=400, detail="Invalid or expired OTP")
         otp_data = response.data[0]
@@ -372,4 +336,43 @@ async def reset_password(req: dict):
         raise e
     except Exception as e:
         logging.error(f"Unexpected error in reset_password: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/send-otp")
+async def send_otp(req: SendOtpRequest):
+    try:
+        logging.info(f"Generating OTP for email: {req.email}")
+        otp = str(random.randint(100000, 999999))
+        expires_at = datetime.utcnow() + timedelta(minutes=10)
+
+        # Insert OTP into Supabase
+        response = supabase_client.from_('otp_codes').insert({
+            'email': req.email,
+            'otp': otp,
+            'expires_at': expires_at.isoformat(),
+            'used': False
+        }).execute()
+
+        logging.info(f"Supabase insert response: {response}")  # Debug log
+        if response.error:
+            logging.error(f"Supabase insert error: {response.error.message}")
+            raise HTTPException(status_code=500, detail=f"Error generating OTP: {response.error.message}")
+
+        # Send OTP via Supabase email
+        invite_response = supabase_client.auth.admin.invite_user_by_email(
+            email=req.email,
+            data={'otp': otp},
+            redirect_to=None
+        )
+        logging.info(f"Supabase invite response: {invite_response}")  # Debug log
+        if invite_response.error:
+            logging.error(f"Supabase invite error: {invite_response.error.message}")
+            raise HTTPException(status_code=500, detail=f"Error sending OTP: {invite_response.error.message}")
+
+        logging.info(f"OTP sent successfully to {req.email}")
+        return {"message": "OTP sent successfully. Check your email."}
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        logging.error(f"Unexpected error in send_otp: {e}")
         raise HTTPException(status_code=500, detail=str(e))
