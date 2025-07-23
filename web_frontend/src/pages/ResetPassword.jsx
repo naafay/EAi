@@ -60,22 +60,21 @@ export default function ResetPassword() {
       });
       if (verifyError) throw verifyError;
 
+      // Get the current user session after verification
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('User session not found after verification');
+
+      // Update password for both authenticated and unauthenticated users
+      const { error: updateError } = await supabase.auth.updateUser({ password });
+      if (updateError) {
+        console.error('UpdateUser error:', updateError.message);
+        throw updateError;
+      }
+
       if (isAuthenticated) {
-        // For authenticated users, update password
-        const { error: updateError } = await supabase.auth.updateUser({ password });
-        if (updateError) {
-          console.error('UpdateUser error:', updateError.message);
-          throw updateError;
-        }
         setMessage('✅ Password updated successfully. Redirecting to dashboard...');
         setTimeout(() => navigate('/dashboard'), 2000);
       } else {
-        // For unauthenticated users, update password and sign in
-        const { user, error: signUpError } = await supabase.auth.signUp({
-          email,
-          password,
-        });
-        if (signUpError) throw signUpError;
         setMessage('✅ Password reset successfully. Redirecting to login...');
         setTimeout(() => navigate('/'), 2000);
       }
