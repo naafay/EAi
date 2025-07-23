@@ -345,7 +345,11 @@ async def send_otp(req: SendOtpRequest):
         otp = str(random.randint(100000, 999999))
         expires_at = datetime.utcnow() + timedelta(minutes=10)
 
-        # Insert OTP into Supabase
+        # Delete existing unexpired, unused OTPs for the email
+        delete_response = supabase_client.from_('otp_codes').delete().eq('email', req.email).eq('used', False).gt('expires_at', datetime.utcnow().isoformat()).execute()
+        logging.info(f"Deleted old OTPs response: {delete_response}")
+
+        # Insert new OTP into Supabase
         response = supabase_client.from_('otp_codes').insert({
             'email': req.email,
             'otp': otp,
@@ -353,8 +357,7 @@ async def send_otp(req: SendOtpRequest):
             'used': False
         }).execute()
 
-        logging.info(f"Supabase insert response: {response}")  # Debug log
-        # Check if response contains error
+        logging.info(f"Supabase insert response: {response}")
         if hasattr(response, 'error') and response.error:
             logging.error(f"Supabase insert error: {response.error.message}")
             raise HTTPException(status_code=500, detail=f"Error generating OTP: {response.error.message}")
@@ -368,7 +371,7 @@ async def send_otp(req: SendOtpRequest):
             data={'otp': otp},
             redirect_to=None
         )
-        logging.info(f"Supabase invite response: {invite_response}")  # Debug log
+        logging.info(f"Supabase invite response: {invite_response}")
         if hasattr(invite_response, 'error') and invite_response.error:
             logging.error(f"Supabase invite error: {invite_response.error.message}")
             raise HTTPException(status_code=500, detail=f"Error sending OTP: {invite_response.error.message}")
