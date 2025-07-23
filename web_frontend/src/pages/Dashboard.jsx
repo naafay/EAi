@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef, useNavigate } from 'react'; // Add useNavigate
+import { useEffect, useState, useRef } from 'react'; // React hooks
+import { useNavigate } from 'react-router-dom'; // Navigation hook
 import { supabase } from '../supabaseClient';
 import logo from '../assets/outprio.png';
 
