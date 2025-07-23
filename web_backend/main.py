@@ -354,9 +354,13 @@ async def send_otp(req: SendOtpRequest):
         }).execute()
 
         logging.info(f"Supabase insert response: {response}")  # Debug log
-        if response.error:
+        # Check if response contains error
+        if hasattr(response, 'error') and response.error:
             logging.error(f"Supabase insert error: {response.error.message}")
             raise HTTPException(status_code=500, detail=f"Error generating OTP: {response.error.message}")
+        elif not response.data:
+            logging.error("Supabase insert returned no data")
+            raise HTTPException(status_code=500, detail="Failed to generate OTP: No data returned")
 
         # Send OTP via Supabase email
         invite_response = supabase_client.auth.admin.invite_user_by_email(
@@ -365,7 +369,7 @@ async def send_otp(req: SendOtpRequest):
             redirect_to=None
         )
         logging.info(f"Supabase invite response: {invite_response}")  # Debug log
-        if invite_response.error:
+        if hasattr(invite_response, 'error') and invite_response.error:
             logging.error(f"Supabase invite error: {invite_response.error.message}")
             raise HTTPException(status_code=500, detail=f"Error sending OTP: {invite_response.error.message}")
 
