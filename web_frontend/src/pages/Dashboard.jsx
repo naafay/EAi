@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useNavigate } from 'react'; // Add useNavigate
 import { supabase } from '../supabaseClient';
 import logo from '../assets/outprio.png';
 
@@ -15,6 +15,7 @@ export default function Dashboard() {
   const [showModal, setShowModal] = useState(false); // Modal visibility
   const [modalMessage, setModalMessage] = useState(''); // Modal content
   const [confirmAction, setConfirmAction] = useState(null); // For confirmation actions
+  const navigate = useNavigate(); // Add navigate hook
   const BACKEND = 'https://eai-uuwt.onrender.com';
 
   // Use ref to store star positions, calculated once on mount
@@ -35,7 +36,7 @@ export default function Dashboard() {
         error: userErr,
       } = await supabase.auth.getUser();
       if (userErr || !user) {
-        window.location.href = '/';
+        navigate('/'); // Use navigate instead of window.location.href
         setLoading(false);
         return;
       }
@@ -74,7 +75,7 @@ export default function Dashboard() {
       }
       setLoading(false);
     })();
-  }, []);
+  }, [navigate]); // Add navigate to dependency array
 
   const saveProfile = async () => {
     setMessage('');
@@ -97,7 +98,7 @@ export default function Dashboard() {
   const handleLogout = async () => {
     setLoading(true);
     await supabase.auth.signOut();
-    window.location.href = '/';
+    navigate('/'); // Use navigate instead of window.location.href
     setLoading(false);
   };
 
@@ -132,7 +133,7 @@ export default function Dashboard() {
         return;
       }
       console.log('Trial started successfully');
-      window.location.reload();
+      window.location.reload(); // Reloading might still be needed here
     } catch (err) {
       console.error('Unexpected error starting trial:', err);
       setModalMessage(`Unexpected error starting trial: ${err.message}`);
@@ -179,7 +180,7 @@ export default function Dashboard() {
       if (data.status === 'success') {
         setModalMessage('Subscription resumed.');
         setShowModal(true);
-        window.location.reload();
+        window.location.reload(); // Reloading might still be needed here
       } else {
         setModalMessage(`Failed to resume subscription: ${data.message || 'Unknown error'}`);
         setShowModal(true);
@@ -210,7 +211,7 @@ export default function Dashboard() {
         if (data.status === 'success') {
           setModalMessage('Subscription cancellation scheduled. You will retain access until the end of the billing cycle.');
           setShowModal(true);
-          window.location.reload();
+          window.location.reload(); // Reloading might still be needed here
         } else {
           setModalMessage(`Failed to cancel subscription: ${data.message || 'Unknown error'}`);
           setShowModal(true);
@@ -253,33 +254,32 @@ export default function Dashboard() {
     }
   };
 
-// In Dashboard.jsx, update handleResetPassword
-const handleResetPassword = async () => {
-  setMessage('');
-  setLoading(true);
-  const resetEmail = user.email || profile.email;
-  if (!resetEmail) {
-    setModalMessage('Error: No valid email found for this user.');
-    setShowModal(true);
-    setLoading(false);
-    return;
-  }
+  const handleResetPassword = async () => {
+    setMessage('');
+    setLoading(true);
+    const resetEmail = user.email || profile.email;
+    if (!resetEmail) {
+      setModalMessage('Error: No valid email found for this user.');
+      setShowModal(true);
+      setLoading(false);
+      return;
+    }
 
-  try {
-    const { error } = await supabase.auth.signInWithOtp({
-      email: resetEmail,
-      options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + '/reset-password' },
-    });
-    if (error) throw error;
-    setModalMessage('✅ OTP sent to your email. Redirecting to reset page...');
-    setShowModal(true);
-    setTimeout(() => navigate('/reset-password'), 1000);
-  } catch (error) {
-    setModalMessage(`Error sending OTP: ${error.message}`);
-    setShowModal(true);
-  }
-  setLoading(false);
-};
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: resetEmail,
+        options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + '/reset-password' },
+      });
+      if (error) throw error;
+      setModalMessage('✅ OTP sent to your email. Redirecting to reset page...');
+      setShowModal(true);
+      setTimeout(() => navigate('/reset-password'), 1000); // Use navigate
+    } catch (error) {
+      setModalMessage(`Error sending OTP: ${error.message}`);
+      setShowModal(true);
+    }
+    setLoading(false);
+  };
 
   const handleModalConfirm = () => {
     if (confirmAction) {
