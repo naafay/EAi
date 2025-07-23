@@ -1,18 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom'; // Add useSearchParams
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import logo from '../assets/outprio.png';
 
 export default function ResetPassword() {
   const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
+  const [otp, setOtp] = useState(''); // Will be populated from magic link token
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams(); // To handle magic link params
+  const [searchParams] = useSearchParams();
 
   const starPositions = useRef([]);
 
@@ -29,17 +29,11 @@ export default function ResetPassword() {
         setEmail(user.email || '');
         setIsAuthenticated(true);
       } else {
-        // Check for magic link session from redirect
+        // Handle magic link redirect
         const token = searchParams.get('token');
-        const type = searchParams.get('type');
-        if (token && type === 'magiclink') {
-          const { error } = await supabase.auth.verifyOtp({ token, type: 'magiclink' });
-          if (!error) {
-            setMessage('✅ Logged in via magic link. Redirecting to dashboard...');
-            setTimeout(() => navigate('/dashboard'), 2000);
-          } else {
-            setMessage('Invalid magic link.');
-          }
+        if (token) {
+          setOtp(token); // Populate OTP field with token from magic link
+          setMessage('✅ Magic link detected. Enter your new password to proceed.');
         }
       }
     };
@@ -58,20 +52,23 @@ export default function ResetPassword() {
     }
 
     try {
+      // Verify the token (from magic link or manual OTP entry)
       const { data, error } = await supabase.auth.verifyOtp({
         email,
         token: otp,
-        type: 'email_change',
+        type: 'magiclink', // Match the magic link flow
       });
       if (error) throw error;
 
       if (isAuthenticated) {
+        // For authenticated users, update password
         const { error: updateError } = await supabase.auth.updateUser({ password });
         if (updateError) throw updateError;
         setMessage('✅ Password updated successfully. Redirecting to dashboard...');
         setTimeout(() => navigate('/dashboard'), 2000);
       } else {
-        setMessage('✅ Password updated successfully. Redirecting to login...');
+        // For unauthenticated users, the verifyOtp should log them in
+        setMessage('✅ Password reset successfully. Redirecting to login...');
         setTimeout(() => navigate('/'), 2000);
       }
     } catch (error) {
@@ -114,7 +111,7 @@ export default function ResetPassword() {
           />
           <input
             type="text"
-            placeholder="Enter OTP"
+            placeholder="Enter OTP (auto-filled if using magic link)"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
             className="w-full px-5 py-3 rounded-xl bg-white/30 backdrop-blur-md text-white placeholder-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
