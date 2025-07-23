@@ -253,41 +253,46 @@ export default function Dashboard() {
     }
   };
 
-  const handleResetPassword = async () => {
-    setMessage('');
-    setLoading(true);
-    const resetEmail = user.email || profile.email;
-    if (!resetEmail) {
-      setModalMessage('Error: No valid email found for this user.');
-      setShowModal(true);
-      setLoading(false);
-      return;
-    }
-    console.log('Attempting password reset for email:', resetEmail, 'User ID:', user.id);
-    const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-      redirectTo: window.location.origin + '/reset-password',
+const handleResetPassword = async () => {
+  setMessage('');
+  setLoading(true);
+  const resetEmail = user.email || profile.email;
+  if (!resetEmail) {
+    setModalMessage('Error: No valid email found for this user.');
+    setShowModal(true);
+    setLoading(false);
+    return;
+  }
+  console.log('Attempting password reset for email:', resetEmail, 'User ID:', user.id);
+
+  // Generate a 6-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString(); // 10-minute expiration
+
+  // Store OTP in Supabase
+  const { error: insertError } = await supabase
+    .from('otp_codes')
+    .insert({ email: resetEmail, otp, expires_at: expiresAt, used: false });
+
+  if (insertError) {
+    setModalMessage(`Error generating OTP: ${insertError.message}`);
+    setShowModal(true);
+  } else {
+    // Send OTP via Supabase email using the inviteUser template
+    const { error: emailError } = await supabase.auth.admin.inviteUserByEmail(resetEmail, {
+      redirectTo: null,
+      data: { otp }, // OTP will be inserted into the email template
     });
-    if (error) {
-      console.error('Password reset error:', {
-        message: error.message,
-        code: error.code,
-        details: error.details,
-        hint: error.hint,
-      });
-      setModalMessage(
-        error.message === 'Email not found'
-          ? 'Error: Email not registered. Please contact support.'
-          : error.message.includes('unconfirmed')
-            ? 'Error: Email not confirmed. Please verify your email first.'
-            : `Error: ${error.message}`
-      );
+    if (emailError) {
+      setModalMessage(`Error sending OTP: ${emailError.message}`);
       setShowModal(true);
     } else {
-      setModalMessage('✅ Password reset email sent. Check your inbox.');
+      setModalMessage('✅ OTP sent to your email. Enter it on the reset page.');
       setShowModal(true);
     }
-    setLoading(false);
-  };
+  }
+  setLoading(false);
+};
 
   const handleModalConfirm = () => {
     if (confirmAction) {

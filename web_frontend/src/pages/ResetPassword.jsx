@@ -1,14 +1,16 @@
-import { useEffect, useState, useRef } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+// Replace the entire ResetPassword.jsx content
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import logo from '../assets/outprio.png';
 
 export default function ResetPassword() {
+  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const starPositions = useRef([]);
@@ -21,19 +23,6 @@ export default function ResetPassword() {
     }));
   }, []);
 
-  useEffect(() => {
-    const accessToken = searchParams.get('access_token');
-    const refreshToken = searchParams.get('refresh_token');
-    const type = searchParams.get('type');
-
-    if (type === 'recovery' && accessToken && refreshToken) {
-      supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      });
-    }
-  }, [searchParams]);
-
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setMessage('');
@@ -45,10 +34,31 @@ export default function ResetPassword() {
       return;
     }
 
-    const { error } = await supabase.auth.updateUser({ password });
-    if (error) {
-      setMessage(error.message);
+    const { data, error: fetchError } = await supabase
+      .from('otp_codes')
+      .select('*')
+      .eq('email', email)
+      .eq('otp', otp)
+      .eq('used', false)
+      .gt('expires_at', new Date().toISOString())
+      .single();
+
+    if (fetchError || !data) {
+      setMessage('Invalid or expired OTP.');
+      setLoading(false);
+      return;
+    }
+
+    const { error: updateError } = await supabase.auth.updateUser({ password });
+    if (updateError) {
+      setMessage(updateError.message);
     } else {
+      // Mark OTP as used
+      await supabase
+        .from('otp_codes')
+        .update({ used: true })
+        .eq('id', data.id);
+
       setMessage('✅ Password updated successfully. Redirecting to login...');
       setTimeout(() => navigate('/'), 2000);
     }
@@ -84,6 +94,22 @@ export default function ResetPassword() {
         )}
         <form onSubmit={handleResetPassword} className="space-y-6">
           <input
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-5 py-3 rounded-xl bg-white/30 backdrop-blur-md text-white placeholder-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
+            required
+          />
+          <input
+            type="text"
+            placeholder="Enter OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            className="w-full px-5 py-3 rounded-xl bg-white/30 backdrop-blur-md text-white placeholder-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
+            required
+          />
+          <input
             type="password"
             placeholder="New Password"
             value={password}
@@ -107,6 +133,14 @@ export default function ResetPassword() {
             {loading ? 'Updating...' : 'Update Password'}
           </button>
         </form>
+        <div className="mt-4 text-center text-sm text-gray-300">
+          <button
+            onClick={() => navigate('/')}
+            className="underline text-indigo-200 hover:text-indigo-100 transition-colors duration-300"
+          >
+            ⟵ Back to Login
+          </button>
+        </div>
       </div>
     </div>
   );
