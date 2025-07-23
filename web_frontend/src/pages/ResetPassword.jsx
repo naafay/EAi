@@ -52,22 +52,30 @@ export default function ResetPassword() {
     }
 
     try {
-      // Verify the token (from magic link or manual OTP entry)
-      const { data, error } = await supabase.auth.verifyOtp({
+      // Verify the token (from magic link)
+      const { data, error: verifyError } = await supabase.auth.verifyOtp({
         email,
         token: otp,
-        type: 'magiclink', // Match the magic link flow
+        type: 'magiclink',
       });
-      if (error) throw error;
+      if (verifyError) throw verifyError;
 
       if (isAuthenticated) {
         // For authenticated users, update password
         const { error: updateError } = await supabase.auth.updateUser({ password });
-        if (updateError) throw updateError;
+        if (updateError) {
+          console.error('UpdateUser error:', updateError.message);
+          throw updateError;
+        }
         setMessage('✅ Password updated successfully. Redirecting to dashboard...');
         setTimeout(() => navigate('/dashboard'), 2000);
       } else {
-        // For unauthenticated users, the verifyOtp should log them in
+        // For unauthenticated users, update password and sign in
+        const { user, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+        if (signUpError) throw signUpError;
         setMessage('✅ Password reset successfully. Redirecting to login...');
         setTimeout(() => navigate('/'), 2000);
       }
