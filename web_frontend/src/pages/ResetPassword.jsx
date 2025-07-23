@@ -10,6 +10,7 @@ export default function ResetPassword() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Track auth state
   const navigate = useNavigate();
 
   const starPositions = useRef([]);
@@ -23,7 +24,10 @@ export default function ResetPassword() {
 
     const checkAuth = async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (user) setEmail(user.email || '');
+      if (user) {
+        setEmail(user.email || '');
+        setIsAuthenticated(true);
+      }
     };
     checkAuth();
   }, []);
@@ -40,21 +44,21 @@ export default function ResetPassword() {
     }
 
     try {
-      const { data: { user }, error } = await supabase.auth.verifyOtp({
+      const { data, error } = await supabase.auth.verifyOtp({
         email,
         token: otp,
         type: 'email_change',
       });
       if (error) throw error;
 
-      if (user) {
+      if (isAuthenticated) {
         // For authenticated users, update password
         const { error: updateError } = await supabase.auth.updateUser({ password });
         if (updateError) throw updateError;
         setMessage('✅ Password updated successfully. Redirecting to dashboard...');
         setTimeout(() => navigate('/dashboard'), 2000);
       } else {
-        // For unauthenticated users, sign in after reset (optional)
+        // For unauthenticated users, sign in after reset (optional, depending on flow)
         setMessage('✅ Password updated successfully. Redirecting to login...');
         setTimeout(() => navigate('/'), 2000);
       }
@@ -102,10 +106,11 @@ export default function ResetPassword() {
           />
           <input
             type="text"
-            placeholder="Enter OTP (optional for signed-in users)"
+            placeholder="Enter OTP"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
             className="w-full px-5 py-3 rounded-xl bg-white/30 backdrop-blur-md text-white placeholder-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all duration-300"
+            required
           />
           <input
             type="password"
@@ -133,10 +138,10 @@ export default function ResetPassword() {
         </form>
         <div className="mt-4 text-center text-sm text-gray-300">
           <button
-            onClick={() => navigate(user ? '/dashboard' : '/')}
+            onClick={() => navigate(isAuthenticated ? '/dashboard' : '/')}
             className="underline text-indigo-200 hover:text-indigo-100 transition-colors duration-300"
           >
-            ⟵ {user ? 'Back to Dashboard' : 'Back to Login'}
+            ⟵ {isAuthenticated ? 'Back to Dashboard' : 'Back to Login'}
           </button>
         </div>
       </div>
