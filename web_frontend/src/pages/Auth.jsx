@@ -54,23 +54,40 @@ export default function AuthPage() {
     }
   };
 
-  const handleResetPassword = async () => {
-    setMessage('');
-    if (!email) {
-      setMessage('Please enter your email address.');
-      return;
-    }
-    setLoadingReset(true);
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://outprio.netlify.app/reset-password',
+const handleResetPassword = async () => {
+  setMessage('');
+  if (!email) {
+    setMessage('Please enter your email address.');
+    return;
+  }
+  setLoadingReset(true);
+
+  // Generate a 6-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString(); // 10-minute expiration
+
+  // Store OTP in Supabase
+  const { error: insertError } = await supabase
+    .from('otp_codes')
+    .insert({ email, otp, expires_at: expiresAt, used: false });
+
+  if (insertError) {
+    setMessage(`Error generating OTP: ${insertError.message}`);
+  } else {
+    // Send OTP via Supabase email using the inviteUser template
+    const { error: emailError } = await supabase.auth.admin.inviteUserByEmail(email, {
+      redirectTo: null,
+      data: { otp }, // OTP will be inserted into the email template
     });
-    setLoadingReset(false);
-    if (error) {
-      setMessage(error.message);
+    if (emailError) {
+      setMessage(`Error sending OTP: ${emailError.message}`);
     } else {
-      setMessage('✅ Password reset email sent. Check your inbox.');
+      setMessage('✅ OTP sent to your email. Enter it on the reset page.');
+      setIsResetMode(false); // Return to login view
     }
-  };
+  }
+  setLoadingReset(false);
+};
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
