@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom'; // Add useSearchParams
 import { supabase } from '../supabaseClient';
 import logo from '../assets/outprio.png';
 
@@ -10,8 +10,9 @@ export default function ResetPassword() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Track auth state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams(); // To handle magic link params
 
   const starPositions = useRef([]);
 
@@ -27,10 +28,23 @@ export default function ResetPassword() {
       if (user) {
         setEmail(user.email || '');
         setIsAuthenticated(true);
+      } else {
+        // Check for magic link session from redirect
+        const token = searchParams.get('token');
+        const type = searchParams.get('type');
+        if (token && type === 'magiclink') {
+          const { error } = await supabase.auth.verifyOtp({ token, type: 'magiclink' });
+          if (!error) {
+            setMessage('✅ Logged in via magic link. Redirecting to dashboard...');
+            setTimeout(() => navigate('/dashboard'), 2000);
+          } else {
+            setMessage('Invalid magic link.');
+          }
+        }
       }
     };
     checkAuth();
-  }, []);
+  }, [searchParams]);
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
@@ -52,13 +66,11 @@ export default function ResetPassword() {
       if (error) throw error;
 
       if (isAuthenticated) {
-        // For authenticated users, update password
         const { error: updateError } = await supabase.auth.updateUser({ password });
         if (updateError) throw updateError;
         setMessage('✅ Password updated successfully. Redirecting to dashboard...');
         setTimeout(() => navigate('/dashboard'), 2000);
       } else {
-        // For unauthenticated users, sign in after reset (optional, depending on flow)
         setMessage('✅ Password updated successfully. Redirecting to login...');
         setTimeout(() => navigate('/'), 2000);
       }
@@ -74,11 +86,7 @@ export default function ResetPassword() {
         <span
           key={i}
           className="absolute h-1 w-1 bg-white rounded-full opacity-10 animate-twinkle"
-          style={{
-            top: pos.top,
-            left: pos.left,
-            animationDelay: pos.animationDelay,
-          }}
+          style={{ top: pos.top, left: pos.left, animationDelay: pos.animationDelay }}
         />
       ))}
       <div className="relative w-full max-w-md bg-white/20 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/30 glow-effect">
