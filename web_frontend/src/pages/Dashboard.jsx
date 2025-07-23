@@ -253,7 +253,7 @@ export default function Dashboard() {
     }
   };
 
-// In Dashboard.jsx, replace or adjust handleResetPassword
+// In Dashboard.jsx, update handleResetPassword
 const handleResetPassword = async () => {
   setMessage('');
   setLoading(true);
@@ -264,19 +264,16 @@ const handleResetPassword = async () => {
     setLoading(false);
     return;
   }
-  console.log('Attempting password reset for email:', resetEmail, 'User ID:', user.id);
 
   try {
-    const response = await fetch(`${BACKEND}/send-otp`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: resetEmail }),
+    const { error } = await supabase.auth.signInWithOtp({
+      email: resetEmail,
+      options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + '/reset-password' },
     });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.detail || 'Failed to send OTP');
+    if (error) throw error;
     setModalMessage('✅ OTP sent to your email. Redirecting to reset page...');
     setShowModal(true);
-    setTimeout(() => navigate('/reset-password'), 1000); // Redirect after a brief delay
+    setTimeout(() => navigate('/reset-password'), 1000);
   } catch (error) {
     setModalMessage(`Error sending OTP: ${error.message}`);
     setShowModal(true);

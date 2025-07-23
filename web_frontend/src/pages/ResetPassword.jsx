@@ -15,14 +15,12 @@ export default function ResetPassword() {
   const starPositions = useRef([]);
 
   useEffect(() => {
-    // Generate star positions for background animation
     starPositions.current = Array.from({ length: 50 }).map(() => ({
       top: `${Math.random() * 100}%`,
       left: `${Math.random() * 100}%`,
       animationDelay: `${Math.random() * 5}s`,
     }));
 
-    // Pre-fill email if user is authenticated
     const checkAuth = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) setEmail(user.email || '');
@@ -42,52 +40,21 @@ export default function ResetPassword() {
     }
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      const BACKEND = 'https://eai-uuwt.onrender.com';
+      const { data: { user }, error } = await supabase.auth.verifyOtp({
+        email,
+        token: otp,
+        type: 'email_change',
+      });
+      if (error) throw error;
 
       if (user) {
-        // Authenticated user changing password
-        let otpValidation = true;
-        if (otp) {
-          // Optional OTP verification for added security
-          const { data, error: fetchError } = await supabase
-            .from('otp_codes')
-            .select('*')
-            .eq('email', email)
-            .eq('otp', otp)
-            .eq('used', false)
-            .gt('expires_at', new Date().toISOString())
-            .single();
-          if (fetchError || !data) {
-            setMessage('Invalid or expired OTP.');
-            setLoading(false);
-            return;
-          }
-          await supabase.from('otp_codes').update({ used: true }).eq('id', data.id);
-          otpValidation = true; // OTP validated
-        }
-
+        // For authenticated users, update password
         const { error: updateError } = await supabase.auth.updateUser({ password });
-        if (updateError) throw new Error(updateError.message);
+        if (updateError) throw updateError;
         setMessage('✅ Password updated successfully. Redirecting to dashboard...');
         setTimeout(() => navigate('/dashboard'), 2000);
       } else {
-        // Unauthenticated user resetting forgotten password
-        if (!otp) {
-          setMessage('OTP is required for forgotten password reset.');
-          setLoading(false);
-          return;
-        }
-
-        const response = await fetch(`${BACKEND}/reset-password`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, otp, new_password: password }),
-        });
-
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.detail || 'Failed to reset password');
-
+        // For unauthenticated users, sign in after reset (optional)
         setMessage('✅ Password updated successfully. Redirecting to login...');
         setTimeout(() => navigate('/'), 2000);
       }

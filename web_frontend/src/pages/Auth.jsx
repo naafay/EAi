@@ -57,7 +57,7 @@ export default function AuthPage() {
     }
   };
 
-// In AuthPage.jsx, replace the handleResetPassword function
+// In AuthPage.jsx, update handleResetPassword
 const handleResetPassword = async () => {
   setMessage('');
   if (!email) {
@@ -67,15 +67,13 @@ const handleResetPassword = async () => {
   setLoadingReset(true);
 
   try {
-    const response = await fetch(`${BACKEND}/send-otp`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + '/reset-password' },
     });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.detail || 'Failed to send OTP');
+    if (error) throw error;
     setMessage('✅ OTP sent to your email. Redirecting to reset page...');
-    setTimeout(() => navigate('/reset-password'), 1000); // Redirect after a brief delay
+    setTimeout(() => navigate('/reset-password'), 1000);
   } catch (error) {
     setMessage(`Error sending OTP: ${error.message}`);
   }
