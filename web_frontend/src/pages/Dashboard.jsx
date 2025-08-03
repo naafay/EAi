@@ -116,7 +116,7 @@ const DOWNLOAD_URL =
     setLoading(true);
     try {
       const now = new Date();
-      const expires = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+      const expires = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
       const { error } = await supabase
         .from('profiles')
         .update({
@@ -577,7 +577,7 @@ const DOWNLOAD_URL =
                               className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg"
                               disabled={loading}
                             >
-                              {loading ? 'Loading...' : 'Buy Annual ($29.9/yr)'}
+                              {loading ? 'Loading...' : 'Buy Annual ($39.9/yr)'}
                             </button>
                           )}
                           <button
@@ -607,7 +607,7 @@ const DOWNLOAD_URL =
                           className="w-full px-6 py-2 bg-teal-600 rounded-xl text-white font-semibold"
                           disabled={loading}
                         >
-                          Start Free 3-Day Trial
+                          Start Free 7-Day Trial
                         </button>
                       )}
                       <div className="flex space-x-2">
@@ -616,14 +616,14 @@ const DOWNLOAD_URL =
                           className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-xl"
                           disabled={loading}
                         >
-                          {loading ? 'Loading...' : 'Monthly ($2.99/mo)'}
+                          {loading ? 'Loading...' : 'Monthly ($3.99/mo)'}
                         </button>
                         <button
                           onClick={() => handleSubscription('price_1RrscYFJfNLob41UCFK2PrFz')}
                           className="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg rounded-xl"
                           disabled={loading}
                         >
-                          {loading ? 'Loading...' : 'Annual ($29.9/yr)'}
+                          {loading ? 'Loading...' : 'Annual ($39.9/yr)'}
                         </button>
                       </div>
                     </div>
