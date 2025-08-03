@@ -19,6 +19,10 @@ export default function Dashboard() {
   const navigate = useNavigate(); // Add navigate hook
   const BACKEND = 'https://eai-uuwt.onrender.com';
 
+  // new, just after imports
+const DOWNLOAD_URL =
+  'https://outprio.netlify.app/downloads/OutPrio_1.0.0_x64-setup.exe';
+
   // Use ref to store star positions, calculated once on mount
   const starPositions = useRef([]);
 
@@ -413,10 +417,18 @@ export default function Dashboard() {
         >
           <img src={logo} alt="OutPrio" className="h-10 w-auto" />
         </a>
+        <a
+            href={DOWNLOAD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors duration-300"
+          >
+            Download OutPrio
+          </a>
         <button
           onClick={handleLogout}
           className="text-2xl text-gray-300 hover:text-white transition-colors duration-300"
-          disabled={loading}
+          disabled={  loading}
         >
           ⏻
         </button>
