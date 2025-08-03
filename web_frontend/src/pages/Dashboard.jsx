@@ -594,14 +594,14 @@ export default function Dashboard() {
                       )}
                       <div className="flex space-x-2">
                         <button
-                          onClick={() => handleSubscription('price_1RfIVDFVd7b5c6lTQrG7zUtJ')}
+                          onClick={() => handleSubscription('price_1RrscYFJfNLob41UUU1kKdhQ')}
                           className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-xl"
                           disabled={loading}
                         >
                           {loading ? 'Loading...' : 'Monthly ($3.99/mo)'}
                         </button>
                         <button
-                          onClick={() => handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')}
+                          onClick={() => handleSubscription('price_1RrscYFJfNLob41UCFK2PrFz')}
                           className="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg rounded-xl"
                           disabled={loading}
                         >
