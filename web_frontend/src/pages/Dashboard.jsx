@@ -555,7 +555,7 @@ export default function Dashboard() {
                         <>
                           {subscriptionInfo.plan.interval === 'month' && (
                             <button
-                              onClick={() => handleSubscription('price_1RfJ54FVd7b5c6lTbljBBCOB')}
+                              onClick={() => handleSubscription('price_1RrscYFJfNLob41UCFK2PrFz')}
                               className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg"
                               disabled={loading}
                             >
