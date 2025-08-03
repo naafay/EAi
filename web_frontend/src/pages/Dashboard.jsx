@@ -623,7 +623,7 @@ const DOWNLOAD_URL =
                           className="flex-1 px-3 py-2 bg-purple-600 text-white rounded-lg rounded-xl"
                           disabled={loading}
                         >
-                          {loading ? 'Loading...' : 'Annual ($39.9/yr)'}
+                          {loading ? 'Loading...' : 'Annual ($29.9/yr)'}
                         </button>
                       </div>
                     </div>
