@@ -28,13 +28,14 @@ export default function DownloadSetupPage() {
   const downloadUrl =
     'https://outprio.netlify.app/downloads/OutPrio_1.0.0_x64-setup.exe';
 
-  // sign up → activate trial → auto-download
+  // sign up → activate trial → trigger download in new tab → go to dashboard
   const handleSignup = async (e) => {
     e.preventDefault();
     setMessage('');
     setLoading(true);
 
     try {
+      // 1) create user
       const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
@@ -45,6 +46,7 @@ export default function DownloadSetupPage() {
         return;
       }
 
+      // 2) insert profile + trial dates
       const userId = data.user.id;
       const now = new Date();
       const expires = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
@@ -59,15 +61,18 @@ export default function DownloadSetupPage() {
         is_paid: false,
         created_at: now.toISOString(),
       });
-
       if (profileError) {
         setMessage(profileError.message);
         setLoading(false);
         return;
       }
 
-      // everything succeeded → download
-      window.location.href = downloadUrl;
+      // 3) everything’s good — open download in new tab
+      window.open(downloadUrl, '_blank');
+
+      // 4) turn off spinner & send them to dashboard
+      setLoading(false);
+      navigate('/dashboard');
     } catch (err) {
       setMessage(err.message);
       setLoading(false);
