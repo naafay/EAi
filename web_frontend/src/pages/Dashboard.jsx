@@ -550,11 +550,14 @@ const DOWNLOAD_URL =
                       <span className="font-medium capitalize">{licenseType}</span>
                     </div>
                   )}
-                  {endDate && (
+                  {endDate && status !== '⚠️ Trial Expired' && (
                     <div className="flex justify-between text-gray-300">
                       <span>
-                        {status === '🧪 Trial Active' ? 'Trial Expiry' :
-                         subscriptionInfo && subscriptionInfo.cancel_at_period_end ? 'Access Ends' : 'Next Billing'}
+                        {status === '🧪 Trial Active'
+                          ? 'Trial Expiry'
+                          : subscriptionInfo?.cancel_at_period_end
+                          ? 'Access Ends'
+                          : 'Next Billing'}
                       </span>
                       <span className="font-medium">{endDate.toLocaleDateString()}</span>
                     </div>
