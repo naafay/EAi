@@ -577,7 +577,7 @@ const DOWNLOAD_URL =
                               className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg"
                               disabled={loading}
                             >
-                              {loading ? 'Loading...' : 'Buy Annual ($39.9/yr)'}
+                              {loading ? 'Loading...' : 'Buy Annual ($29.9/yr)'}
                             </button>
                           )}
                           <button
@@ -616,7 +616,7 @@ const DOWNLOAD_URL =
                           className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-xl"
                           disabled={loading}
                         >
-                          {loading ? 'Loading...' : 'Monthly ($3.99/mo)'}
+                          {loading ? 'Loading...' : 'Monthly ($2.99/mo)'}
                         </button>
                         <button
                           onClick={() => handleSubscription('price_1RrscYFJfNLob41UCFK2PrFz')}
