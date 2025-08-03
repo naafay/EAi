@@ -408,31 +408,37 @@ const DOWNLOAD_URL =
         </div>
       )}
 
-      <nav className="flex items-center justify-between p-6">
-        <a
-          href="https://outprio.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="transition-transform hover:scale-110"
-        >
-          <img src={logo} alt="OutPrio" className="h-10 w-auto" />
-        </a>
-        <a
-            href={DOWNLOAD_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors duration-300"
-          >
-            Download OutPrio
-          </a>
-        <button
-          onClick={handleLogout}
-          className="text-2xl text-gray-300 hover:text-white transition-colors duration-300"
-          disabled={  loading}
-        >
-          ⏻
-        </button>
-      </nav>
+<nav className="flex items-center justify-between p-6">
+  {/* logo on the left */}
+  <a
+    href="https://outprio.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="transition-transform hover:scale-110"
+  >
+    <img src={logo} alt="OutPrio" className="h-10 w-auto" />
+  </a>
+
+  {/* download + logout on the right */}
+  <div className="flex items-center">
+    <a
+      href={DOWNLOAD_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mr-4 px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors duration-300"
+    >
+      Download OutPrio
+    </a>
+    <button
+      onClick={handleLogout}
+      className="text-2xl text-gray-300 hover:text-white transition-colors duration-300"
+      disabled={loading}
+    >
+      ⏻
+    </button>
+  </div>
+</nav>
+
 
       <div className="flex-grow flex items-center justify-center p-6">
         <div className="relative w-full max-w-xl bg-white/20 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/30 glow-effect">
