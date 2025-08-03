@@ -49,7 +49,7 @@ export default function DownloadSetupPage() {
       // 2) insert profile + trial dates
       const userId = data.user.id;
       const now = new Date();
-      const expires = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+      const expires = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
       const { error: profileError } = await supabase.from('profiles').insert({
         id: userId,
@@ -182,7 +182,7 @@ export default function DownloadSetupPage() {
               {loading ? 'Creating…' : 'Create Account & Download'}
             </button>
             <p className="text-center text-gray-300 text-sm">
-              By creating an account, you’ll activate a 3-day free trial and
+              By creating an account, you’ll activate a 7-day free trial and
               automatically download the OutPrio installer.
             </p>
           </form>
